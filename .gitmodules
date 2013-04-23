@@ -1,0 +1,3 @@
+[submodule "open-lmis"]
+	path = open-lmis
+	url = git://github.com/OpenLMIS/open-lmis.git
