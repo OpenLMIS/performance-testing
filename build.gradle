@@ -19,6 +19,7 @@ dependencies {
     compile 'org.springframework:spring-jdbc:3.2.2.RELEASE',
             'org.springframework:spring-context:3.1.2.RELEASE',
             'org.projectlombok:lombok:0.11.0',
+            'commons-lang:commons-lang:2.6',
             'postgresql:postgresql:9.1-901.jdbc4'
 
     compile fileTree(dir: 'libs', include: '*.jar')
