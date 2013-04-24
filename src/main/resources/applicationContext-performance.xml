@@ -32,4 +32,9 @@
         <constructor-arg ref="template"/>
     </bean>
 
+    <bean id="programRnrTemplateDAO" class="org.openlmis.performancetesting.dao.ProgramRnrTemplateDAO">
+        <constructor-arg ref="template"/>
+    </bean>
+
+
 </beans>

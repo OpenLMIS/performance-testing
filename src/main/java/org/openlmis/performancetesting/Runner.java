@@ -10,9 +10,12 @@ import org.openlmis.core.domain.*;
 import org.openlmis.performancetesting.dao.FacilityDAO;
 import org.openlmis.performancetesting.dao.ProductDAO;
 import org.openlmis.performancetesting.dao.ProgramDAO;
+import org.openlmis.performancetesting.dao.ProgramRnrTemplateDAO;
 import org.openlmis.performancetesting.helper.FacilityHelper;
 import org.openlmis.performancetesting.helper.ProductHelper;
 import org.openlmis.performancetesting.helper.ProgramHelper;
+import org.openlmis.performancetesting.helper.ProgramRnrTemplateHelper;
+import org.openlmis.rnr.domain.ProgramRnrTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -23,11 +26,13 @@ public class Runner {
 
   ProductHelper productHelper = new ProductHelper();
   FacilityHelper facilityHelper = new FacilityHelper();
-  private ProgramHelper programHelper = new ProgramHelper();
+  ProgramHelper programHelper = new ProgramHelper();
+  ProgramRnrTemplateHelper programRnrTemplateHelper = new ProgramRnrTemplateHelper();
 
   ProductDAO productDAO;
   FacilityDAO facilityDAO;
   ProgramDAO programDAO;
+  ProgramRnrTemplateDAO programRnrTemplateDAO;
 
   List<Program> programList;
 
@@ -36,6 +41,7 @@ public class Runner {
     productDAO = (ProductDAO) ctx.getBean("productDAO");
     facilityDAO = (FacilityDAO) ctx.getBean("facilityDAO");
     programDAO = (ProgramDAO) ctx.getBean("programDAO");
+    programRnrTemplateDAO = (ProgramRnrTemplateDAO) ctx.getBean("programRnrTemplateDAO");
   }
 
 
@@ -46,11 +52,21 @@ public class Runner {
 
   private void insertData() {
     insertPrograms();
+    insertRnrTemplate();
 
     insertProductData();
     insertFacilityData();
+  }
 
+  private void insertRnrTemplate() {
+    for (Program program : programList) {
+      createTemplateForProgram(program);
+    }
+  }
 
+  private void createTemplateForProgram(Program program) {
+    ProgramRnrTemplate programRnrTemplate = programRnrTemplateHelper.createProgramRnrTemplate(program);
+    programRnrTemplateDAO.insertRnrTemplate(programRnrTemplate);
   }
 
   private void insertPrograms() {
