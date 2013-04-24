@@ -9,8 +9,10 @@ package org.openlmis.performancetesting;
 import org.openlmis.core.domain.*;
 import org.openlmis.performancetesting.dao.FacilityDAO;
 import org.openlmis.performancetesting.dao.ProductDAO;
+import org.openlmis.performancetesting.dao.ProgramDAO;
 import org.openlmis.performancetesting.helper.FacilityHelper;
 import org.openlmis.performancetesting.helper.ProductHelper;
+import org.openlmis.performancetesting.helper.ProgramHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -18,14 +20,17 @@ public class Runner {
 
   ProductHelper productHelper = new ProductHelper();
   FacilityHelper facilityHelper = new FacilityHelper();
+  private ProgramHelper programHelper = new ProgramHelper();
 
   ProductDAO productDAO;
   FacilityDAO facilityDAO;
+  ProgramDAO programDAO;
 
   public Runner() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
     productDAO = (ProductDAO) ctx.getBean("productDAO");
     facilityDAO = (FacilityDAO) ctx.getBean("facilityDAO");
+    programDAO = (ProgramDAO) ctx.getBean("programDAO");
   }
 
 
@@ -35,6 +40,9 @@ public class Runner {
   }
 
   private void insertData() {
+    Program program = programHelper.createProgram("ESS MEDICINES");
+    System.out.println(programDAO.insertProgram(program));
+
     insertProductData();
     insertFacilityData();
 

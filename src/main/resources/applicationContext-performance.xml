@@ -28,4 +28,8 @@
         <constructor-arg ref="template"/>
     </bean>
 
+    <bean id="programDAO" class="org.openlmis.performancetesting.dao.ProgramDAO">
+        <constructor-arg ref="template"/>
+    </bean>
+
 </beans>
