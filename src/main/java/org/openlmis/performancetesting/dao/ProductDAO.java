@@ -19,7 +19,7 @@ public class ProductDAO {
 
   final String insertFormQuery = "INSERT INTO product_forms VALUES(DEFAULT, :code, :displayOrder)";
   final String insertDosageUnitQuery = "INSERT INTO dosage_units VALUES(DEFAULT, :code, :displayOrder)";
-  final String insertCategoryQuery = "INSERT INTO product_categories VALUES(DEFAULT, :code, :name, :displayOrder, NULL, NULL, NULL, NULL)";
+  final String insertCategoryQuery = "INSERT INTO product_categories VALUES(DEFAULT, :code, :name, :displayOrder)";
 
   public ProductDAO(NamedParameterJdbcTemplate template) {
     this.template = template;
