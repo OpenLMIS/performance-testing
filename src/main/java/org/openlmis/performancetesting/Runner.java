@@ -16,6 +16,9 @@ import org.openlmis.performancetesting.helper.ProgramHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Runner {
 
   ProductHelper productHelper = new ProductHelper();
@@ -25,6 +28,8 @@ public class Runner {
   ProductDAO productDAO;
   FacilityDAO facilityDAO;
   ProgramDAO programDAO;
+
+  List<Program> programList;
 
   public Runner() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
@@ -40,13 +45,26 @@ public class Runner {
   }
 
   private void insertData() {
-    Program program = programHelper.createProgram("ESS MEDICINES");
-    System.out.println(programDAO.insertProgram(program));
+    insertPrograms();
 
     insertProductData();
     insertFacilityData();
 
 
+  }
+
+  private void insertPrograms() {
+    programList = new ArrayList<Program>() {{
+      add(programHelper.createProgram("ESS MEDICINES"));
+      add(programHelper.createProgram("TB"));
+      add(programHelper.createProgram("MALARIA"));
+      add(programHelper.createProgram("ARV/ART"));
+      add(programHelper.createProgram("VACCINES"));
+    }};
+
+    for (Program program : programList) {
+      programDAO.insertProgram(program);
+    }
   }
 
   private Facility insertFacilityData() {
