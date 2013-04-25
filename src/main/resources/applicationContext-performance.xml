@@ -36,5 +36,9 @@
         <constructor-arg ref="template"/>
     </bean>
 
+    <bean id="userDAO" class="org.openlmis.performancetesting.dao.UserDAO">
+        <constructor-arg ref="template"/>
+    </bean>
+
 
 </beans>

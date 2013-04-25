@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.openlmis.rnr.domain.RnRColumnSource.*;
 
-public class ProgramRnrTemplateHelper {
+public class ProgramRnrTemplateBuilder {
 
   public ProgramRnrTemplate createProgramRnrTemplate(Program program) {
     return new ProgramRnrTemplate(program.getId(), createRnrColumnsList(program.getId()));

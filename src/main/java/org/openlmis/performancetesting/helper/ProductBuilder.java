@@ -16,7 +16,7 @@ import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
 
-public class ProductHelper {
+public class ProductBuilder {
   public Product createProduct(ProductForm form, DosageUnit dosageUnit, ProductCategory category) {
     Product product = new Product();
     product.setCode(randomAlphanumeric(40));

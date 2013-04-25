@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 public class ProgramRnrTemplateDAO {
   NamedParameterJdbcTemplate template;
 
-  String insertRnrTemplateQuery = "INSERT INTO program_rnr_columns VALUES( " +
+  final String insertRnrTemplateQuery = "INSERT INTO program_rnr_columns VALUES( " +
       "DEFAULT,:id, :programId, :label, :visible, :position, :source.code, TRUE)";
 
   public ProgramRnrTemplateDAO(NamedParameterJdbcTemplate template) {

@@ -13,7 +13,7 @@ import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
 import static org.openlmis.performancetesting.Randomizer.randomDate;
 
-public class FacilityHelper {
+public class FacilityBuilder {
   public Facility createFacility(GeographicZone geoZone, FacilityType facilityType, FacilityOperator facilityOperator) {
     Facility facility = new Facility();
     facility.setCode(randomAlphanumeric(40));

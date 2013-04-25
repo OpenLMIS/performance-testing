@@ -10,7 +10,7 @@ import org.openlmis.core.domain.Program;
 
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 
-public class ProgramHelper {
+public class ProgramBuilder {
 
   public Program createProgram(String code) {
     Program program = new Program();

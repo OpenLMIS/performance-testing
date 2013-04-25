@@ -7,14 +7,8 @@
 package org.openlmis.performancetesting;
 
 import org.openlmis.core.domain.*;
-import org.openlmis.performancetesting.dao.FacilityDAO;
-import org.openlmis.performancetesting.dao.ProductDAO;
-import org.openlmis.performancetesting.dao.ProgramDAO;
-import org.openlmis.performancetesting.dao.ProgramRnrTemplateDAO;
-import org.openlmis.performancetesting.helper.FacilityHelper;
-import org.openlmis.performancetesting.helper.ProductHelper;
-import org.openlmis.performancetesting.helper.ProgramHelper;
-import org.openlmis.performancetesting.helper.ProgramRnrTemplateHelper;
+import org.openlmis.performancetesting.dao.*;
+import org.openlmis.performancetesting.helper.*;
 import org.openlmis.rnr.domain.ProgramRnrTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -22,12 +16,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+import static org.openlmis.core.domain.Right.*;
+
 public class Runner {
 
-  ProductHelper productHelper = new ProductHelper();
-  FacilityHelper facilityHelper = new FacilityHelper();
-  ProgramHelper programHelper = new ProgramHelper();
-  ProgramRnrTemplateHelper programRnrTemplateHelper = new ProgramRnrTemplateHelper();
+  ProductBuilder productBuilder = new ProductBuilder();
+  FacilityBuilder facilityBuilder = new FacilityBuilder();
+  ProgramBuilder programBuilder = new ProgramBuilder();
+  ProgramRnrTemplateBuilder programRnrTemplateBuilder = new ProgramRnrTemplateBuilder();
+  UserBuilder userBuilder = new UserBuilder();
 
   ProductDAO productDAO;
   FacilityDAO facilityDAO;
@@ -35,6 +33,8 @@ public class Runner {
   ProgramRnrTemplateDAO programRnrTemplateDAO;
 
   List<Program> programList;
+  ArrayList<Role> rolesList;
+  UserDAO userDAO;
 
   public Runner() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
@@ -42,6 +42,7 @@ public class Runner {
     facilityDAO = (FacilityDAO) ctx.getBean("facilityDAO");
     programDAO = (ProgramDAO) ctx.getBean("programDAO");
     programRnrTemplateDAO = (ProgramRnrTemplateDAO) ctx.getBean("programRnrTemplateDAO");
+    userDAO = (UserDAO) ctx.getBean("userDAO");
   }
 
 
@@ -51,6 +52,7 @@ public class Runner {
   }
 
   private void insertData() {
+    insertUserData();
     insertPrograms();
     insertRnrTemplate();
 
@@ -58,24 +60,39 @@ public class Runner {
     insertFacilityData();
   }
 
-  private void insertRnrTemplate() {
-    for (Program program : programList) {
-      createTemplateForProgram(program);
+  private void insertUserData() {
+    insertRoleRights();
+  }
+
+  private void insertRoleRights() {
+    rolesList = new ArrayList<Role>() {{
+      add(userBuilder.createRole("ADMIN", true, asList(UPLOADS, MANAGE_FACILITY, MANAGE_ROLE, MANAGE_USERS, MANAGE_SCHEDULE, CONFIGURE_RNR)));
+      add(userBuilder.createRole("LMU In-Charge", true, asList(CONVERT_TO_ORDER, VIEW_ORDER)));
+      add(userBuilder.createRole("Store In-Charge", false, asList(VIEW_REQUISITION, CREATE_REQUISITION)));
+      add(userBuilder.createRole("LMU", false, asList(VIEW_REQUISITION, APPROVE_REQUISITION)));
+      add(userBuilder.createRole("FacilityHead", false, asList(VIEW_REQUISITION, AUTHORIZE_REQUISITION)));
+      add(userBuilder.createRole("Medical-Officer", false, asList(VIEW_REQUISITION, APPROVE_REQUISITION)));
+    }};
+
+    for (Role role : rolesList) {
+      userDAO.insertRoleAndRoleRights(role);
     }
   }
 
-  private void createTemplateForProgram(Program program) {
-    ProgramRnrTemplate programRnrTemplate = programRnrTemplateHelper.createProgramRnrTemplate(program);
-    programRnrTemplateDAO.insertRnrTemplate(programRnrTemplate);
+  private void insertRnrTemplate() {
+    for (Program program : programList) {
+      ProgramRnrTemplate rnrTemplate = programRnrTemplateBuilder.createProgramRnrTemplate(program);
+      programRnrTemplateDAO.insertRnrTemplate(rnrTemplate);
+    }
   }
 
   private void insertPrograms() {
     programList = new ArrayList<Program>() {{
-      add(programHelper.createProgram("ESS MEDICINES"));
-      add(programHelper.createProgram("TB"));
-      add(programHelper.createProgram("MALARIA"));
-      add(programHelper.createProgram("ARV/ART"));
-      add(programHelper.createProgram("VACCINES"));
+      add(programBuilder.createProgram("ESS MEDICINES"));
+      add(programBuilder.createProgram("TB"));
+      add(programBuilder.createProgram("MALARIA"));
+      add(programBuilder.createProgram("ARV/ART"));
+      add(programBuilder.createProgram("VACCINES"));
     }};
 
     for (Program program : programList) {
@@ -85,18 +102,18 @@ public class Runner {
 
   private Facility insertFacilityData() {
 
-    GeographicLevel geoLevel = facilityHelper.createGeoLevel();
+    GeographicLevel geoLevel = facilityBuilder.createGeoLevel();
     facilityDAO.insertGeoLevel(geoLevel);
 
-    GeographicZone geoZone = facilityHelper.createGeographicZone(geoLevel, new GeographicZone());
+    GeographicZone geoZone = facilityBuilder.createGeographicZone(geoLevel, new GeographicZone());
     facilityDAO.insertGeoZone(geoZone);
 
-    FacilityType facilityType = facilityHelper.createFacilityType();
+    FacilityType facilityType = facilityBuilder.createFacilityType();
     facilityDAO.insertFacilityType(facilityType);
 
-    FacilityOperator facilityOperator = facilityHelper.createFacilityOperator();
+    FacilityOperator facilityOperator = facilityBuilder.createFacilityOperator();
 
-    Facility facility = facilityHelper.createFacility(geoZone, facilityType, facilityOperator);
+    Facility facility = facilityBuilder.createFacility(geoZone, facilityType, facilityOperator);
     facilityDAO.insertFacility(facility);
 
     System.out.println(facility.getId());
@@ -104,16 +121,16 @@ public class Runner {
   }
 
   private void insertProductData() {
-    ProductForm productForm = productHelper.createForm();
+    ProductForm productForm = productBuilder.createForm();
     productDAO.insertProductForm(productForm);
 
-    DosageUnit dosageUnit = productHelper.createDosageUnit();
+    DosageUnit dosageUnit = productBuilder.createDosageUnit();
     productDAO.insertDosageUnit(dosageUnit);
 
-    ProductCategory category = productHelper.createCategory();
+    ProductCategory category = productBuilder.createCategory();
     productDAO.insertCategory(category);
 
-    Product product = productHelper.createProduct(productForm, dosageUnit, category);
+    Product product = productBuilder.createProduct(productForm, dosageUnit, category);
     long productId = productDAO.insertProduct(product);
 
     System.out.println(productId);
