@@ -9,6 +9,7 @@ package org.openlmis.performancetesting.dao;
 import lombok.Data;
 import org.openlmis.core.domain.Right;
 import org.openlmis.core.domain.Role;
+import org.openlmis.core.domain.User;
 import org.openlmis.core.domain.Vendor;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -18,13 +19,28 @@ public class UserDAO {
   NamedParameterJdbcTemplate template;
 
   final String insertRoleQuery = "INSERT INTO roles VALUES(DEFAULT, :adminRole, :name, :description)";
+
   final String insertRoleRightQuery = "INSERT INTO role_rights VALUES(:roleId, :rightName)";
+
   final String insertVendorQuery = "INSERT INTO vendors VALUES(DEFAULT, :name, DEFAULT, :active)";
+
+  final String insertUserQuery = "INSERT INTO users VALUES(DEFAULT, :userName, :password, :firstName, :lastName, :employeeId, :jobTitle," +
+      " :primaryNotificationMethod, :officePhone, :cellPhone, :email, :supervisor.Id, :facilityId, :active, :vendorId, :modifiedBy, :modifiedDate)";
 
   public UserDAO(NamedParameterJdbcTemplate template) {
     this.template = template;
   }
 
+
+  public long insertUser(User user) {
+    GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+    template.update(insertUserQuery, new BeanPropertySqlParameterSource(user), keyHolder, new String[]{"id"});
+
+    int userId = keyHolder.getKey().intValue();
+    user.setId(userId);
+
+    return userId;
+  }
 
   public long insertRoleAndRoleRights(Role role) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();

@@ -6,13 +6,14 @@
 
 package org.openlmis.performancetesting.helper;
 
-import org.openlmis.core.domain.Right;
-import org.openlmis.core.domain.Role;
+import org.openlmis.core.domain.*;
 
 import java.util.HashSet;
 import java.util.List;
 
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
+import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
+import static org.openlmis.performancetesting.Randomizer.randomDate;
 
 public class UserBuilder {
   public Role createRole(String name, Boolean isAdminRole, List<Right> rights) {
@@ -22,5 +23,34 @@ public class UserBuilder {
     role.setDescription(randomAlphanumeric(20));
     role.setRights(new HashSet<>(rights));
     return role;
+  }
+
+  public User createUser(Facility facility, Vendor vendor) {
+    User user = new User();
+    user.setUserName(randomAlphanumeric(20));
+    user.setPassword(randomAlphanumeric(10));
+    user.setFirstName(randomAlphanumeric(35));
+    user.setLastName(randomAlphanumeric(35));
+    user.setEmployeeId(randomAlphanumeric(20));
+    user.setJobTitle(randomAlphanumeric(40));
+    user.setJobTitle(randomAlphanumeric(40));
+    user.setPrimaryNotificationMethod(randomAlphanumeric(10));
+    user.setOfficePhone(randomAlphanumeric(15));
+    user.setCellPhone(randomAlphanumeric(15));
+    user.setEmail(randomAlphanumeric(25));
+    user.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    user.setActive(true);
+    user.setSupervisor(new User());
+    user.setModifiedDate(randomDate());
+
+    if (facility != null && facility.getId() != null) {
+      user.setFacilityId(facility.getId());
+    }
+
+    if (vendor != null && vendor.getId() != null) {
+      user.setVendorId(vendor.getId());
+    }
+
+    return user;
   }
 }

@@ -35,6 +35,7 @@ public class Runner {
   List<Program> programList;
   ArrayList<Role> rolesList;
   UserDAO userDAO;
+  private Vendor vendor;
 
   public Runner() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
@@ -52,23 +53,22 @@ public class Runner {
   }
 
   private void insertData() {
+    insertVendor();
     insertUserData();
     insertPrograms();
     insertRnrTemplate();
-
     insertProductData();
     insertFacilityData();
   }
 
-  private void insertUserData() {
-    insertRoleRights();
-    createVendor();
-
+  public void insertVendor() {
+    vendor = new Vendor("openLmis", true);
+    userDAO.insertVendor(vendor);
   }
 
-  private void createVendor() {
-    Vendor vendor = new Vendor("openLmis", true);
-    userDAO.insertVendor(vendor);
+  private void insertUserData() {
+
+    userDAO.insertUser(userBuilder.createUser(insertFacilityData(), vendor));
   }
 
   private void insertRoleRights() {
