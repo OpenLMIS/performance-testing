@@ -26,15 +26,17 @@ public class Runner {
   ProgramBuilder programBuilder = new ProgramBuilder();
   ProgramRnrTemplateBuilder programRnrTemplateBuilder = new ProgramRnrTemplateBuilder();
   UserBuilder userBuilder = new UserBuilder();
+  SupervisoryNodeBuilder supervisoryNodeBuilder = new SupervisoryNodeBuilder();
 
   ProductDAO productDAO;
   FacilityDAO facilityDAO;
   ProgramDAO programDAO;
   ProgramRnrTemplateDAO programRnrTemplateDAO;
+  UserDAO userDAO;
+  SupervisoryNodeDAO supervisoryNodeDAO;
 
   List<Program> programList;
   ArrayList<Role> rolesList;
-  UserDAO userDAO;
   private Vendor vendor;
 
   public Runner() {
@@ -44,6 +46,8 @@ public class Runner {
     programDAO = (ProgramDAO) ctx.getBean("programDAO");
     programRnrTemplateDAO = (ProgramRnrTemplateDAO) ctx.getBean("programRnrTemplateDAO");
     userDAO = (UserDAO) ctx.getBean("userDAO");
+    supervisoryNodeDAO = (SupervisoryNodeDAO) ctx.getBean("supervisoryNodeDAO");
+
   }
 
 
@@ -53,6 +57,7 @@ public class Runner {
   }
 
   private void insertData() {
+    insertSupervisoryNodePair(insertFacilityData());
     insertVendor();
     insertUserData();
     insertPrograms();
@@ -61,13 +66,21 @@ public class Runner {
     insertFacilityData();
   }
 
+  private void insertSupervisoryNodePair(Facility facility) {
+    SupervisoryNode parentNode = supervisoryNodeBuilder.createSupervisoryNode(facility, null);
+    supervisoryNodeDAO.insertSupervisoryNode(parentNode);
+
+    SupervisoryNode childNode = supervisoryNodeBuilder.createSupervisoryNode(facility, parentNode);
+    supervisoryNodeDAO.insertSupervisoryNode(childNode);
+  }
+
   public void insertVendor() {
     vendor = new Vendor("openLmis", true);
     userDAO.insertVendor(vendor);
   }
 
   private void insertUserData() {
-
+    insertRoleRights();
     userDAO.insertUser(userBuilder.createUser(insertFacilityData(), vendor));
   }
 

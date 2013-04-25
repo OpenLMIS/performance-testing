@@ -13,14 +13,22 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
+import static java.lang.String.format;
+import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
+
 public class ProductDAO {
 
   NamedParameterJdbcTemplate template;
 
-  final String insertProductQuery = "INSERT INTO products VALUES( " +
-      "DEFAULT, :code, :alternateItemCode, :manufacturer, :manufacturerCode, :manufacturerBarCode, :mohBarCode, :gtin, :type, :displayOrder, :primaryName, :fullName, :genericName, :alternateName, :description, :strength" +
+  final String insertProductQuery = format("INSERT INTO products VALUES( " +
+      "DEFAULT, :code, :alternateItemCode, :manufacturer, :manufacturerCode, :manufacturerBarCode, :mohBarCode, :gtin" +
+      ", :type, :displayOrder, :primaryName, :fullName, :genericName, :alternateName, :description, :strength" +
       ", :form.id, :dosageUnit.id, :category.id" +
-      ", :dispensingUnit, :dosesPerDispensingUnit, :packSize, :alternatePackSize, :storeRefrigerated, :storeRoomTemperature, :hazardous, :flammable, :controlledSubstance, :lightSensitive, :approvedByWHO, :contraceptiveCYP, :packLength, :packWidth, :packHeight, :packWeight, :packsPerCarton, :cartonLength, :cartonWidth, :cartonHeight, :cartonsPerPallet, :expectedShelfLife, :specialStorageInstructions, :specialTransportInstructions, :active, :fullSupply, :tracer, :roundToZero, :archived, :packRoundingThreshold, :modifiedBy)";
+      ", :dispensingUnit, :dosesPerDispensingUnit, :packSize, :alternatePackSize, :storeRefrigerated, :storeRoomTemperature" +
+      ", :hazardous, :flammable, :controlledSubstance, :lightSensitive, :approvedByWHO, :contraceptiveCYP, :packLength" +
+      ", :packWidth, :packHeight, :packWeight, :packsPerCarton, :cartonLength, :cartonWidth, :cartonHeight, :cartonsPerPallet" +
+      ", :expectedShelfLife, :specialStorageInstructions, :specialTransportInstructions, :active, :fullSupply" +
+      ", :tracer, :roundToZero, :archived, :packRoundingThreshold, :modifiedBy, :modifiedDate, %s, :modifiedDate)", randomNumeric(5));
 
   final String insertFormQuery = "INSERT INTO product_forms VALUES(DEFAULT, :code, :displayOrder)";
   final String insertDosageUnitQuery = "INSERT INTO dosage_units VALUES(DEFAULT, :code, :displayOrder)";

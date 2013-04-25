@@ -14,6 +14,9 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
+import static java.lang.String.format;
+import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
+
 public class FacilityDAO {
   NamedParameterJdbcTemplate template;
 
@@ -22,12 +25,12 @@ public class FacilityDAO {
   final String insertFacilityTypeQuery = "INSERT INTO facility_types VALUES(DEFAULT, :code, :name, :description, " +
       ":levelId, :nominalMaxMonth, :nominalEop, :displayOrder, :active)";
 
-  final String insertFacilityQuery = "INSERT INTO facilities VALUES(" +
+  final String insertFacilityQuery = format("INSERT INTO facilities VALUES(" +
       "DEFAULT, :code, :name, :description, :gln, :mainPhone, :fax, :address1, :address2, " +
       " :geographicZone.id, :facilityType.id, :catchmentPopulation, :latitude, :longitude, :altitude, " +
       " :operatedBy.id, :coldStorageGrossCapacity, :coldStorageNetCapacity, :suppliesOthers, :sdp, :online, :satellite," +
       " :satelliteParentCode, :hasElectricity, :hasElectronicScc, :hasElectronicDar, :active, :goLiveDate, :goDownDate, " +
-      " :comment, :dataReportable, NULL, :modifiedDate, NULL, NULL)";
+      " :comment, :dataReportable, :modifiedBy, :modifiedDate, %s, :modifiedDate)", randomNumeric(5));
 
   public FacilityDAO(NamedParameterJdbcTemplate template) {
     this.template = template;

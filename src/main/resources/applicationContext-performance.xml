@@ -40,5 +40,8 @@
         <constructor-arg ref="template"/>
     </bean>
 
+    <bean id="supervisoryNodeDAO" class="org.openlmis.performancetesting.dao.SupervisoryNodeDAO">
+        <constructor-arg ref="template"/>
+    </bean>
 
 </beans>

@@ -46,7 +46,7 @@ public class FacilityBuilder {
     facility.setGoDownDate(randomDate());
     facility.setComment(randomAlphanumeric(50));
     facility.setDataReportable(nextBoolean());
-//    facility.setModifiedBy(1);
+    facility.setModifiedBy(Integer.valueOf(randomNumeric(5)));
     facility.setModifiedDate(randomDate());
 //    facility.setCreatedBy();
 //    facility.setCreatedDate(randomDate());

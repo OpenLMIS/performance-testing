@@ -15,6 +15,7 @@ import java.util.Random;
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
+import static org.openlmis.performancetesting.Randomizer.randomDate;
 
 public class ProductBuilder {
   public Product createProduct(ProductForm form, DosageUnit dosageUnit, ProductCategory category) {
@@ -70,6 +71,7 @@ public class ProductBuilder {
     product.setArchived(nextBoolean());
     product.setPackRoundingThreshold(Integer.valueOf(randomNumeric(3)));
     product.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    product.setModifiedDate(randomDate());
 
     return product;
   }

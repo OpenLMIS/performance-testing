@@ -15,6 +15,9 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
+import static java.lang.String.format;
+import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
+
 public class UserDAO {
   NamedParameterJdbcTemplate template;
 
@@ -24,8 +27,9 @@ public class UserDAO {
 
   final String insertVendorQuery = "INSERT INTO vendors VALUES(DEFAULT, :name, DEFAULT, :active)";
 
-  final String insertUserQuery = "INSERT INTO users VALUES(DEFAULT, :userName, :password, :firstName, :lastName, :employeeId, :jobTitle," +
-      " :primaryNotificationMethod, :officePhone, :cellPhone, :email, :supervisor.Id, :facilityId, :active, :vendorId, :modifiedBy, :modifiedDate)";
+  final String insertUserQuery = format("INSERT INTO users VALUES(DEFAULT, :userName, :password, :firstName, :lastName" +
+      ", :employeeId, :jobTitle, :primaryNotificationMethod, :officePhone, :cellPhone, :email, :supervisor.Id" +
+      ", :facilityId, :active, :vendorId, :modifiedBy, :modifiedDate, %s, :modifiedDate)", randomNumeric(5));
 
   public UserDAO(NamedParameterJdbcTemplate template) {
     this.template = template;

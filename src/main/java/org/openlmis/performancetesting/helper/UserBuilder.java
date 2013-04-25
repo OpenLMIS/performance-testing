@@ -25,7 +25,7 @@ public class UserBuilder {
     return role;
   }
 
-  public User createUser(Facility facility, Vendor vendor) {
+  public User createUser(Facility homeFacility, Vendor vendor) {
     User user = new User();
     user.setUserName(randomAlphanumeric(20));
     user.setPassword(randomAlphanumeric(10));
@@ -43,8 +43,8 @@ public class UserBuilder {
     user.setSupervisor(new User());
     user.setModifiedDate(randomDate());
 
-    if (facility != null && facility.getId() != null) {
-      user.setFacilityId(facility.getId());
+    if (homeFacility != null && homeFacility.getId() != null) {
+      user.setFacilityId(homeFacility.getId());
     }
 
     if (vendor != null && vendor.getId() != null) {
