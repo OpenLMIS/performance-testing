@@ -62,6 +62,13 @@ public class Runner {
 
   private void insertUserData() {
     insertRoleRights();
+    createVendor();
+
+  }
+
+  private void createVendor() {
+    Vendor vendor = new Vendor("openLmis", true);
+    userDAO.insertVendor(vendor);
   }
 
   private void insertRoleRights() {

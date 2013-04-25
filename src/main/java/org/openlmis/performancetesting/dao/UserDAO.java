@@ -9,6 +9,7 @@ package org.openlmis.performancetesting.dao;
 import lombok.Data;
 import org.openlmis.core.domain.Right;
 import org.openlmis.core.domain.Role;
+import org.openlmis.core.domain.Vendor;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,6 +19,7 @@ public class UserDAO {
 
   final String insertRoleQuery = "INSERT INTO roles VALUES(DEFAULT, :adminRole, :name, :description)";
   final String insertRoleRightQuery = "INSERT INTO role_rights VALUES(:roleId, :rightName)";
+  final String insertVendorQuery = "INSERT INTO vendors VALUES(DEFAULT, :name, DEFAULT, :active)";
 
   public UserDAO(NamedParameterJdbcTemplate template) {
     this.template = template;
@@ -39,9 +41,18 @@ public class UserDAO {
     return roleId;
   }
 
+  public int insertVendor(Vendor vendor) {
+    GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+    template.update(insertVendorQuery, new BeanPropertySqlParameterSource(vendor), keyHolder, new String[]{"id"});
+
+    int vendorId = keyHolder.getKey().intValue();
+    vendor.setId(vendorId);
+    return vendorId;
+
+  }
+
   @Data
   class RoleRight {
-
     Integer roleId;
     String rightName;
 
