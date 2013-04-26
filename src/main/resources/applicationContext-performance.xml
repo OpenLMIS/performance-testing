@@ -44,6 +44,10 @@
         <constructor-arg ref="template"/>
     </bean>
 
+    <bean id="requisitionGroupDAO" class="org.openlmis.performancetesting.dao.RequisitionGroupDAO">
+        <constructor-arg ref="template"/>
+    </bean>
+
     <bean id="processingScheduleDAO" class="org.openlmis.performancetesting.dao.ProcessingScheduleDAO">
         <constructor-arg ref="template"/>
     </bean>

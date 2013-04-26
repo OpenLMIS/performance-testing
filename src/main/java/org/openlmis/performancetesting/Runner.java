@@ -31,6 +31,7 @@ public class Runner {
   private ProgramRnrTemplateBuilder programRnrTemplateBuilder = new ProgramRnrTemplateBuilder();
   private UserBuilder userBuilder = new UserBuilder();
   private SupervisoryNodeBuilder supervisoryNodeBuilder = new SupervisoryNodeBuilder();
+  private RequisitionGroupBuilder requisitionGroupBuilder = new RequisitionGroupBuilder();
   private ProcessingScheduleBuilder scheduleBuilder = new ProcessingScheduleBuilder();
 
   private ProductDAO productDAO;
@@ -39,6 +40,7 @@ public class Runner {
   private ProgramRnrTemplateDAO programRnrTemplateDAO;
   private UserDAO userDAO;
   private SupervisoryNodeDAO supervisoryNodeDAO;
+  private RequisitionGroupDAO requisitionGroupDAO;
   private ProcessingScheduleDAO processingScheduleDAO;
 
   private final ArrayList<ProcessingPeriod> periodList;
@@ -56,6 +58,7 @@ public class Runner {
     programRnrTemplateDAO = (ProgramRnrTemplateDAO) ctx.getBean("programRnrTemplateDAO");
     userDAO = (UserDAO) ctx.getBean("userDAO");
     supervisoryNodeDAO = (SupervisoryNodeDAO) ctx.getBean("supervisoryNodeDAO");
+    requisitionGroupDAO = (RequisitionGroupDAO) ctx.getBean("requisitionGroupDAO");
     processingScheduleDAO = (ProcessingScheduleDAO) ctx.getBean("processingScheduleDAO");
 
     periodList = new ArrayList<>();
@@ -76,8 +79,14 @@ public class Runner {
     insertRnrTemplate();
     insertProductData();
     insertFacilityData();
-    insertSupervisoryNodePair(insertFacilityData());
+    SupervisoryNode supervisoryNode = insertSupervisoryNodePair(insertFacilityData());
+    insertRequisitionGroup(supervisoryNode);
     createSchedulesAndPeriods();
+  }
+
+  private void insertRequisitionGroup(SupervisoryNode supervisoryNode) {
+    RequisitionGroup requisitionGroup = requisitionGroupBuilder.createRequisitionGroup(supervisoryNode);
+    requisitionGroupDAO.insertRequisitionGroup(requisitionGroup);
   }
 
   private void createSchedulesAndPeriods() {
@@ -101,12 +110,14 @@ public class Runner {
     }
   }
 
-  private void insertSupervisoryNodePair(Facility facility) {
+  private SupervisoryNode insertSupervisoryNodePair(Facility facility) {
     SupervisoryNode parentNode = supervisoryNodeBuilder.createSupervisoryNode(facility, null);
     supervisoryNodeDAO.insertSupervisoryNode(parentNode);
 
     SupervisoryNode childNode = supervisoryNodeBuilder.createSupervisoryNode(facility, parentNode);
     supervisoryNodeDAO.insertSupervisoryNode(childNode);
+
+    return childNode;
   }
 
   public void insertVendor() {
