@@ -27,6 +27,7 @@ public class Runner {
   ProgramRnrTemplateBuilder programRnrTemplateBuilder = new ProgramRnrTemplateBuilder();
   UserBuilder userBuilder = new UserBuilder();
   SupervisoryNodeBuilder supervisoryNodeBuilder = new SupervisoryNodeBuilder();
+  ProcessingScheduleBuilder scheduleBuilder = new ProcessingScheduleBuilder();
 
   ProductDAO productDAO;
   FacilityDAO facilityDAO;
@@ -34,10 +35,13 @@ public class Runner {
   ProgramRnrTemplateDAO programRnrTemplateDAO;
   UserDAO userDAO;
   SupervisoryNodeDAO supervisoryNodeDAO;
+  ProcessingScheduleDAO processingScheduleDAO;
 
   List<Program> programList;
   ArrayList<Role> rolesList;
   private Vendor vendor;
+  private ProcessingSchedule monthlySchedule;
+  private ProcessingSchedule quarterlySchedule;
 
   public Runner() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
@@ -47,6 +51,7 @@ public class Runner {
     programRnrTemplateDAO = (ProgramRnrTemplateDAO) ctx.getBean("programRnrTemplateDAO");
     userDAO = (UserDAO) ctx.getBean("userDAO");
     supervisoryNodeDAO = (SupervisoryNodeDAO) ctx.getBean("supervisoryNodeDAO");
+    processingScheduleDAO = (ProcessingScheduleDAO) ctx.getBean("processingScheduleDAO");
 
   }
 
@@ -57,13 +62,22 @@ public class Runner {
   }
 
   private void insertData() {
-    insertSupervisoryNodePair(insertFacilityData());
     insertVendor();
     insertUserData();
     insertPrograms();
     insertRnrTemplate();
     insertProductData();
     insertFacilityData();
+    insertSupervisoryNodePair(insertFacilityData());
+    createSchedules();
+  }
+
+  private void createSchedules() {
+    monthlySchedule = scheduleBuilder.createSchedule("MONTHLY", "monthly");
+    processingScheduleDAO.insertSchedule(monthlySchedule);
+
+    quarterlySchedule = scheduleBuilder.createSchedule("QUARTERLY", "QUARTERLY");
+    processingScheduleDAO.insertSchedule(quarterlySchedule);
   }
 
   private void insertSupervisoryNodePair(Facility facility) {
