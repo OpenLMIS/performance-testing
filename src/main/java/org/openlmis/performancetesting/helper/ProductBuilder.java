@@ -15,7 +15,7 @@ import java.util.Random;
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
-import static org.openlmis.performancetesting.Randomizer.randomDate;
+import static org.openlmis.performancetesting.DateUtil.randomDate;
 
 public class ProductBuilder {
   public Product createProduct(ProductForm form, DosageUnit dosageUnit, ProductCategory category) {

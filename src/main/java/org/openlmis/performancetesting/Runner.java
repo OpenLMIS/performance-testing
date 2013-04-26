@@ -13,32 +13,37 @@ import org.openlmis.rnr.domain.ProgramRnrTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.openlmis.core.domain.Right.*;
+import static org.openlmis.performancetesting.DateUtil.periodEndDate;
+import static org.openlmis.performancetesting.DateUtil.periodStartDate;
 
 public class Runner {
 
-  ProductBuilder productBuilder = new ProductBuilder();
-  FacilityBuilder facilityBuilder = new FacilityBuilder();
-  ProgramBuilder programBuilder = new ProgramBuilder();
-  ProgramRnrTemplateBuilder programRnrTemplateBuilder = new ProgramRnrTemplateBuilder();
-  UserBuilder userBuilder = new UserBuilder();
-  SupervisoryNodeBuilder supervisoryNodeBuilder = new SupervisoryNodeBuilder();
-  ProcessingScheduleBuilder scheduleBuilder = new ProcessingScheduleBuilder();
+  private ProductBuilder productBuilder = new ProductBuilder();
+  private FacilityBuilder facilityBuilder = new FacilityBuilder();
+  private ProgramBuilder programBuilder = new ProgramBuilder();
+  private ProgramRnrTemplateBuilder programRnrTemplateBuilder = new ProgramRnrTemplateBuilder();
+  private UserBuilder userBuilder = new UserBuilder();
+  private SupervisoryNodeBuilder supervisoryNodeBuilder = new SupervisoryNodeBuilder();
+  private ProcessingScheduleBuilder scheduleBuilder = new ProcessingScheduleBuilder();
 
-  ProductDAO productDAO;
-  FacilityDAO facilityDAO;
-  ProgramDAO programDAO;
-  ProgramRnrTemplateDAO programRnrTemplateDAO;
-  UserDAO userDAO;
-  SupervisoryNodeDAO supervisoryNodeDAO;
-  ProcessingScheduleDAO processingScheduleDAO;
+  private ProductDAO productDAO;
+  private FacilityDAO facilityDAO;
+  private ProgramDAO programDAO;
+  private ProgramRnrTemplateDAO programRnrTemplateDAO;
+  private UserDAO userDAO;
+  private SupervisoryNodeDAO supervisoryNodeDAO;
+  private ProcessingScheduleDAO processingScheduleDAO;
 
-  List<Program> programList;
-  ArrayList<Role> rolesList;
+  private final ArrayList<ProcessingPeriod> periodList;
+  private List<Program> programList;
+  private ArrayList<Role> rolesList;
   private Vendor vendor;
   private ProcessingSchedule monthlySchedule;
   private ProcessingSchedule quarterlySchedule;
@@ -53,10 +58,13 @@ public class Runner {
     supervisoryNodeDAO = (SupervisoryNodeDAO) ctx.getBean("supervisoryNodeDAO");
     processingScheduleDAO = (ProcessingScheduleDAO) ctx.getBean("processingScheduleDAO");
 
+    periodList = new ArrayList<>();
+
   }
 
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws ParseException {
+
     Runner runner = new Runner();
     runner.insertData();
   }
@@ -69,15 +77,28 @@ public class Runner {
     insertProductData();
     insertFacilityData();
     insertSupervisoryNodePair(insertFacilityData());
-    createSchedules();
+    createSchedulesAndPeriods();
   }
 
-  private void createSchedules() {
+  private void createSchedulesAndPeriods() {
     monthlySchedule = scheduleBuilder.createSchedule("MONTHLY", "monthly");
     processingScheduleDAO.insertSchedule(monthlySchedule);
 
     quarterlySchedule = scheduleBuilder.createSchedule("QUARTERLY", "QUARTERLY");
     processingScheduleDAO.insertSchedule(quarterlySchedule);
+
+    for (int year = 2012; year < 2014; year++) {
+      for (int month = 1; month <= 12; month++) {
+        Date periodStartDate = periodStartDate(year, month);
+        Date periodEndDate = periodEndDate(year, month);
+        ProcessingPeriod period = scheduleBuilder.createPeriod(periodStartDate, periodEndDate, monthlySchedule);
+        periodList.add(period);
+      }
+    }
+
+    for (ProcessingPeriod period : periodList) {
+      processingScheduleDAO.insertPeriod(period);
+    }
   }
 
   private void insertSupervisoryNodePair(Facility facility) {

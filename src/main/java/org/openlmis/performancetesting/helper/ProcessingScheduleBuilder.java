@@ -6,11 +6,15 @@
 
 package org.openlmis.performancetesting.helper;
 
+import org.openlmis.core.domain.ProcessingPeriod;
 import org.openlmis.core.domain.ProcessingSchedule;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
-import static org.openlmis.performancetesting.Randomizer.randomDate;
+import static org.openlmis.performancetesting.DateUtil.randomDate;
 
 public class ProcessingScheduleBuilder {
 
@@ -25,4 +29,17 @@ public class ProcessingScheduleBuilder {
     return schedule;
   }
 
+  public ProcessingPeriod createPeriod(Date startDate, Date endDate, ProcessingSchedule monthlySchedule) {
+    ProcessingPeriod period = new ProcessingPeriod();
+    period.setName(new SimpleDateFormat("MM-dd-yyyy").format(startDate));
+    period.setDescription(randomAlphanumeric(10));
+    period.setNumberOfMonths(1);
+    period.setStartDate(startDate);
+    period.setEndDate(endDate);
+    period.setScheduleId(monthlySchedule.getId());
+    period.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    period.setModifiedDate(randomDate());
+
+    return period;
+  }
 }
