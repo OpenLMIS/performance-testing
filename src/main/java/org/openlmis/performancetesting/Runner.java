@@ -25,6 +25,8 @@ import static org.openlmis.performancetesting.DateUtil.periodStartDate;
 
 public class Runner {
 
+  public static final int STATES_PER_COUNTRY = 35;
+  public static final int DISTRICT_PER_STATE = 25;
   private ProductBuilder productBuilder = new ProductBuilder();
   private FacilityBuilder facilityBuilder = new FacilityBuilder();
   private ProgramBuilder programBuilder = new ProgramBuilder();
@@ -46,6 +48,7 @@ public class Runner {
   private final ArrayList<ProcessingPeriod> periodList;
   private List<Program> programList;
   private ArrayList<Role> rolesList;
+  List<GeographicLevel> zoneLevels;
   private Vendor vendor;
   private ProcessingSchedule monthlySchedule;
   private ProcessingSchedule quarterlySchedule;
@@ -62,6 +65,7 @@ public class Runner {
     processingScheduleDAO = (ProcessingScheduleDAO) ctx.getBean("processingScheduleDAO");
 
     periodList = new ArrayList<>();
+    zoneLevels = new ArrayList<>();
 
   }
 
@@ -74,22 +78,35 @@ public class Runner {
 
   private void insertData() {
     insertVendor();
-    insertUserData();
     insertPrograms();
+    insertZoneLevels();
+    insertGeoZones();
+    insertSchedulesAndPeriods();
     insertRnrTemplate();
+
+
     insertProductData();
-    insertFacilityData();
-    SupervisoryNode supervisoryNode = insertSupervisoryNodePair(insertFacilityData());
-    insertRequisitionGroup(supervisoryNode);
-    createSchedulesAndPeriods();
+
+    GeographicZone geoZone = facilityDAO.getZone(3);
+    Facility facility = insertFacilityData(geoZone);
+    SupervisoryNode supervisoryNode = insertSupervisoryNodePair(facility);
+    RequisitionGroup requisitionGroup = insertRequisitionGroup(supervisoryNode);
+    insertRequisitionGroupMember(requisitionGroup, facility);
+    insertUserData(facility);
   }
 
-  private void insertRequisitionGroup(SupervisoryNode supervisoryNode) {
+  private RequisitionGroup insertRequisitionGroup(SupervisoryNode supervisoryNode) {
     RequisitionGroup requisitionGroup = requisitionGroupBuilder.createRequisitionGroup(supervisoryNode);
     requisitionGroupDAO.insertRequisitionGroup(requisitionGroup);
+    return requisitionGroup;
   }
 
-  private void createSchedulesAndPeriods() {
+  private void insertRequisitionGroupMember(RequisitionGroup requisitionGroup, Facility facility) {
+    RequisitionGroupMember rgMember = requisitionGroupBuilder.createRequisitionGroupMember(requisitionGroup, facility);
+    requisitionGroupDAO.insertRequisitionMember(rgMember);
+  }
+
+  private void insertSchedulesAndPeriods() {
     monthlySchedule = scheduleBuilder.createSchedule("MONTHLY", "monthly");
     processingScheduleDAO.insertSchedule(monthlySchedule);
 
@@ -125,9 +142,9 @@ public class Runner {
     userDAO.insertVendor(vendor);
   }
 
-  private void insertUserData() {
+  private void insertUserData(Facility facility) {
     insertRoleRights();
-    userDAO.insertUser(userBuilder.createUser(insertFacilityData(), vendor));
+    userDAO.insertUser(userBuilder.createUser(facility, vendor));
   }
 
   private void insertRoleRights() {
@@ -166,13 +183,32 @@ public class Runner {
     }
   }
 
-  private Facility insertFacilityData() {
+  private void insertZoneLevels() {
+    zoneLevels.add(facilityBuilder.createGeoLevel("Country", 1));
+    zoneLevels.add(facilityBuilder.createGeoLevel("State", 2));
+    zoneLevels.add(facilityBuilder.createGeoLevel("District", 3));
 
-    GeographicLevel geoLevel = facilityBuilder.createGeoLevel();
-    facilityDAO.insertGeoLevel(geoLevel);
+    for (GeographicLevel level : zoneLevels) {
+      facilityDAO.insertGeoLevel(level);
+    }
+  }
 
-    GeographicZone geoZone = facilityBuilder.createGeographicZone(geoLevel, new GeographicZone());
-    facilityDAO.insertGeoZone(geoZone);
+  private void insertGeoZones() {
+    GeographicZone nullZone = new GeographicZone();
+    GeographicZone country = facilityBuilder.createGeographicZone(zoneLevels.get(0), nullZone);
+    facilityDAO.insertGeoZone(country);
+    for (int stateCounter = 0; stateCounter < STATES_PER_COUNTRY; stateCounter++) {
+      GeographicZone state = facilityBuilder.createGeographicZone(zoneLevels.get(1), country);
+      facilityDAO.insertGeoZone(state);
+
+      for (int districtCounter = 0; districtCounter < DISTRICT_PER_STATE; districtCounter++) {
+        GeographicZone district = facilityBuilder.createGeographicZone(zoneLevels.get(2), state);
+        facilityDAO.insertGeoZone(district);
+      }
+    }
+  }
+
+  private Facility insertFacilityData(GeographicZone geoZone) {
 
     FacilityType facilityType = facilityBuilder.createFacilityType();
     facilityDAO.insertFacilityType(facilityType);

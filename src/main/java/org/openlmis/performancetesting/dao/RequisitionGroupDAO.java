@@ -7,6 +7,7 @@
 package org.openlmis.performancetesting.dao;
 
 import org.openlmis.core.domain.RequisitionGroup;
+import org.openlmis.core.domain.RequisitionGroupMember;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -17,6 +18,7 @@ public class RequisitionGroupDAO {
 
   NamedParameterJdbcTemplate template;
   final String insertRequisitionGroupQuery = "INSERT INTO requisition_groups VALUES(DEFAULT, :code, :name, :description, :supervisoryNode.id, :modifiedBy, :modifiedDate, %s, :modifiedDate)";
+  final String insertRequisitionGroupMemberQuery = "INSERT INTO requisition_group_members VALUES(DEFAULT, :requisitionGroup.id, :facility.id, :modifiedBy, :modifiedDate, %s, :modifiedDate)";
 
   public RequisitionGroupDAO(NamedParameterJdbcTemplate template) {
     this.template = template;
@@ -32,4 +34,13 @@ public class RequisitionGroupDAO {
     return id;
   }
 
+  public int insertRequisitionMember(RequisitionGroupMember rgMember) {
+    GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+    String query = String.format(insertRequisitionGroupMemberQuery, randomNumeric(5));
+    template.update(query, new BeanPropertySqlParameterSource(rgMember), keyHolder, new String[]{"id"});
+
+    int id = keyHolder.getKey().intValue();
+    rgMember.setId(id);
+    return id;
+  }
 }

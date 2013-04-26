@@ -6,7 +6,9 @@
 
 package org.openlmis.performancetesting.helper;
 
+import org.openlmis.core.domain.Facility;
 import org.openlmis.core.domain.RequisitionGroup;
+import org.openlmis.core.domain.RequisitionGroupMember;
 import org.openlmis.core.domain.SupervisoryNode;
 
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
@@ -25,5 +27,15 @@ public class RequisitionGroupBuilder {
     requisitionGroup.setModifiedDate(randomDate());
 
     return requisitionGroup;
+  }
+
+  public RequisitionGroupMember createRequisitionGroupMember(final RequisitionGroup requisitionGroup, final Facility facility) {
+    RequisitionGroupMember member = new RequisitionGroupMember();
+    member.setFacility(facility);
+    member.setRequisitionGroup(requisitionGroup);
+    member.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    member.setModifiedDate(randomDate());
+
+    return member;
   }
 }

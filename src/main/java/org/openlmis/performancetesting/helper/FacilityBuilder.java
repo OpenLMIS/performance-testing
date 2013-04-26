@@ -86,11 +86,11 @@ public class FacilityBuilder {
     return zone;
   }
 
-  public GeographicLevel createGeoLevel() {
+  public GeographicLevel createGeoLevel(String name, int levelNumber) {
     GeographicLevel level = new GeographicLevel();
     level.setCode(randomAlphanumeric(40));
-    level.setName(randomAlphanumeric(150));
-    level.setLevelNumber(Integer.valueOf(randomNumeric(3)));
+    level.setName(name);
+    level.setLevelNumber(levelNumber);
 
     return level;
   }
