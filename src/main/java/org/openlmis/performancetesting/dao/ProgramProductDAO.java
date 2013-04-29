@@ -15,7 +15,7 @@ public class ProgramProductDAO {
 
   NamedParameterJdbcTemplate template;
   final String insertProgramQuery = "INSERT INTO program_products VALUES(DEFAULT, :program.id, :product.id, " +
-      ":dosagePerMonth, :active, :currentPrice, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
+      ":dosesPerMonth, :active, :currentPrice.value, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
 
   public ProgramProductDAO(NamedParameterJdbcTemplate template) {
     this.template = template;

@@ -56,4 +56,8 @@
         <constructor-arg ref="template"/>
     </bean>
 
+    <bean id="programProductDAO" class="org.openlmis.performancetesting.dao.ProgramProductDAO">
+        <constructor-arg ref="template"/>
+    </bean>
+
 </beans>

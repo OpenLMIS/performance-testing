@@ -6,12 +6,11 @@
 
 package org.openlmis.performancetesting;
 
-import org.openlmis.core.domain.DosageUnit;
-import org.openlmis.core.domain.Product;
-import org.openlmis.core.domain.ProductCategory;
-import org.openlmis.core.domain.ProductForm;
+import org.openlmis.core.domain.*;
 import org.openlmis.performancetesting.dao.ProductDAO;
+import org.openlmis.performancetesting.dao.ProgramProductDAO;
 import org.openlmis.performancetesting.helper.ProductBuilder;
+import org.openlmis.performancetesting.helper.ProgramProductBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -21,17 +20,22 @@ import java.util.List;
 public class ProductData {
 
   private ProductDAO productDAO;
+  private final ProgramProductDAO programProductDAO;
   private ProductBuilder productBuilder = new ProductBuilder();
+  private ProgramProductBuilder programProductBuilder = new ProgramProductBuilder();
 
   public ProductData() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
     productDAO = (ProductDAO) ctx.getBean("productDAO");
+    programProductDAO = (ProgramProductDAO) ctx.getBean("programProductDAO");
 
   }
 
-  public void insertProduct(ProductForm productForm, DosageUnit dosageUnit, ProductCategory category) {
+  public Product insertProduct(ProductForm productForm, DosageUnit dosageUnit, ProductCategory category) {
     Product product = productBuilder.createProduct(productForm, dosageUnit, category);
     productDAO.insertProduct(product);
+
+    return product;
 
   }
 
@@ -68,5 +72,11 @@ public class ProductData {
     }
 
     return productForms;
+  }
+
+  public ProgramProduct insertProgramProduct(Program program, Product product) {
+    ProgramProduct programProduct = programProductBuilder.createProgramProduct(program, product);
+    programProductDAO.insertProgramProduct(programProduct);
+    return programProduct;
   }
 }

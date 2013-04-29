@@ -25,8 +25,8 @@ import static org.openlmis.performancetesting.DateUtil.periodStartDate;
 
 public class Runner {
 
-  public static final int STATES_PER_COUNTRY = 35;
-  public static final int DISTRICT_PER_STATE = 25;
+  public static final int STATES_PER_COUNTRY = 3;
+  public static final int DISTRICT_PER_STATE = 2;
 
   private FacilityBuilder facilityBuilder = new FacilityBuilder();
   private ProgramBuilder programBuilder = new ProgramBuilder();
@@ -99,7 +99,8 @@ public class Runner {
     FacilityOperator facilityOperator = facilityBuilder.createFacilityOperator();
 
 
-    productData.insertProduct(productForms.get(0), dosageUnits.get(0), productCategories.get(0));
+    Product product = productData.insertProduct(productForms.get(0), dosageUnits.get(0), productCategories.get(0));
+    productData.insertProgramProduct(programList.get(0), product);
 
     GeographicZone geoZone = facilityDAO.getZone(3);
     Facility facility = insertFacility(geoZone, facilityType, facilityOperator);
