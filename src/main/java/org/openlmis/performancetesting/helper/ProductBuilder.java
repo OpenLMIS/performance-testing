@@ -76,25 +76,25 @@ public class ProductBuilder {
     return product;
   }
 
-  public ProductForm createForm() {
+  public ProductForm createForm(String code) {
     ProductForm form = new ProductForm();
-    form.setCode(randomAlphanumeric(20));
+    form.setCode(code);
     form.setDisplayOrder(Integer.parseInt(randomNumeric(3)));
 
     return form;
   }
 
-  public DosageUnit createDosageUnit() {
+  public DosageUnit createDosageUnit(String code) {
     DosageUnit dosageUnit = new DosageUnit();
-    dosageUnit.setCode(randomAlphanumeric(20));
+    dosageUnit.setCode(code);
     dosageUnit.setDisplayOrder(Integer.parseInt(randomNumeric(3)));
 
     return dosageUnit;
   }
 
-  public ProductCategory createCategory() {
+  public ProductCategory createCategory(String code) {
     ProductCategory category = new ProductCategory();
-    category.setCode(randomAlphanumeric(50));
+    category.setCode(code);
     category.setName(randomAlphanumeric(80));
     category.setDisplayOrder(Integer.valueOf(randomNumeric(3)));
 
