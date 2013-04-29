@@ -27,7 +27,7 @@ public class Runner {
 
   public static final int STATES_PER_COUNTRY = 35;
   public static final int DISTRICT_PER_STATE = 25;
-  private ProductBuilder productBuilder = new ProductBuilder();
+
   private FacilityBuilder facilityBuilder = new FacilityBuilder();
   private ProgramBuilder programBuilder = new ProgramBuilder();
   private ProgramRnrTemplateBuilder programRnrTemplateBuilder = new ProgramRnrTemplateBuilder();
@@ -37,7 +37,7 @@ public class Runner {
   private ProcessingScheduleBuilder scheduleBuilder = new ProcessingScheduleBuilder();
   private SupplyLineBuilder supplyLineBuilder = new SupplyLineBuilder();
 
-  private ProductDAO productDAO;
+  private ProductData productData = new ProductData();
   private FacilityDAO facilityDAO;
   private ProgramDAO programDAO;
   private ProgramRnrTemplateDAO programRnrTemplateDAO;
@@ -60,7 +60,6 @@ public class Runner {
 
   public Runner() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
-    productDAO = (ProductDAO) ctx.getBean("productDAO");
     facilityDAO = (FacilityDAO) ctx.getBean("facilityDAO");
     programDAO = (ProgramDAO) ctx.getBean("programDAO");
     programRnrTemplateDAO = (ProgramRnrTemplateDAO) ctx.getBean("programRnrTemplateDAO");
@@ -81,9 +80,9 @@ public class Runner {
   }
 
   private void setupReferenceData() {
-    setupDosageUnits();
-    setupProductCategories();
-    setupProductForms();
+    dosageUnits = productData.setupDosageUnits();
+    productCategories = productData.setupProductCategories();
+    productForms = productData.setupProductForms();
     setupVendors();
 
     insertPrograms();
@@ -100,7 +99,7 @@ public class Runner {
     FacilityOperator facilityOperator = facilityBuilder.createFacilityOperator();
 
 
-    insertProductData(productForms.get(0), dosageUnits.get(0), productCategories.get(0));
+    productData.insertProduct(productForms.get(0), dosageUnits.get(0), productCategories.get(0));
 
     GeographicZone geoZone = facilityDAO.getZone(3);
     Facility facility = insertFacility(geoZone, facilityType, facilityOperator);
@@ -250,40 +249,5 @@ public class Runner {
     return facilityType;
   }
 
-  private void insertProductData(ProductForm productForm, DosageUnit dosageUnit, ProductCategory category) {
-
-
-    Product product = productBuilder.createProduct(productForm, dosageUnit, category);
-    long productId = productDAO.insertProduct(product);
-
-    System.out.println(productId);
-  }
-
-  private void setupDosageUnits() {
-    String[] codes = {"mg", "ml", "each", "cc", "gm", "mcg", "IU"};
-    for (String code : codes) {
-      DosageUnit dosageUnit = productBuilder.createDosageUnit(code);
-      productDAO.insertDosageUnit(dosageUnit);
-      this.dosageUnits.add(dosageUnit);
-    }
-  }
-
-  private void setupProductCategories() {
-    String[] codes = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10"};
-    for (String code : codes) {
-      ProductCategory category = productBuilder.createCategory(code);
-      productDAO.insertCategory(category);
-      this.productCategories.add(category);
-    }
-  }
-
-  private void setupProductForms() {
-    String[] codes = {"Tablet", "Capsule", "Bottle", "Vial", "Ampule", "Drops", "Powder", "Each", "Injecta", "Tube", "Solutio", "Inhaler", "Patch", "Implant", "Sachet", "Device", "Other"};
-    for (String code : codes) {
-      ProductForm productForm = productBuilder.createForm(code);
-      productDAO.insertProductForm(productForm);
-      this.productForms.add(productForm);
-    }
-  }
 
 }
