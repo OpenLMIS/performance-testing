@@ -52,4 +52,8 @@
         <constructor-arg ref="template"/>
     </bean>
 
+    <bean id="supplyLineDAO" class="org.openlmis.performancetesting.dao.SupplyLineDAO">
+        <constructor-arg ref="template"/>
+    </bean>
+
 </beans>

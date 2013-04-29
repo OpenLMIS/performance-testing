@@ -35,6 +35,7 @@ public class Runner {
   private SupervisoryNodeBuilder supervisoryNodeBuilder = new SupervisoryNodeBuilder();
   private RequisitionGroupBuilder requisitionGroupBuilder = new RequisitionGroupBuilder();
   private ProcessingScheduleBuilder scheduleBuilder = new ProcessingScheduleBuilder();
+  private SupplyLineBuilder supplyLineBuilder = new SupplyLineBuilder();
 
   private ProductDAO productDAO;
   private FacilityDAO facilityDAO;
@@ -44,6 +45,7 @@ public class Runner {
   private SupervisoryNodeDAO supervisoryNodeDAO;
   private RequisitionGroupDAO requisitionGroupDAO;
   private ProcessingScheduleDAO processingScheduleDAO;
+  private SupplyLineDAO supplyLineDAO;
 
   private final ArrayList<ProcessingPeriod> periodList;
   private List<Program> programList;
@@ -63,6 +65,7 @@ public class Runner {
     supervisoryNodeDAO = (SupervisoryNodeDAO) ctx.getBean("supervisoryNodeDAO");
     requisitionGroupDAO = (RequisitionGroupDAO) ctx.getBean("requisitionGroupDAO");
     processingScheduleDAO = (ProcessingScheduleDAO) ctx.getBean("processingScheduleDAO");
+    supplyLineDAO = (SupplyLineDAO) ctx.getBean("supplyLineDAO");
 
     periodList = new ArrayList<>();
     zoneLevels = new ArrayList<>();
@@ -96,7 +99,19 @@ public class Runner {
     RequisitionGroup requisitionGroup = insertRequisitionGroup(supervisoryNode);
 
     insertRequisitionGroupMember(requisitionGroup, facility);
+
+    for (Program program : programList) {
+      insertSupplyLine(supervisoryNode, program, facility);
+    }
+
     insertUserData(facility);
+  }
+
+  private SupplyLine insertSupplyLine(SupervisoryNode supervisoryNode, Program program, Facility facility) {
+    SupplyLine supplyLine = supplyLineBuilder.createSupplyLine(supervisoryNode, program, facility);
+
+    supplyLineDAO.insertSupplyLine(supplyLine);
+    return supplyLine;
   }
 
   private RequisitionGroup insertRequisitionGroup(SupervisoryNode supervisoryNode) {
