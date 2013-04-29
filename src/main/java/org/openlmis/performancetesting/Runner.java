@@ -83,14 +83,18 @@ public class Runner {
     insertGeoZones();
     insertSchedulesAndPeriods();
     insertRnrTemplate();
+    FacilityType facilityType = insertFacilityType();
+    //TODO insert facility operator
+    FacilityOperator facilityOperator = facilityBuilder.createFacilityOperator();
 
 
     insertProductData();
 
     GeographicZone geoZone = facilityDAO.getZone(3);
-    Facility facility = insertFacilityData(geoZone);
+    Facility facility = insertFacility(geoZone, facilityType, facilityOperator);
     SupervisoryNode supervisoryNode = insertSupervisoryNodePair(facility);
     RequisitionGroup requisitionGroup = insertRequisitionGroup(supervisoryNode);
+
     insertRequisitionGroupMember(requisitionGroup, facility);
     insertUserData(facility);
   }
@@ -208,18 +212,18 @@ public class Runner {
     }
   }
 
-  private Facility insertFacilityData(GeographicZone geoZone) {
-
-    FacilityType facilityType = facilityBuilder.createFacilityType();
-    facilityDAO.insertFacilityType(facilityType);
-
-    FacilityOperator facilityOperator = facilityBuilder.createFacilityOperator();
+  private Facility insertFacility(GeographicZone geoZone, FacilityType facilityType, FacilityOperator facilityOperator) {
 
     Facility facility = facilityBuilder.createFacility(geoZone, facilityType, facilityOperator);
     facilityDAO.insertFacility(facility);
 
-    System.out.println(facility.getId());
     return facility;
+  }
+
+  private FacilityType insertFacilityType() {
+    FacilityType facilityType = facilityBuilder.createFacilityType();
+    facilityDAO.insertFacilityType(facilityType);
+    return facilityType;
   }
 
   private void insertProductData() {
