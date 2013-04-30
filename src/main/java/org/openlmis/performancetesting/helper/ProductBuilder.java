@@ -5,10 +5,7 @@
 
 package org.openlmis.performancetesting.helper;
 
-import org.openlmis.core.domain.DosageUnit;
-import org.openlmis.core.domain.Product;
-import org.openlmis.core.domain.ProductCategory;
-import org.openlmis.core.domain.ProductForm;
+import org.openlmis.core.domain.*;
 
 import java.util.Random;
 
@@ -75,6 +72,31 @@ public class ProductBuilder {
 
     return product;
   }
+
+  public ProgramProduct createProgramProduct(Program program, Product product) {
+    ProgramProduct programProduct = new ProgramProduct();
+    programProduct.setProgram(program);
+    programProduct.setProduct(product);
+    programProduct.setActive(true);
+    programProduct.setCurrentPrice(new Money("33.3"));
+    programProduct.setDosesPerMonth(4);
+    programProduct.setModifiedBy(Integer.valueOf(randomNumeric(4)));
+    programProduct.setModifiedDate(randomDate());
+
+    return programProduct;
+  }
+
+  public FacilityApprovedProduct createFacilityApprovedProduct(FacilityType facilityType, ProgramProduct programProduct) {
+    FacilityApprovedProduct product = new FacilityApprovedProduct();
+    product.setFacilityType(facilityType);
+    product.setProgramProduct(programProduct);
+    product.setMaxMonthsOfStock(40);
+    product.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    product.setModifiedDate(randomDate());
+
+    return product;
+  }
+
 
   public ProductForm createForm(String code) {
     ProductForm form = new ProductForm();

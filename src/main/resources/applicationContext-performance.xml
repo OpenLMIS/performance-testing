@@ -59,5 +59,8 @@
     <bean id="programProductDAO" class="org.openlmis.performancetesting.dao.ProgramProductDAO">
         <constructor-arg ref="template"/>
     </bean>
+    <bean id="facilityApprovedProductDAO" class="org.openlmis.performancetesting.dao.FacilityApprovedProductDAO">
+        <constructor-arg ref="template"/>
+    </bean>
 
 </beans>

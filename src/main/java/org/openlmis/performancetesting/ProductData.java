@@ -7,10 +7,10 @@
 package org.openlmis.performancetesting;
 
 import org.openlmis.core.domain.*;
+import org.openlmis.performancetesting.dao.FacilityApprovedProductDAO;
 import org.openlmis.performancetesting.dao.ProductDAO;
 import org.openlmis.performancetesting.dao.ProgramProductDAO;
 import org.openlmis.performancetesting.helper.ProductBuilder;
-import org.openlmis.performancetesting.helper.ProgramProductBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -21,13 +21,14 @@ public class ProductData {
 
   private ProductDAO productDAO;
   private final ProgramProductDAO programProductDAO;
+  private final FacilityApprovedProductDAO facilityApprovedProductDAO;
   private ProductBuilder productBuilder = new ProductBuilder();
-  private ProgramProductBuilder programProductBuilder = new ProgramProductBuilder();
 
   public ProductData() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
     productDAO = (ProductDAO) ctx.getBean("productDAO");
     programProductDAO = (ProgramProductDAO) ctx.getBean("programProductDAO");
+    facilityApprovedProductDAO = (FacilityApprovedProductDAO) ctx.getBean("facilityApprovedProductDAO");
 
   }
 
@@ -37,6 +38,17 @@ public class ProductData {
 
     return product;
 
+  }
+
+  public ProgramProduct insertProgramProduct(Program program, Product product) {
+    ProgramProduct programProduct = productBuilder.createProgramProduct(program, product);
+    programProductDAO.insertProgramProduct(programProduct);
+    return programProduct;
+  }
+
+  public void insertFacilityApprovedProduct(FacilityType facilityType, ProgramProduct programProduct) {
+    FacilityApprovedProduct facilityApprovedProduct = productBuilder.createFacilityApprovedProduct(facilityType, programProduct);
+    facilityApprovedProductDAO.insertFacilityApprovedProduct(facilityApprovedProduct);
   }
 
   public List<DosageUnit> setupDosageUnits() {
@@ -72,11 +84,5 @@ public class ProductData {
     }
 
     return productForms;
-  }
-
-  public ProgramProduct insertProgramProduct(Program program, Product product) {
-    ProgramProduct programProduct = programProductBuilder.createProgramProduct(program, product);
-    programProductDAO.insertProgramProduct(programProduct);
-    return programProduct;
   }
 }

@@ -100,7 +100,8 @@ public class Runner {
 
 
     Product product = productData.insertProduct(productForms.get(0), dosageUnits.get(0), productCategories.get(0));
-    productData.insertProgramProduct(programList.get(0), product);
+    ProgramProduct programProduct = productData.insertProgramProduct(programList.get(0), product);
+    productData.insertFacilityApprovedProduct(facilityType, programProduct);
 
     GeographicZone geoZone = facilityDAO.getZone(3);
     Facility facility = insertFacility(geoZone, facilityType, facilityOperator);
