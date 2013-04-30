@@ -37,7 +37,6 @@ public class FacilityBuilder {
     facility.setSdp(nextBoolean());
     facility.setOnline(nextBoolean());
     facility.setSatellite(nextBoolean());
-//    facility.setSatelliteParentCode(randomAlphanumeric(6));
     facility.setHasElectricity(nextBoolean());
     facility.setHasElectronicScc(nextBoolean());
     facility.setHasElectronicDar(nextBoolean());
