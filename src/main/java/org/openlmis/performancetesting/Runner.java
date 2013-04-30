@@ -25,8 +25,11 @@ import static org.openlmis.performancetesting.DateUtil.periodStartDate;
 
 public class Runner {
 
-  public static final int STATES_PER_COUNTRY = 3;
-  public static final int DISTRICT_PER_STATE = 2;
+  public static final int STATES_PER_COUNTRY = 10; // 35
+  public static final int DISTRICT_PER_STATE = 5; // 25
+  public static final int FACILITIES_PER_DISTRICT = 5; // 28
+  public static final int FACILITIES_PER_REQUISITION_GROUP = 5; // 100
+
 
   private FacilityBuilder facilityBuilder = new FacilityBuilder();
   private ProgramBuilder programBuilder = new ProgramBuilder();
@@ -84,6 +87,8 @@ public class Runner {
     productCategories = productData.setupProductCategories();
     productForms = productData.setupProductForms();
     setupVendors();
+    insertRoleRights();
+
 
     insertPrograms();
     insertZoneLevels();
@@ -103,19 +108,31 @@ public class Runner {
     ProgramProduct programProduct = productData.insertProgramProduct(programList.get(0), product);
     productData.insertFacilityApprovedProduct(facilityType, programProduct);
 
-    GeographicZone geoZone = facilityDAO.getZone(3);
-    Facility facility = insertFacility(geoZone, facilityType, facilityOperator);
-    SupervisoryNode supervisoryNode = insertSupervisoryNodePair(facility);
-    RequisitionGroup requisitionGroup = insertRequisitionGroup(supervisoryNode);
+    List<Facility> facilityList = new ArrayList<>();
+    for (int facilityCounter = 0; facilityCounter < STATES_PER_COUNTRY * DISTRICT_PER_STATE * FACILITIES_PER_DISTRICT; facilityCounter++) {
+      GeographicZone geoZone = facilityDAO.getDistrictZone(facilityCounter % (STATES_PER_COUNTRY * DISTRICT_PER_STATE));
+      Facility facility = insertFacility(geoZone, facilityType, facilityOperator);
+      facilityList.add(facility);
+      insertPairOfUserWithCreateAndAuthorizeRights(facility);
 
-    insertRequisitionGroupMember(requisitionGroup, facility);
-
-    for (Program program : programList) {
-      insertSupplyLine(supervisoryNode, program, facility);
-      insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
+      if ((facilityCounter + 1) % FACILITIES_PER_REQUISITION_GROUP == 0) {
+        SupervisoryNode supervisoryNode = insertSupervisoryNodePair(facility);
+        RequisitionGroup requisitionGroup = insertRequisitionGroup(supervisoryNode);
+        insertRequisitionGroupMember(requisitionGroup, facilityList);
+        for (Program program : programList) {
+          insertSupplyLine(supervisoryNode, program, facility);
+          insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
+          createApproverAtSupervisoryNodes(supervisoryNode);
+        }
+        facilityList = new ArrayList<>();
+      }
     }
 
-    insertUserData(facility);
+  }
+
+  private void createApproverAtSupervisoryNodes(SupervisoryNode supervisoryNode) {
+    userBuilder.createUser(null, vendor);
+
   }
 
   private RequisitionGroupProgramSchedule insertRequisitionGroupProgramSchedule(RequisitionGroup requisitionGroup, Program program, ProcessingSchedule monthlySchedule, Facility facility) {
@@ -137,9 +154,11 @@ public class Runner {
     return requisitionGroup;
   }
 
-  private void insertRequisitionGroupMember(RequisitionGroup requisitionGroup, Facility facility) {
-    RequisitionGroupMember rgMember = requisitionGroupBuilder.createRequisitionGroupMember(requisitionGroup, facility);
-    requisitionGroupDAO.insertRequisitionMember(rgMember);
+  private void insertRequisitionGroupMember(RequisitionGroup requisitionGroup, List<Facility> facilityList) {
+    for (Facility facility : facilityList) {
+      RequisitionGroupMember rgMember = requisitionGroupBuilder.createRequisitionGroupMember(requisitionGroup, facility);
+      requisitionGroupDAO.insertRequisitionMember(rgMember);
+    }
   }
 
   private void insertSchedulesAndPeriods() {
@@ -178,9 +197,20 @@ public class Runner {
     userDAO.insertVendor(vendor);
   }
 
-  private void insertUserData(Facility facility) {
-    insertRoleRights();
-    userDAO.insertUser(userBuilder.createUser(facility, vendor));
+  private void insertPairOfUserWithCreateAndAuthorizeRights(Facility facility) {
+    Role storeInCharge = rolesList.get(2);
+    Role facilityHead = rolesList.get(4);
+
+    for (int i = 0; i < 2; i++) {
+      User user = userBuilder.createUser(facility, vendor);
+      userDAO.insertUser(user);
+
+      for (Program program : programList) {
+        userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user, storeInCharge));
+
+        userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user, facilityHead));
+      }
+    }
   }
 
   private void insertRoleRights() {

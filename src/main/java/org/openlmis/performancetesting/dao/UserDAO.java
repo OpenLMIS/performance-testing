@@ -7,16 +7,10 @@
 package org.openlmis.performancetesting.dao;
 
 import lombok.Data;
-import org.openlmis.core.domain.Right;
-import org.openlmis.core.domain.Role;
-import org.openlmis.core.domain.User;
-import org.openlmis.core.domain.Vendor;
+import org.openlmis.core.domain.*;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-
-import static java.lang.String.format;
-import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 
 public class UserDAO {
   NamedParameterJdbcTemplate template;
@@ -27,9 +21,11 @@ public class UserDAO {
 
   final String insertVendorQuery = "INSERT INTO vendors VALUES(DEFAULT, :name, DEFAULT, :active)";
 
-  final String insertUserQuery = format("INSERT INTO users VALUES(DEFAULT, :userName, :password, :firstName, :lastName" +
+  final String insertUserQuery = "INSERT INTO users VALUES(DEFAULT, :userName, :password, :firstName, :lastName" +
       ", :employeeId, :jobTitle, :primaryNotificationMethod, :officePhone, :cellPhone, :email, :supervisor.Id" +
-      ", :facilityId, :active, :vendorId, :modifiedBy, :modifiedDate, %s, :modifiedDate)", randomNumeric(5));
+      ", :facilityId, :active, :vendorId, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
+
+  final String insertRoleAssignmentQuery = "INSERT INTO role_assignments VALUES(:userId, :roleIds[0], :programId)";
 
   public UserDAO(NamedParameterJdbcTemplate template) {
     this.template = template;
@@ -59,6 +55,10 @@ public class UserDAO {
     }
 
     return roleId;
+  }
+
+  public void insertRoleAssignment(RoleAssignment roleAssignment) {
+    template.update(insertRoleAssignmentQuery, new BeanPropertySqlParameterSource(roleAssignment));
   }
 
   public int insertVendor(Vendor vendor) {

@@ -25,6 +25,16 @@ public class UserBuilder {
     return role;
   }
 
+  public RoleAssignment createRoleAssignment(Program program, User user, Role role) {
+    RoleAssignment roleAssignment = new RoleAssignment();
+
+    roleAssignment.setUserId(user.getId());
+    roleAssignment.setRoleId(role.getId());
+    roleAssignment.setProgramId(program.getId());
+
+    return roleAssignment;
+  }
+
   public User createUser(Facility homeFacility, Vendor vendor) {
     User user = new User();
     user.setUserName(randomAlphanumeric(20));
