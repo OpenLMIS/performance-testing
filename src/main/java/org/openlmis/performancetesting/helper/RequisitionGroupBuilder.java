@@ -6,10 +6,7 @@
 
 package org.openlmis.performancetesting.helper;
 
-import org.openlmis.core.domain.Facility;
-import org.openlmis.core.domain.RequisitionGroup;
-import org.openlmis.core.domain.RequisitionGroupMember;
-import org.openlmis.core.domain.SupervisoryNode;
+import org.openlmis.core.domain.*;
 
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
@@ -37,5 +34,21 @@ public class RequisitionGroupBuilder {
     member.setModifiedDate(randomDate());
 
     return member;
+  }
+
+  public RequisitionGroupProgramSchedule createRequisitionGroupProgramSchedule(final RequisitionGroup requisitionGroup,
+                                                                               final Program program,
+                                                                               final ProcessingSchedule schedule,
+                                                                               final Facility dropOffFacility) {
+    RequisitionGroupProgramSchedule mapping = new RequisitionGroupProgramSchedule();
+    mapping.setRequisitionGroup(requisitionGroup);
+    mapping.setProgram(program);
+    mapping.setProcessingSchedule(schedule);
+    mapping.setDropOffFacility(dropOffFacility);
+    mapping.setDirectDelivery(true);
+    mapping.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    mapping.setModifiedDate(randomDate());
+
+    return mapping;
   }
 }

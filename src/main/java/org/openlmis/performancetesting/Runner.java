@@ -112,9 +112,16 @@ public class Runner {
 
     for (Program program : programList) {
       insertSupplyLine(supervisoryNode, program, facility);
+      insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
     }
 
     insertUserData(facility);
+  }
+
+  private RequisitionGroupProgramSchedule insertRequisitionGroupProgramSchedule(RequisitionGroup requisitionGroup, Program program, ProcessingSchedule monthlySchedule, Facility facility) {
+    RequisitionGroupProgramSchedule requisitionGroupProgramSchedule = requisitionGroupBuilder.createRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
+    requisitionGroupDAO.insertRequisitionGroupProgramSchedule(requisitionGroupProgramSchedule);
+    return requisitionGroupProgramSchedule;
   }
 
   private SupplyLine insertSupplyLine(SupervisoryNode supervisoryNode, Program program, Facility facility) {
