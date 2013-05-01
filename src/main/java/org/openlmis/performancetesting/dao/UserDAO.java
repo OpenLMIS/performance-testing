@@ -25,7 +25,7 @@ public class UserDAO {
       ", :employeeId, :jobTitle, :primaryNotificationMethod, :officePhone, :cellPhone, :email, :supervisor.Id" +
       ", :facilityId, :active, :vendorId, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
 
-  final String insertRoleAssignmentQuery = "INSERT INTO role_assignments VALUES(:userId, :roleIds[0], :programId)";
+  final String insertRoleAssignmentQuery = "INSERT INTO role_assignments VALUES(:userId, :roleIds[0], :programId, :supervisoryNode.id)";
 
   public UserDAO(NamedParameterJdbcTemplate template) {
     this.template = template;

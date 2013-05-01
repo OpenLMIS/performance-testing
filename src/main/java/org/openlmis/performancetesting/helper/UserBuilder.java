@@ -25,12 +25,17 @@ public class UserBuilder {
     return role;
   }
 
-  public RoleAssignment createRoleAssignment(Program program, User user, Role role) {
+  public RoleAssignment createRoleAssignment(Program program, User user, Role role, SupervisoryNode supervisoryNode) {
     RoleAssignment roleAssignment = new RoleAssignment();
 
     roleAssignment.setUserId(user.getId());
     roleAssignment.setRoleId(role.getId());
     roleAssignment.setProgramId(program.getId());
+
+    if (supervisoryNode == null) {
+      supervisoryNode = new SupervisoryNode();
+    }
+    roleAssignment.setSupervisoryNode(supervisoryNode);
 
     return roleAssignment;
   }

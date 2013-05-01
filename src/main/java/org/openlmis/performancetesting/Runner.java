@@ -131,7 +131,20 @@ public class Runner {
   }
 
   private void createApproverAtSupervisoryNodes(SupervisoryNode supervisoryNode) {
-    userBuilder.createUser(null, vendor);
+    User user1 = userBuilder.createUser(null, vendor);
+    User user2 = userBuilder.createUser(null, vendor);
+    userDAO.insertUser(user1);
+    userDAO.insertUser(user2);
+    Role lmu = rolesList.get(3);
+    Role facilityHead = rolesList.get(4);
+
+    for (Program program : programList) {
+      RoleAssignment roleAssignment1 = userBuilder.createRoleAssignment(program, user1, lmu, supervisoryNode);
+      userDAO.insertRoleAssignment(roleAssignment1);
+
+      RoleAssignment roleAssignment2 = userBuilder.createRoleAssignment(program, user2, facilityHead, supervisoryNode.getParent());
+      userDAO.insertRoleAssignment(roleAssignment2);
+    }
 
   }
 
@@ -206,9 +219,8 @@ public class Runner {
       userDAO.insertUser(user);
 
       for (Program program : programList) {
-        userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user, storeInCharge));
-
-        userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user, facilityHead));
+        userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user, storeInCharge, null));
+        userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user, facilityHead, null));
       }
     }
   }
