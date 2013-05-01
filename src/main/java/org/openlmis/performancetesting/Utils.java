@@ -6,15 +6,19 @@
 
 package org.openlmis.performancetesting;
 
+import org.openlmis.core.domain.Money;
+
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import static java.lang.Math.abs;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Calendar.*;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 
-public class DateUtil {
+public class Utils {
 
   public static Date randomDate() {
     return new Date(abs(currentTimeMillis() - Long.valueOf(randomNumeric(11))));
@@ -46,5 +50,19 @@ public class DateUtil {
     return calendar.getTime();
 
   }
+
+  public static double randomDouble(int min, int max) {
+    Random random = new Random();
+    return min + (max - min) * random.nextDouble();
+  }
+
+  public static Money randomMoney(int length) {
+    int min = (int) Math.pow(10, length - 1);
+    int max = (int) Math.pow(10, length) - 1;
+    Random random = new Random();
+    BigDecimal bigDecimal = new BigDecimal(min + (max - min) * random.nextDouble());
+    return new Money(bigDecimal);
+  }
+
 
 }

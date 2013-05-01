@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
-import static org.openlmis.performancetesting.DateUtil.randomDate;
+import static org.openlmis.performancetesting.Utils.randomDate;
 
 public class UserBuilder {
   public Role createRole(String name, Boolean isAdminRole, List<Right> rights) {

@@ -10,7 +10,7 @@ import org.openlmis.core.domain.*;
 
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
-import static org.openlmis.performancetesting.DateUtil.randomDate;
+import static org.openlmis.performancetesting.Utils.randomDate;
 
 public class RequisitionGroupBuilder {
 
@@ -36,10 +36,10 @@ public class RequisitionGroupBuilder {
     return member;
   }
 
-  public RequisitionGroupProgramSchedule createRequisitionGroupProgramSchedule(final RequisitionGroup requisitionGroup,
-                                                                               final Program program,
-                                                                               final ProcessingSchedule schedule,
-                                                                               final Facility dropOffFacility) {
+  public RequisitionGroupProgramSchedule createRGProgramSchedule(final RequisitionGroup requisitionGroup,
+                                                                 final Program program,
+                                                                 final ProcessingSchedule schedule,
+                                                                 final Facility dropOffFacility) {
     RequisitionGroupProgramSchedule mapping = new RequisitionGroupProgramSchedule();
     mapping.setRequisitionGroup(requisitionGroup);
     mapping.setProgram(program);

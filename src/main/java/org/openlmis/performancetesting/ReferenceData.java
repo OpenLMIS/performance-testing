@@ -6,10 +6,12 @@
 
 package org.openlmis.performancetesting;
 
+import lombok.Getter;
 import org.openlmis.core.domain.*;
 import org.openlmis.performancetesting.builder.*;
 import org.openlmis.performancetesting.dao.*;
 import org.openlmis.rnr.domain.ProgramRnrTemplate;
+import org.openlmis.rnr.domain.RnrStatus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,15 +19,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.openlmis.performancetesting.DateUtil.periodEndDate;
-import static org.openlmis.performancetesting.DateUtil.periodStartDate;
+import static org.openlmis.performancetesting.Utils.periodEndDate;
+import static org.openlmis.performancetesting.Utils.periodStartDate;
 
 public class ReferenceData {
 
-  public static final int STATES_PER_COUNTRY = 10; // 35
-  public static final int DISTRICT_PER_STATE = 5; // 25
-  public static final int FACILITIES_PER_DISTRICT = 5; // 28
-  public static final int FACILITIES_PER_REQUISITION_GROUP = 5; // 100
+  public static final int STATES_PER_COUNTRY = 2; // 35
+  public static final int DISTRICT_PER_STATE = 2; // 25
+  public static final int FACILITIES_PER_DISTRICT = 2; // 28
+  public static final int FACILITIES_PER_REQUISITION_GROUP = 2; // 100
 
 
   private FacilityBuilder facilityBuilder = new FacilityBuilder();
@@ -38,6 +40,8 @@ public class ReferenceData {
 
   private ProductData productData = new ProductData();
   private ProgramData programData = new ProgramData();
+  private RequisitionData requisitionData = new RequisitionData();
+
   private RoleRightData roleRightData = new RoleRightData();
   private FacilityDAO facilityDAO;
   private ProgramRnrTemplateDAO programRnrTemplateDAO;
@@ -47,8 +51,12 @@ public class ReferenceData {
   private ProcessingScheduleDAO processingScheduleDAO;
   private SupplyLineDAO supplyLineDAO;
 
+  @Getter
   private final ArrayList<ProcessingPeriod> periodList = new ArrayList<>();
+
+  @Getter
   private List<Program> programList;
+
   private ArrayList<Role> rolesList = new ArrayList<>();
   List<GeographicLevel> zoneLevels = new ArrayList<>();
   private Vendor vendor;
@@ -112,11 +120,19 @@ public class ReferenceData {
           insertSupplyLine(supervisoryNode, program, facility);
           insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
           createApproverAtSupervisoryNodes(supervisoryNode);
+          createRequisitions(facilityList, program, supervisoryNode, facility);
         }
         facilityList = new ArrayList<>();
       }
     }
 
+  }
+
+  private void createRequisitions(List<Facility> facilities, Program program, SupervisoryNode supervisoryNode, Facility supplyingFacility) {
+    for (Facility facility : facilities) {
+      requisitionData.createRequisition(periodList.subList(0, 12), facility, program, supervisoryNode,
+          supplyingFacility, RnrStatus.APPROVED);
+    }
   }
 
   private void createApproverAtSupervisoryNodes(SupervisoryNode supervisoryNode) {
@@ -141,7 +157,7 @@ public class ReferenceData {
                                                                                 Program program,
                                                                                 ProcessingSchedule monthlySchedule,
                                                                                 Facility facility) {
-    RequisitionGroupProgramSchedule rgProgramSchedule = requisitionGroupBuilder.createRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
+    RequisitionGroupProgramSchedule rgProgramSchedule = requisitionGroupBuilder.createRGProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
     requisitionGroupDAO.insertRequisitionGroupProgramSchedule(rgProgramSchedule);
     return rgProgramSchedule;
   }
