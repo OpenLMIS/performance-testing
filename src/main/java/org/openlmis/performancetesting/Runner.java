@@ -7,8 +7,8 @@
 package org.openlmis.performancetesting;
 
 import org.openlmis.core.domain.*;
+import org.openlmis.performancetesting.builder.*;
 import org.openlmis.performancetesting.dao.*;
-import org.openlmis.performancetesting.helper.*;
 import org.openlmis.rnr.domain.ProgramRnrTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-import static org.openlmis.core.domain.Right.*;
 import static org.openlmis.performancetesting.DateUtil.periodEndDate;
 import static org.openlmis.performancetesting.DateUtil.periodStartDate;
 
@@ -32,7 +30,6 @@ public class Runner {
 
 
   private FacilityBuilder facilityBuilder = new FacilityBuilder();
-  private ProgramBuilder programBuilder = new ProgramBuilder();
   private ProgramRnrTemplateBuilder programRnrTemplateBuilder = new ProgramRnrTemplateBuilder();
   private UserBuilder userBuilder = new UserBuilder();
   private SupervisoryNodeBuilder supervisoryNodeBuilder = new SupervisoryNodeBuilder();
@@ -41,8 +38,9 @@ public class Runner {
   private SupplyLineBuilder supplyLineBuilder = new SupplyLineBuilder();
 
   private ProductData productData = new ProductData();
+  private ProgramData programData = new ProgramData();
+  private RoleRightData roleRightData = new RoleRightData();
   private FacilityDAO facilityDAO;
-  private ProgramDAO programDAO;
   private ProgramRnrTemplateDAO programRnrTemplateDAO;
   private UserDAO userDAO;
   private SupervisoryNodeDAO supervisoryNodeDAO;
@@ -64,7 +62,6 @@ public class Runner {
   public Runner() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
     facilityDAO = (FacilityDAO) ctx.getBean("facilityDAO");
-    programDAO = (ProgramDAO) ctx.getBean("programDAO");
     programRnrTemplateDAO = (ProgramRnrTemplateDAO) ctx.getBean("programRnrTemplateDAO");
     userDAO = (UserDAO) ctx.getBean("userDAO");
     supervisoryNodeDAO = (SupervisoryNodeDAO) ctx.getBean("supervisoryNodeDAO");
@@ -86,11 +83,10 @@ public class Runner {
     dosageUnits = productData.setupDosageUnits();
     productCategories = productData.setupProductCategories();
     productForms = productData.setupProductForms();
+    programList = programData.setupPrograms();
+    rolesList = roleRightData.setupRoleRights();
     setupVendors();
-    insertRoleRights();
 
-
-    insertPrograms();
     insertZoneLevels();
     insertGeoZones();
     insertSchedulesAndPeriods();
@@ -148,10 +144,13 @@ public class Runner {
 
   }
 
-  private RequisitionGroupProgramSchedule insertRequisitionGroupProgramSchedule(RequisitionGroup requisitionGroup, Program program, ProcessingSchedule monthlySchedule, Facility facility) {
-    RequisitionGroupProgramSchedule requisitionGroupProgramSchedule = requisitionGroupBuilder.createRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
-    requisitionGroupDAO.insertRequisitionGroupProgramSchedule(requisitionGroupProgramSchedule);
-    return requisitionGroupProgramSchedule;
+  private RequisitionGroupProgramSchedule insertRequisitionGroupProgramSchedule(RequisitionGroup requisitionGroup,
+                                                                                Program program,
+                                                                                ProcessingSchedule monthlySchedule,
+                                                                                Facility facility) {
+    RequisitionGroupProgramSchedule rgProgramSchedule = requisitionGroupBuilder.createRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
+    requisitionGroupDAO.insertRequisitionGroupProgramSchedule(rgProgramSchedule);
+    return rgProgramSchedule;
   }
 
   private SupplyLine insertSupplyLine(SupervisoryNode supervisoryNode, Program program, Facility facility) {
@@ -225,20 +224,6 @@ public class Runner {
     }
   }
 
-  private void insertRoleRights() {
-    rolesList = new ArrayList<Role>() {{
-      add(userBuilder.createRole("ADMIN", true, asList(UPLOADS, MANAGE_FACILITY, MANAGE_ROLE, MANAGE_USERS, MANAGE_SCHEDULE, CONFIGURE_RNR)));
-      add(userBuilder.createRole("LMU In-Charge", true, asList(CONVERT_TO_ORDER, VIEW_ORDER)));
-      add(userBuilder.createRole("Store In-Charge", false, asList(VIEW_REQUISITION, CREATE_REQUISITION)));
-      add(userBuilder.createRole("LMU", false, asList(VIEW_REQUISITION, APPROVE_REQUISITION)));
-      add(userBuilder.createRole("FacilityHead", false, asList(VIEW_REQUISITION, AUTHORIZE_REQUISITION)));
-      add(userBuilder.createRole("Medical-Officer", false, asList(VIEW_REQUISITION, APPROVE_REQUISITION)));
-    }};
-
-    for (Role role : rolesList) {
-      userDAO.insertRoleAndRoleRights(role);
-    }
-  }
 
   private void insertRnrTemplate() {
     for (Program program : programList) {
@@ -247,19 +232,6 @@ public class Runner {
     }
   }
 
-  private void insertPrograms() {
-    programList = new ArrayList<Program>() {{
-      add(programBuilder.createProgram("ESS MEDICINES"));
-      add(programBuilder.createProgram("TB"));
-      add(programBuilder.createProgram("MALARIA"));
-      add(programBuilder.createProgram("ARV/ART"));
-      add(programBuilder.createProgram("VACCINES"));
-    }};
-
-    for (Program program : programList) {
-      programDAO.insertProgram(program);
-    }
-  }
 
   private void insertZoneLevels() {
     zoneLevels.add(facilityBuilder.createGeoLevel("Country", 1));
@@ -299,6 +271,5 @@ public class Runner {
     facilityDAO.insertFacilityType(facilityType);
     return facilityType;
   }
-
 
 }

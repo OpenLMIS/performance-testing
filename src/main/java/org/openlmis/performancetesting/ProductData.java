@@ -7,10 +7,10 @@
 package org.openlmis.performancetesting;
 
 import org.openlmis.core.domain.*;
+import org.openlmis.performancetesting.builder.ProductBuilder;
 import org.openlmis.performancetesting.dao.FacilityApprovedProductDAO;
 import org.openlmis.performancetesting.dao.ProductDAO;
 import org.openlmis.performancetesting.dao.ProgramProductDAO;
-import org.openlmis.performancetesting.helper.ProductBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

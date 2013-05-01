@@ -4,7 +4,7 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.openlmis.performancetesting.helper;
+package org.openlmis.performancetesting.builder;
 
 import org.openlmis.core.domain.ProcessingPeriod;
 import org.openlmis.core.domain.ProcessingSchedule;
