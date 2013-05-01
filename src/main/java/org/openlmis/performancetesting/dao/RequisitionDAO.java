@@ -28,10 +28,9 @@ public class RequisitionDAO {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertRequisitionQuery, new BeanPropertySqlParameterSource(rnr), keyHolder, new String[]{"id"});
 
-    int userId = keyHolder.getKey().intValue();
-    rnr.setId(userId);
-
-    return userId;
+    int id = keyHolder.getKey().intValue();
+    rnr.setId(id);
+    return id;
   }
 
 }
