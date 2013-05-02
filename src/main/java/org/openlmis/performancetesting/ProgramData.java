@@ -13,8 +13,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Arrays.asList;
+import static org.openlmis.performancetesting.Constants.*;
 
 public class ProgramData {
+
   private ProgramDAO programDAO;
   private ProgramBuilder programBuilder;
 
@@ -25,13 +31,19 @@ public class ProgramData {
 
   }
 
-  public ArrayList<Program> setupPrograms() {
+  public ArrayList<Program> setupPrograms(Map<Program, List<Integer>> programProductCountMap) {
     ArrayList<Program> programList = new ArrayList<>();
     String[] programNames = {"ESS MEDICINES", "TB", "MALARIA", "ARV/ART", "VACCINES"};
     for (String programName : programNames) {
       Program program = programBuilder.createProgram(programName);
       programDAO.insertProgram(program);
       programList.add(program);
+      if (programName.equals("ESS MEDICINES")) {
+        programProductCountMap.put(program, asList(MAX_FULL_SUPPLY_COUNT, NON_FULL_SUPPLY_COUNT));
+      } else {
+        programProductCountMap.put(program, asList(AVERAGE_FULL_SUPPLY_COUNT, NON_FULL_SUPPLY_COUNT));
+      }
+
     }
     return programList;
   }

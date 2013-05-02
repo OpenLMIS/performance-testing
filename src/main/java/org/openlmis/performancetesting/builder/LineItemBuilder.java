@@ -18,12 +18,12 @@ import static org.openlmis.performancetesting.Utils.randomMoney;
 
 public class LineItemBuilder {
 
-  public RnrLineItem createLineItem(Rnr requisition, Product product, Boolean isFullSupply) {
+  public RnrLineItem createLineItem(Rnr requisition, Product product) {
     RnrLineItem lineItem = new RnrLineItem();
 
     lineItem.setProductCode(product.getCode());
     lineItem.setRnrId(requisition.getId());
-    lineItem.setFullSupply(isFullSupply);
+    lineItem.setFullSupply(product.getFullSupply());
 
     lineItem.setProduct(randomAlphanumeric(100));
     lineItem.setProductDisplayOrder(valueOf(randomNumeric(3)));

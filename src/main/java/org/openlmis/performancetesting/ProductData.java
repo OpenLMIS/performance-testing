@@ -32,8 +32,8 @@ public class ProductData {
 
   }
 
-  public Product insertProduct(ProductForm productForm, DosageUnit dosageUnit, ProductCategory category) {
-    Product product = productBuilder.createProduct(productForm, dosageUnit, category);
+  public Product insertProduct(ProductForm productForm, DosageUnit dosageUnit, ProductCategory category, Boolean isFullSupply) {
+    Product product = productBuilder.createProduct(productForm, dosageUnit, category, isFullSupply);
     productDAO.insertProduct(product);
 
     return product;

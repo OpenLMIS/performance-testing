@@ -45,12 +45,12 @@ public class RequisitionData {
       ProcessingPeriod period = periods.get(periodIndex);
       Rnr requisition = requisitionBuilder.createRequisition(facility, program, period, supervisoryNode, supplyingFacility, status);
       requisitionDAO.insertRequisition(requisition);
-      createLineItem(requisition, productDAO.getProduct(0), true);
+      createLineItem(requisition, productDAO.getProduct(0));
     }
   }
 
-  public void createLineItem(Rnr requisition, Product product, Boolean isFullSupply) {
-    RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, product, isFullSupply);
+  public void createLineItem(Rnr requisition, Product product) {
+    RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, product);
     lineItemDAO.insertLineItem(lineItem);
   }
 }

@@ -15,19 +15,16 @@ import org.openlmis.rnr.domain.RnrStatus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+import static java.lang.Integer.valueOf;
+import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
+import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
+import static org.openlmis.performancetesting.Constants.*;
 import static org.openlmis.performancetesting.Utils.periodEndDate;
 import static org.openlmis.performancetesting.Utils.periodStartDate;
 
 public class ReferenceData {
-
-  public static final int STATES_PER_COUNTRY = 2; // 35
-  public static final int DISTRICT_PER_STATE = 2; // 25
-  public static final int FACILITIES_PER_DISTRICT = 2; // 28
-  public static final int FACILITIES_PER_REQUISITION_GROUP = 2; // 100
 
 
   private FacilityBuilder facilityBuilder = new FacilityBuilder();
@@ -57,6 +54,8 @@ public class ReferenceData {
   @Getter
   private List<Program> programList;
 
+  private List<FacilityType> facilityTypes = new ArrayList<>();
+
   private ArrayList<Role> rolesList = new ArrayList<>();
   List<GeographicLevel> zoneLevels = new ArrayList<>();
   private Vendor vendor;
@@ -71,6 +70,8 @@ public class ReferenceData {
 
   @Getter
   private List<ProductCategory> productCategories = new ArrayList<>();
+
+  private Map<Program, List<Integer>> programProductCountMap = new HashMap<>();
 
   public ReferenceData() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
@@ -89,31 +90,71 @@ public class ReferenceData {
     dosageUnits = productData.setupDosageUnits();
     productCategories = productData.setupProductCategories();
     productForms = productData.setupProductForms();
-    programList = programData.setupPrograms();
+    programList = programData.setupPrograms(programProductCountMap);
     rolesList = roleRightData.setupRoleRights();
 
+    insertFacilityTypes();
     insertZoneLevels();
     insertGeoZones();
     insertSchedulesAndPeriods();
     insertRnrTemplate();
 
     insertFacilityAndUsers();
+
+    setupProducts();
   }
+
+  private void setupProducts() {
+    int createdProductCounter = 0;
+    for (Program program : programProductCountMap.keySet()) {
+
+      int fullSupplyProductCount = programProductCountMap.get(program).get(0);
+      int nonFullSupplyProductCount = programProductCountMap.get(program).get(1);
+
+      insertProductAndItsMappings(fullSupplyProductCount, program, true);
+      insertProductAndItsMappings(nonFullSupplyProductCount, program, false);
+
+      createdProductCounter += (fullSupplyProductCount + nonFullSupplyProductCount);
+
+    }
+
+    for (; createdProductCounter < TOTAL_NO_OF_PRODUCTS; createdProductCounter++) {
+      ProductForm productForm = productForms.get(valueOf(randomNumeric(3)) % productForms.size());
+      DosageUnit dosageUnit = dosageUnits.get(valueOf(randomNumeric(3)) % dosageUnits.size());
+      ProductCategory category = productCategories.get(valueOf(randomNumeric(3)) % productCategories.size());
+
+      productData.insertProduct(productForm, dosageUnit, category, nextBoolean());
+    }
+
+  }
+
+  private void insertProductAndItsMappings(int fullSupplyProductCount, Program program, Boolean fullSupply) {
+    for (int i = 0; i < fullSupplyProductCount; i++) {
+      ProductForm productForm = productForms.get(valueOf(randomNumeric(3)) % productForms.size());
+      DosageUnit dosageUnit = dosageUnits.get(valueOf(randomNumeric(3)) % dosageUnits.size());
+      ProductCategory category = productCategories.get(valueOf(randomNumeric(3)) % productCategories.size());
+
+      Product product = productData.insertProduct(productForm, dosageUnit, category, fullSupply);
+      ProgramProduct programProduct = productData.insertProgramProduct(program, product);
+      for (FacilityType facilityType : facilityTypes) {
+        productData.insertFacilityApprovedProduct(facilityType, programProduct);
+      }
+    }
+
+  }
+
 
   private void insertFacilityAndUsers() {
 
-    FacilityType facilityType = insertFacilityType();
+
     //TODO insert facility operator
     FacilityOperator facilityOperator = facilityBuilder.createFacilityOperator();
 
 
-    Product product = productData.insertProduct(productForms.get(0), dosageUnits.get(0), productCategories.get(0));
-    ProgramProduct programProduct = productData.insertProgramProduct(programList.get(0), product);
-    productData.insertFacilityApprovedProduct(facilityType, programProduct);
-
     List<Facility> facilityList = new ArrayList<>();
     for (int facilityCounter = 0; facilityCounter < STATES_PER_COUNTRY * DISTRICT_PER_STATE * FACILITIES_PER_DISTRICT; facilityCounter++) {
       GeographicZone geoZone = facilityDAO.getDistrictZone(facilityCounter % (STATES_PER_COUNTRY * DISTRICT_PER_STATE));
+      FacilityType facilityType = facilityTypes.get(facilityCounter % NO_OF_FACILITY_TYPES);
       Facility facility = insertFacility(geoZone, facilityType, facilityOperator);
       facilityList.add(facility);
       insertPairOfUserWithCreateAndAuthorizeRights(facility);
@@ -195,11 +236,11 @@ public class ReferenceData {
     quarterlySchedule = scheduleBuilder.createSchedule("QUARTERLY", "QUARTERLY");
     processingScheduleDAO.insertSchedule(quarterlySchedule);
 
-    for (int year = 2012; year < 2014; year++) {
+    for (int year = 2011, yearNumber = 0; year < 2013; year++, yearNumber++) {
       for (int month = 1; month <= 12; month++) {
         Date periodStartDate = periodStartDate(year, month);
         Date periodEndDate = periodEndDate(year, month);
-        ProcessingPeriod period = scheduleBuilder.createPeriod(periodStartDate, periodEndDate, monthlySchedule);
+        ProcessingPeriod period = scheduleBuilder.createPeriod(month + yearNumber * 12, periodStartDate, periodEndDate, monthlySchedule);
         periodList.add(period);
       }
     }
@@ -281,10 +322,12 @@ public class ReferenceData {
     return facility;
   }
 
-  private FacilityType insertFacilityType() {
-    FacilityType facilityType = facilityBuilder.createFacilityType();
-    facilityDAO.insertFacilityType(facilityType);
-    return facilityType;
+  private void insertFacilityTypes() {
+    for (int counter = 0; counter < NO_OF_FACILITY_TYPES; counter++) {
+      FacilityType facilityType = facilityBuilder.createFacilityType();
+      facilityDAO.insertFacilityType(facilityType);
+      facilityTypes.add(facilityType);
+    }
   }
 
 }

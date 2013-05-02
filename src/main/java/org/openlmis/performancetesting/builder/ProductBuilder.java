@@ -15,7 +15,7 @@ import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
 import static org.openlmis.performancetesting.Utils.randomDate;
 
 public class ProductBuilder {
-  public Product createProduct(ProductForm form, DosageUnit dosageUnit, ProductCategory category) {
+  public Product createProduct(ProductForm form, DosageUnit dosageUnit, ProductCategory category, Boolean isFulLSupply) {
     Product product = new Product();
     product.setCode(randomAlphanumeric(40));
     product.setAlternateItemCode(randomAlphanumeric(15));
@@ -62,7 +62,7 @@ public class ProductBuilder {
     product.setSpecialStorageInstructions(randomAlphanumeric(100));
     product.setSpecialTransportInstructions(randomAlphanumeric(100));
     product.setActive(nextBoolean());
-    product.setFullSupply(nextBoolean());
+    product.setFullSupply(isFulLSupply);
     product.setTracer(nextBoolean());
     product.setRoundToZero(nextBoolean());
     product.setArchived(nextBoolean());
@@ -90,7 +90,7 @@ public class ProductBuilder {
     FacilityApprovedProduct product = new FacilityApprovedProduct();
     product.setFacilityType(facilityType);
     product.setProgramProduct(programProduct);
-    product.setMaxMonthsOfStock(40);
+    product.setMaxMonthsOfStock(Integer.valueOf(randomNumeric(2)));
     product.setModifiedBy(Integer.valueOf(randomNumeric(5)));
     product.setModifiedDate(randomDate());
 
