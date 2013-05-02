@@ -68,4 +68,8 @@
         <constructor-arg ref="template"/>
     </bean>
 
+    <bean id="lineItemDAO" class="org.openlmis.performancetesting.dao.LineItemDAO">
+        <constructor-arg ref="template"/>
+    </bean>
+
 </beans>

@@ -62,8 +62,14 @@ public class ReferenceData {
   private Vendor vendor;
   private ProcessingSchedule monthlySchedule;
   private ProcessingSchedule quarterlySchedule;
+
+  @Getter
   private List<ProductForm> productForms = new ArrayList<>();
+
+  @Getter
   private List<DosageUnit> dosageUnits = new ArrayList<>();
+
+  @Getter
   private List<ProductCategory> productCategories = new ArrayList<>();
 
   public ReferenceData() {
