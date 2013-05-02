@@ -99,11 +99,10 @@ public class ReferenceData {
     insertSchedulesAndPeriods();
     insertRnrTemplate();
 
-    setupProducts();
-    insertFacilityAndUsers();
+
   }
 
-  private void setupProducts() {
+  public void setupProducts() {
     int createdProductCounter = 0;
     for (Program program : programProductCountMap.keySet()) {
 
@@ -143,7 +142,7 @@ public class ReferenceData {
   }
 
 
-  private void insertFacilityAndUsers() {
+  public void insertFacilityAndUsers() {
 
 
     //TODO insert facility operator
@@ -153,19 +152,24 @@ public class ReferenceData {
     for (int facilityCounter = 0; facilityCounter < STATES_PER_COUNTRY * DISTRICT_PER_STATE * FACILITIES_PER_DISTRICT; facilityCounter++) {
       GeographicZone geoZone = facilityDAO.getDistrictZone(facilityCounter % (STATES_PER_COUNTRY * DISTRICT_PER_STATE));
       FacilityType facilityType = facilityTypes.get(facilityCounter % NO_OF_FACILITY_TYPES);
-      Facility facility = insertFacility(geoZone, facilityType, facilityOperator);
+      final Facility facility = insertFacility(geoZone, facilityType, facilityOperator);
       facilityList.add(facility);
       insertPairOfUserWithCreateAndAuthorizeRights(facility);
 
       if ((facilityCounter + 1) % FACILITIES_PER_REQUISITION_GROUP == 0) {
-        SupervisoryNode supervisoryNode = insertSupervisoryNodePair(facility);
-        RequisitionGroup requisitionGroup = insertRequisitionGroup(supervisoryNode);
+        final SupervisoryNode supervisoryNode = insertSupervisoryNodePair(facility);
+        final RequisitionGroup requisitionGroup = insertRequisitionGroup(supervisoryNode);
         insertRequisitionGroupMember(requisitionGroup, facilityList);
-        for (Program program : programList) {
-          insertSupplyLine(supervisoryNode, program, facility);
-          insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
-          createApproverAtSupervisoryNodes(supervisoryNode);
-          createRequisitions(facilityList, program, supervisoryNode, facility);
+        for (final Program program : programList) {
+          final List<Facility> finalFacilityList = facilityList;
+          new Thread() {
+            public void run() {
+              insertSupplyLine(supervisoryNode, program, facility);
+              insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
+              createApproverAtSupervisoryNodes(supervisoryNode);
+              createRequisitions(finalFacilityList, program, supervisoryNode, facility);
+            }
+          }.start();
         }
         facilityList = new ArrayList<>();
       }

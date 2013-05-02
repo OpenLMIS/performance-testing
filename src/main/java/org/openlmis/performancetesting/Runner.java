@@ -6,13 +6,44 @@
 
 package org.openlmis.performancetesting;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.ParseException;
+import java.util.Date;
 
 public class Runner {
 
+  public static final Logger logger = LoggerFactory.getLogger(Runner.class);
+
   public static void main(String[] args) throws ParseException {
-    ReferenceData referenceData = new ReferenceData();
+
+    final ReferenceData referenceData = new ReferenceData();
+    System.out.println("startTime " + new Date());
     referenceData.init();
+
+    Thread t1 = new Thread() {
+      public void run() {
+        referenceData.setupProducts();
+      }
+    };
+    t1.start();
+
+    Thread t2 = new Thread() {
+      public void run() {
+        referenceData.insertFacilityAndUsers();
+      }
+    };
+    t2.start();
+
+    try {
+      t1.join();
+      t2.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
+    System.out.println("endTime " + new Date());
   }
 
 

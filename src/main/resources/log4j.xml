@@ -16,11 +16,11 @@
     </appender>
 
     <logger name="org.springframework.jdbc.core">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
 
     <logger name="org.openlmis.performancetesting">
-        <level value="INFO"/>
+        <level value="DEBUG"/>
     </logger>
 
     <root>

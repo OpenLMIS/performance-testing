@@ -7,12 +7,17 @@
 package org.openlmis.performancetesting.dao;
 
 import org.openlmis.rnr.domain.Rnr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
+import java.util.Date;
+
 public class RequisitionDAO {
 
+  public static final Logger logger = LoggerFactory.getLogger(RequisitionDAO.class);
   NamedParameterJdbcTemplate template;
 
   final String insertRequisitionQuery = "INSERT INTO requisitions VALUES(DEFAULT, :facility.id, :program.id, :period.id, " +
@@ -30,6 +35,8 @@ public class RequisitionDAO {
 
     int id = keyHolder.getKey().intValue();
     rnr.setId(id);
+
+    logger.debug("{} requisition {} ", new Date(), id);
     return id;
   }
 
