@@ -29,8 +29,9 @@ public class ProcessingScheduleBuilder {
     return schedule;
   }
 
-  public ProcessingPeriod createPeriod(Date startDate, Date endDate, ProcessingSchedule monthlySchedule) {
+  public ProcessingPeriod createPeriod(Integer name, Date startDate, Date endDate, ProcessingSchedule monthlySchedule) {
     ProcessingPeriod period = new ProcessingPeriod();
+    period.setId(name);
     period.setName(new SimpleDateFormat("MM-dd-yyyy").format(startDate));
     period.setDescription(randomAlphanumeric(10));
     period.setNumberOfMonths(1);

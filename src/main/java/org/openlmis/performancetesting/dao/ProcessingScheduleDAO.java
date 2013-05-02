@@ -18,7 +18,7 @@ public class ProcessingScheduleDAO {
   final String insertScheduleQuery = "INSERT INTO processing_schedules VALUES(DEFAULT, :code, :name, :description, " +
       ":modifiedBy, :modifiedDate, :modifiedBy)";
 
-  final String insertPeriodQuery = "INSERT INTO processing_periods VALUES(DEFAULT, :scheduleId, :name, :description, " +
+  final String insertPeriodQuery = "INSERT INTO processing_periods VALUES(:id, :scheduleId, :name, :description, " +
       ":startDate, :endDate, :numberOfMonths, :modifiedBy, :modifiedDate, :modifiedBy)";
 
   public ProcessingScheduleDAO(NamedParameterJdbcTemplate template) {
