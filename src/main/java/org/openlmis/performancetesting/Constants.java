@@ -21,4 +21,6 @@ public class Constants {
   public static final int AVERAGE_FULL_SUPPLY_COUNT = 35;  //35
   public static final int TOTAL_NO_OF_PRODUCTS = 2000;      //2000
 
+  public static final String[] ADJUSTMENT_NAMES = {"TRANSFER_IN", "TRANSFER_OUT", "DAMAGED", "LOST", "STOLEN", "EXPIRED", "PASSED_OPEN_VIAL_TIME_LIMIT", "COLD_CHAIN_FAILURE", "CLINIC_RETURN"};
+
 }

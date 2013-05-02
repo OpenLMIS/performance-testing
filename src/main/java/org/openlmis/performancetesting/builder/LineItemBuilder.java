@@ -7,6 +7,8 @@
 package org.openlmis.performancetesting.builder;
 
 import org.openlmis.core.domain.Product;
+import org.openlmis.rnr.domain.LossesAndAdjustments;
+import org.openlmis.rnr.domain.LossesAndAdjustmentsType;
 import org.openlmis.rnr.domain.Rnr;
 import org.openlmis.rnr.domain.RnrLineItem;
 
@@ -60,5 +62,26 @@ public class LineItemBuilder {
 
     return lineItem;
 
+  }
+
+  public LossesAndAdjustments createLossesAndAdjustment(RnrLineItem lineItem, LossesAndAdjustmentsType adjustmentType) {
+    LossesAndAdjustments le = new LossesAndAdjustments();
+    le.setId(lineItem.getId());
+    le.setType(adjustmentType);
+    le.setQuantity(valueOf(randomNumeric(3)));
+    le.setModifiedBy(valueOf(randomNumeric(3)));
+    le.setModifiedDate(randomDate());
+
+    return le;
+  }
+
+  public LossesAndAdjustmentsType createAdjustmentType(String name) {
+    LossesAndAdjustmentsType type = new LossesAndAdjustmentsType();
+    type.setName(name);
+    type.setDescription(randomAlphabetic(40));
+    type.setAdditive(nextBoolean());
+    type.setDisplayOrder(Integer.valueOf(randomNumeric(1)));
+
+    return type;
   }
 }

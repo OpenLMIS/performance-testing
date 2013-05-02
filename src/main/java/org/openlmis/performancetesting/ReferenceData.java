@@ -92,13 +92,13 @@ public class ReferenceData {
     productForms = productData.setupProductForms();
     programList = programData.setupPrograms(programProductCountMap);
     rolesList = roleRightData.setupRoleRights();
+    requisitionData.setupLossesAndAdjustmentTypes();
 
     insertFacilityTypes();
     insertZoneLevels();
     insertGeoZones();
     insertSchedulesAndPeriods();
     insertRnrTemplate();
-
 
   }
 

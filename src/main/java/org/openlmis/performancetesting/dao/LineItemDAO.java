@@ -9,7 +9,11 @@ package org.openlmis.performancetesting.dao;
 import org.openlmis.core.domain.Facility;
 import org.openlmis.core.domain.Product;
 import org.openlmis.core.domain.Program;
+import org.openlmis.rnr.domain.LossesAndAdjustments;
+import org.openlmis.rnr.domain.LossesAndAdjustmentsType;
 import org.openlmis.rnr.domain.RnrLineItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -24,6 +28,7 @@ import java.util.Map;
 public class LineItemDAO {
 
   NamedParameterJdbcTemplate template;
+  public static final Logger logger = LoggerFactory.getLogger(LineItemDAO.class);
 
   final String insertLineItemQuery = "INSERT INTO requisition_line_items VALUES(DEFAULT, :rnrId, :productCode, :product," +
       ":productDisplayOrder, :productCategory, :productCategoryDisplayOrder, :dispensingUnit, :beginningBalance, :quantityReceived," +
@@ -32,6 +37,9 @@ public class LineItemDAO {
       ":normalizedConsumption, :amc, :maxMonthsOfStock, :maxStockQuantity, :packsToShip, :price.value, " +
       ":remarks, :dosesPerMonth, :dosesPerDispensingUnit, :packSize, :roundToZero, :packRoundingThreshold, :fullSupply," +
       ":previousStockInHandAvailable, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
+
+  final String insertAdjustmentTypeQuery = "INSERT INTO losses_adjustments_types VALUES(:name, :description, :additive, :displayOrder)";
+  final String insertAdjustmentsQuery = "INSERT INTO requisition_line_item_losses_adjustments VALUES(:id, :type.name, :quantity, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
 
   public LineItemDAO(NamedParameterJdbcTemplate template) {
     this.template = template;
@@ -47,8 +55,21 @@ public class LineItemDAO {
     return id;
   }
 
+  public void insertLossesAndAdjustmentType(LossesAndAdjustmentsType adjustmentsType) {
+    template.update(insertAdjustmentTypeQuery, new BeanPropertySqlParameterSource(adjustmentsType));
+  }
+
+
+  public void insertLossesAndAdjustments(LossesAndAdjustments lossesAndAdjustments) {
+    try {
+      template.update(insertAdjustmentsQuery, new BeanPropertySqlParameterSource(lossesAndAdjustments));
+    } catch (Exception e) {
+      logger.debug(e.getMessage());
+    }
+  }
+
   public List<Product> getLineItems(Facility facility, Program program, Boolean isFullSupply) {
-    String getLineItemQuery = "SELECT p.* " +
+    String getLineItemQuery = "SELECT p.code, p.fullSupply " +
         "FROM facility_approved_products fap " +
         "INNER JOIN facilities f ON f.typeId = fap.facilityTypeId " +
         "INNER JOIN program_products pp ON pp.id = fap.programProductId " +
