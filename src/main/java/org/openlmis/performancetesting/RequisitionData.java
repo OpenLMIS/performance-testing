@@ -10,7 +10,6 @@ import org.openlmis.core.domain.*;
 import org.openlmis.performancetesting.builder.LineItemBuilder;
 import org.openlmis.performancetesting.builder.RequisitionBuilder;
 import org.openlmis.performancetesting.dao.LineItemDAO;
-import org.openlmis.performancetesting.dao.ProductDAO;
 import org.openlmis.performancetesting.dao.RequisitionDAO;
 import org.openlmis.rnr.domain.Rnr;
 import org.openlmis.rnr.domain.RnrLineItem;
@@ -20,20 +19,19 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
 
+import static org.openlmis.performancetesting.Constants.NUMBER_OF_PERIODS;
+
 public class RequisitionData {
 
   private RequisitionBuilder requisitionBuilder;
   private RequisitionDAO requisitionDAO;
-  private static final int NUMBER_OF_PERIODS = 12;
   private final LineItemDAO lineItemDAO;
   private final LineItemBuilder lineItemBuilder;
-  private final ProductDAO productDAO;
 
   public RequisitionData() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
     requisitionDAO = (RequisitionDAO) ctx.getBean("requisitionDAO");
     lineItemDAO = (LineItemDAO) ctx.getBean("lineItemDAO");
-    productDAO = (ProductDAO) ctx.getBean("productDAO");
     requisitionBuilder = new RequisitionBuilder();
     lineItemBuilder = new LineItemBuilder();
   }
@@ -45,12 +43,23 @@ public class RequisitionData {
       ProcessingPeriod period = periods.get(periodIndex);
       Rnr requisition = requisitionBuilder.createRequisition(facility, program, period, supervisoryNode, supplyingFacility, status);
       requisitionDAO.insertRequisition(requisition);
-      createLineItem(requisition, productDAO.getProduct(0));
+      createLineItem(requisition);
     }
   }
 
-  public void createLineItem(Rnr requisition, Product product) {
-    RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, product);
-    lineItemDAO.insertLineItem(lineItem);
+  public void createLineItem(Rnr requisition) {
+    List<Product> fullSupplyProducts = lineItemDAO.getLineItems(requisition.getFacility(), requisition.getProgram(), true);
+    for (Product product : fullSupplyProducts) {
+      RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, product);
+      lineItemDAO.insertLineItem(lineItem);
+    }
+
+    List<Product> nonFullSupplyProducts = lineItemDAO.getLineItems(requisition.getFacility(), requisition.getProgram(), false);
+    for (int counter = 0; counter < nonFullSupplyProducts.size(); counter++) {
+      if (counter % 10 == 0) {
+        RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, nonFullSupplyProducts.get(0));
+        lineItemDAO.insertLineItem(lineItem);
+      }
+    }
   }
 }

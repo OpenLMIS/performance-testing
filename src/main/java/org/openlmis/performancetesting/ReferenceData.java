@@ -99,9 +99,8 @@ public class ReferenceData {
     insertSchedulesAndPeriods();
     insertRnrTemplate();
 
-    insertFacilityAndUsers();
-
     setupProducts();
+    insertFacilityAndUsers();
   }
 
   private void setupProducts() {
@@ -149,7 +148,6 @@ public class ReferenceData {
 
     //TODO insert facility operator
     FacilityOperator facilityOperator = facilityBuilder.createFacilityOperator();
-
 
     List<Facility> facilityList = new ArrayList<>();
     for (int facilityCounter = 0; facilityCounter < STATES_PER_COUNTRY * DISTRICT_PER_STATE * FACILITIES_PER_DISTRICT; facilityCounter++) {
