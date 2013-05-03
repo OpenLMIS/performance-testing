@@ -30,5 +30,10 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
 }
 
+task(run, dependsOn: 'classes', type: JavaExec) {
+    main = 'org.openlmis.performancetesting.Runner'
+    classpath = sourceSets.main.runtimeClasspath
+}
 
+defaultTasks 'run'
 
