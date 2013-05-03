@@ -53,16 +53,11 @@ public class RequisitionData {
   public void createLineItem(final Rnr requisition) {
     List<Product> fullSupplyProducts = lineItemDAO.getLineItems(requisition.getFacility(), requisition.getProgram(), true);
     for (final Product product : fullSupplyProducts) {
-      new Thread() {
-        @Override
-        public void run() {
-          RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, product);
-          lineItemDAO.insertLineItem(lineItem);
-          if (nextBoolean()) {
-            createLossesAndAdjustments(lineItem);
-          }
-        }
-      }.start();
+      RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, product);
+      lineItemDAO.insertLineItem(lineItem);
+      if (nextBoolean()) {
+        createLossesAndAdjustments(lineItem);
+      }
     }
 
     List<Product> nonFullSupplyProducts = lineItemDAO.getLineItems(requisition.getFacility(), requisition.getProgram(), false);
