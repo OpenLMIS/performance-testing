@@ -14,6 +14,7 @@ public class Constants {
   public static final int FACILITIES_PER_REQUISITION_GROUP = 100; // 100
   public static final int NO_OF_FACILITY_TYPES = 5;
   public static final int NUMBER_OF_PERIODS = 12;
+  public static final int STARTING_PERIOD_MONTH = 10;
 
 
   public static final int MAX_FULL_SUPPLY_COUNT = 400;     //400

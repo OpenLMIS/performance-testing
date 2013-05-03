@@ -20,8 +20,7 @@ import java.util.List;
 
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
-import static org.openlmis.performancetesting.Constants.ADJUSTMENT_NAMES;
-import static org.openlmis.performancetesting.Constants.NUMBER_OF_PERIODS;
+import static org.openlmis.performancetesting.Constants.*;
 
 public class RequisitionData {
 
@@ -42,7 +41,7 @@ public class RequisitionData {
   public void createRequisition(List<ProcessingPeriod> periods, Facility facility, Program program,
                                 SupervisoryNode supervisoryNode, Facility supplyingFacility, RnrStatus status) {
 
-    for (int periodIndex = 10; periodIndex < NUMBER_OF_PERIODS && periodIndex < periods.size(); periodIndex++) {
+    for (int periodIndex = STARTING_PERIOD_MONTH; periodIndex < NUMBER_OF_PERIODS && periodIndex < periods.size(); periodIndex++) {
       ProcessingPeriod period = periods.get(periodIndex);
       Rnr requisition = requisitionBuilder.createRequisition(facility, program, period, supervisoryNode, supplyingFacility, status);
       requisitionDAO.insertRequisition(requisition);
