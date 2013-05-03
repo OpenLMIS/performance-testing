@@ -10,6 +10,8 @@ import org.openlmis.core.domain.Facility;
 import org.openlmis.core.domain.FacilityType;
 import org.openlmis.core.domain.GeographicLevel;
 import org.openlmis.core.domain.GeographicZone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -34,6 +36,8 @@ public class FacilityDAO {
       " :satelliteParentId, :hasElectricity, :hasElectronicScc, :hasElectronicDar, :active, :goLiveDate, :goDownDate, " +
       " :comment, :dataReportable, :modifiedBy, :modifiedDate, %s, :modifiedDate)", randomNumeric(5));
 
+  final static Logger logger = LoggerFactory.getLogger(FacilityDAO.class);
+
   public FacilityDAO(NamedParameterJdbcTemplate template) {
     this.template = template;
   }
@@ -45,6 +49,9 @@ public class FacilityDAO {
 
     int id = keyHolder.getKey().intValue();
     facility.setId(id);
+
+    logger.info("facility id {}", id);
+
     return id;
   }
 

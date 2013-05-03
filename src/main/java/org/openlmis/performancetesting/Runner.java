@@ -19,7 +19,8 @@ public class Runner {
   public static void main(String[] args) throws ParseException {
 
     final ReferenceData referenceData = new ReferenceData();
-    System.out.println("startTime " + new Date());
+    Date startTime = new Date();
+    System.out.println("startTime " + startTime);
     referenceData.init();
 
     Thread t1 = new Thread() {
@@ -43,7 +44,9 @@ public class Runner {
       e.printStackTrace();
     }
 
-    System.out.println("endTime " + new Date());
+    Date endTime = new Date();
+    System.out.println("endTime " + endTime);
+    System.out.println("time take " + (endTime.getTime() - startTime.getTime()));
   }
 
 
