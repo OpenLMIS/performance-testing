@@ -42,7 +42,7 @@ public class RequisitionData {
   public void createRequisition(List<ProcessingPeriod> periods, Facility facility, Program program,
                                 SupervisoryNode supervisoryNode, Facility supplyingFacility, RnrStatus status) {
 
-    for (int periodIndex = 0; periodIndex < NUMBER_OF_PERIODS && periodIndex < periods.size(); periodIndex++) {
+    for (int periodIndex = 10; periodIndex < NUMBER_OF_PERIODS && periodIndex < periods.size(); periodIndex++) {
       ProcessingPeriod period = periods.get(periodIndex);
       Rnr requisition = requisitionBuilder.createRequisition(facility, program, period, supervisoryNode, supplyingFacility, status);
       requisitionDAO.insertRequisition(requisition);
@@ -50,14 +50,19 @@ public class RequisitionData {
     }
   }
 
-  public void createLineItem(Rnr requisition) {
+  public void createLineItem(final Rnr requisition) {
     List<Product> fullSupplyProducts = lineItemDAO.getLineItems(requisition.getFacility(), requisition.getProgram(), true);
-    for (Product product : fullSupplyProducts) {
-      RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, product);
-      lineItemDAO.insertLineItem(lineItem);
-      if (nextBoolean()) {
-        createLossesAndAdjustments(lineItem);
-      }
+    for (final Product product : fullSupplyProducts) {
+      new Thread() {
+        @Override
+        public void run() {
+          RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, product);
+          lineItemDAO.insertLineItem(lineItem);
+          if (nextBoolean()) {
+            createLossesAndAdjustments(lineItem);
+          }
+        }
+      }.start();
     }
 
     List<Product> nonFullSupplyProducts = lineItemDAO.getLineItems(requisition.getFacility(), requisition.getProgram(), false);
@@ -71,7 +76,7 @@ public class RequisitionData {
 
   private void createLossesAndAdjustments(RnrLineItem lineItem) {
     for (int i = Integer.valueOf(randomNumeric(1)) - 5; i > 0; i--) {
-      LossesAndAdjustmentsType lossesAndAdjustmentsType = adjustmentTypeList.get(Integer.valueOf(randomNumeric(1)) % adjustmentTypeList.size());
+      LossesAndAdjustmentsType lossesAndAdjustmentsType = adjustmentTypeList.get(i);
       LossesAndAdjustments le = lineItemBuilder.createLossesAndAdjustment(lineItem, lossesAndAdjustmentsType);
       lineItemDAO.insertLossesAndAdjustments(le);
     }

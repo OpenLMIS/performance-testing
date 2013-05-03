@@ -45,8 +45,8 @@ public class Runner {
     }
 
     Date endTime = new Date();
-    System.out.println("endTime " + endTime);
-    System.out.println("time take " + (endTime.getTime() - startTime.getTime()));
+    logger.info("endTime {}", endTime);
+    logger.info("time take {}", (endTime.getTime() - startTime.getTime()));
   }
 
 

@@ -160,11 +160,18 @@ public class ReferenceData {
         final SupervisoryNode supervisoryNode = insertSupervisoryNodePair(facility);
         final RequisitionGroup requisitionGroup = insertRequisitionGroup(supervisoryNode);
         insertRequisitionGroupMember(requisitionGroup, facilityList);
+
         for (final Program program : programList) {
-          insertSupplyLine(supervisoryNode, program, facility);
-          insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
-          createApproverAtSupervisoryNodes(supervisoryNode);
-          createRequisitions(facilityList, program, supervisoryNode, facility);
+          final List<Facility> finalFacilityList = facilityList;
+          new Thread() {
+            public void run() {
+              insertSupplyLine(supervisoryNode, program, facility);
+              insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
+              createApproverAtSupervisoryNodes(supervisoryNode);
+              createRequisitions(finalFacilityList, program, supervisoryNode, facility);
+            }
+          }.start();
+
         }
         facilityList = new ArrayList<>();
       }
