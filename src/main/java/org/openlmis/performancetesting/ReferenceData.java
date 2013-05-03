@@ -165,6 +165,7 @@ public class ReferenceData {
           final List<Facility> finalFacilityList = facilityList;
           new Thread() {
             public void run() {
+              insertProgramsSupported(program, facility);
               insertSupplyLine(supervisoryNode, program, facility);
               insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
               createApproverAtSupervisoryNodes(supervisoryNode);
@@ -177,6 +178,10 @@ public class ReferenceData {
       }
     }
 
+  }
+
+  private void insertProgramsSupported(Program program, Facility facility) {
+    programData.setupProgramSupported(program, facility);
   }
 
   private void createRequisitions(List<Facility> facilities, Program program, SupervisoryNode supervisoryNode, Facility supplyingFacility) {

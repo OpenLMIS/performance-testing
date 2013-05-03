@@ -6,9 +6,13 @@
 
 package org.openlmis.performancetesting;
 
+import org.openlmis.core.domain.Facility;
 import org.openlmis.core.domain.Program;
+import org.openlmis.core.domain.ProgramSupported;
 import org.openlmis.performancetesting.builder.ProgramBuilder;
+import org.openlmis.performancetesting.builder.ProgramsSupportedBuilder;
 import org.openlmis.performancetesting.dao.ProgramDAO;
+import org.openlmis.performancetesting.dao.ProgramsSupportedDAO;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -24,10 +28,15 @@ public class ProgramData {
   private ProgramDAO programDAO;
   private ProgramBuilder programBuilder;
 
+  private ProgramsSupportedDAO programsSupportedDAO;
+  private ProgramsSupportedBuilder programSupportedBuilder;
+
   public ProgramData() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
     programDAO = (ProgramDAO) ctx.getBean("programDAO");
+    programsSupportedDAO = (ProgramsSupportedDAO) ctx.getBean("programsSupportedDAO");
     programBuilder = new ProgramBuilder();
+    programSupportedBuilder = new ProgramsSupportedBuilder();
 
   }
 
@@ -48,4 +57,10 @@ public class ProgramData {
     return programList;
   }
 
+  public ProgramSupported setupProgramSupported(Program program, Facility facility) {
+    ProgramSupported programsSupported = programSupportedBuilder.createProgramsSupported(facility, program);
+    programsSupportedDAO.insertProgramSupported(programsSupported);
+
+    return programsSupported;
+  }
 }
