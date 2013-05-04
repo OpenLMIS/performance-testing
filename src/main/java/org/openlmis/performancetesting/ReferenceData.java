@@ -11,7 +11,6 @@ import org.openlmis.core.domain.*;
 import org.openlmis.performancetesting.builder.*;
 import org.openlmis.performancetesting.dao.*;
 import org.openlmis.rnr.domain.ProgramRnrTemplate;
-import org.openlmis.rnr.domain.RnrStatus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -23,6 +22,7 @@ import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
 import static org.openlmis.performancetesting.Constants.*;
 import static org.openlmis.performancetesting.Utils.periodEndDate;
 import static org.openlmis.performancetesting.Utils.periodStartDate;
+import static org.openlmis.rnr.domain.RnrStatus.APPROVED;
 
 public class ReferenceData {
 
@@ -102,18 +102,30 @@ public class ReferenceData {
 
   }
 
-  public void setupProducts() {
+  public void setupProducts() throws InterruptedException {
     int createdProductCounter = 0;
-    for (Program program : programProductCountMap.keySet()) {
-
-      int fullSupplyProductCount = programProductCountMap.get(program).get(0);
-      int nonFullSupplyProductCount = programProductCountMap.get(program).get(1);
-
-      insertProductAndItsMappings(fullSupplyProductCount, program, true);
-      insertProductAndItsMappings(nonFullSupplyProductCount, program, false);
-
+    List<Thread> threads = new ArrayList<>();
+    for (final Program program : programProductCountMap.keySet()) {
+      final int fullSupplyProductCount = programProductCountMap.get(program).get(0);
+      final int nonFullSupplyProductCount = programProductCountMap.get(program).get(1);
       createdProductCounter += (fullSupplyProductCount + nonFullSupplyProductCount);
 
+      Thread thread1 = new Thread() {
+        public void run() {
+          insertProductAndItsMappings(fullSupplyProductCount, program, true);
+          insertProductAndItsMappings(nonFullSupplyProductCount, program, false);
+        }
+      };
+      threads.add(thread1);
+      thread1.start();
+
+      Thread thread2 = new Thread() {
+        public void run() {
+          insertProductAndItsMappings(nonFullSupplyProductCount, program, false);
+        }
+      };
+      threads.add(thread2);
+      thread2.start();
     }
 
     for (; createdProductCounter < TOTAL_NO_OF_PRODUCTS; createdProductCounter++) {
@@ -124,6 +136,9 @@ public class ReferenceData {
       productData.insertProduct(productForm, dosageUnit, category, nextBoolean());
     }
 
+    for (Thread thread : threads) {
+      thread.join();
+    }
   }
 
   private void insertProductAndItsMappings(int fullSupplyProductCount, Program program, Boolean fullSupply) {
@@ -162,14 +177,14 @@ public class ReferenceData {
         insertRequisitionGroupMember(requisitionGroup, facilityList);
 
         for (final Program program : programList) {
-          final List<Facility> finalFacilityList = facilityList;
+          final List<Facility> facilities = facilityList;
           new Thread() {
             public void run() {
               insertProgramsSupported(program, facility);
               insertSupplyLine(supervisoryNode, program, facility);
               insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
               createApproverAtSupervisoryNodes(supervisoryNode);
-              createRequisitions(finalFacilityList, program, supervisoryNode, facility);
+              createRequisitions(facilities, program, supervisoryNode, facility);
             }
           }.start();
 
@@ -186,8 +201,7 @@ public class ReferenceData {
 
   private void createRequisitions(List<Facility> facilities, Program program, SupervisoryNode supervisoryNode, Facility supplyingFacility) {
     for (Facility facility : facilities) {
-      requisitionData.createRequisition(periodList.subList(0, 12), facility, program, supervisoryNode,
-          supplyingFacility, RnrStatus.APPROVED);
+      requisitionData.createRequisition(periodList, facility, program, supervisoryNode, supplyingFacility, APPROVED);
     }
   }
 

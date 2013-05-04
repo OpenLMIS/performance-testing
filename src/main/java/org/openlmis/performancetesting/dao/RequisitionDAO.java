@@ -33,7 +33,7 @@ public class RequisitionDAO {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertRequisitionQuery, new BeanPropertySqlParameterSource(rnr), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     rnr.setId(id);
 
     logger.debug("{} requisition {} ", new Date(), id);

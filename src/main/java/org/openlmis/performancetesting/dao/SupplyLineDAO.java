@@ -20,11 +20,11 @@ public class SupplyLineDAO {
     this.template = template;
   }
 
-  public int insertSupplyLine(SupplyLine supplyLine) {
+  public long insertSupplyLine(SupplyLine supplyLine) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertSupplyLineQuery, new BeanPropertySqlParameterSource(supplyLine), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     supplyLine.setId(id);
     return id;
   }

@@ -9,6 +9,8 @@ import org.openlmis.core.domain.*;
 
 import java.util.Random;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.valueOf;
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
@@ -25,7 +27,7 @@ public class ProductBuilder {
     product.setMohBarCode(randomAlphanumeric(20));
     product.setGtin(randomAlphanumeric(10));
     product.setType(randomAlphanumeric(60));
-    product.setDisplayOrder(Integer.valueOf(randomNumeric(3)));
+    product.setDisplayOrder(valueOf(randomNumeric(3)));
     product.setPrimaryName(randomAlphanumeric(120));
     product.setFullName(randomAlphanumeric(200));
     product.setGenericName(randomAlphanumeric(80));
@@ -38,9 +40,9 @@ public class ProductBuilder {
     product.setCategory(category);
 
     product.setDispensingUnit(randomAlphanumeric(20));
-    product.setDosesPerDispensingUnit(Integer.valueOf(randomNumeric(4)));
-    product.setPackSize(Integer.valueOf(randomNumeric(4)));
-    product.setAlternatePackSize(Integer.valueOf(randomNumeric(4)));
+    product.setDosesPerDispensingUnit(valueOf(randomNumeric(4)));
+    product.setPackSize(valueOf(randomNumeric(4)));
+    product.setAlternatePackSize(valueOf(randomNumeric(4)));
     product.setStoreRefrigerated(nextBoolean());
     product.setStoreRoomTemperature(nextBoolean());
     product.setHazardous(nextBoolean());
@@ -53,21 +55,21 @@ public class ProductBuilder {
     product.setPackWidth(new Random().nextDouble() * 1000);
     product.setPackHeight(new Random().nextDouble() * 1000);
     product.setPackWeight(new Random().nextDouble() * 1000);
-    product.setPacksPerCarton(Integer.valueOf(randomNumeric(4)));
+    product.setPacksPerCarton(valueOf(randomNumeric(4)));
     product.setCartonLength(new Random().nextDouble() * 1000);
     product.setCartonWidth(new Random().nextDouble() * 1000);
     product.setCartonHeight(new Random().nextDouble() * 1000);
-    product.setCartonsPerPallet(Integer.valueOf(randomNumeric(4)));
-    product.setExpectedShelfLife(Integer.valueOf(randomNumeric(4)));
+    product.setCartonsPerPallet(valueOf(randomNumeric(4)));
+    product.setExpectedShelfLife(valueOf(randomNumeric(4)));
     product.setSpecialStorageInstructions(randomAlphanumeric(100));
     product.setSpecialTransportInstructions(randomAlphanumeric(100));
-    product.setActive(nextBoolean());
+    product.setActive(true);
     product.setFullSupply(isFulLSupply);
     product.setTracer(nextBoolean());
     product.setRoundToZero(nextBoolean());
     product.setArchived(nextBoolean());
-    product.setPackRoundingThreshold(Integer.valueOf(randomNumeric(3)));
-    product.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    product.setPackRoundingThreshold(valueOf(randomNumeric(3)));
+    product.setModifiedBy(Long.valueOf(randomNumeric(5)));
     product.setModifiedDate(randomDate());
 
     return product;
@@ -80,7 +82,7 @@ public class ProductBuilder {
     programProduct.setActive(true);
     programProduct.setCurrentPrice(new Money("33.3"));
     programProduct.setDosesPerMonth(4);
-    programProduct.setModifiedBy(Integer.valueOf(randomNumeric(4)));
+    programProduct.setModifiedBy(Long.valueOf(randomNumeric(4)));
     programProduct.setModifiedDate(randomDate());
 
     return programProduct;
@@ -90,8 +92,8 @@ public class ProductBuilder {
     FacilityApprovedProduct product = new FacilityApprovedProduct();
     product.setFacilityType(facilityType);
     product.setProgramProduct(programProduct);
-    product.setMaxMonthsOfStock(Integer.valueOf(randomNumeric(2)));
-    product.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    product.setMaxMonthsOfStock(valueOf(randomNumeric(2)));
+    product.setModifiedBy(Long.valueOf(randomNumeric(5)));
     product.setModifiedDate(randomDate());
 
     return product;
@@ -101,7 +103,7 @@ public class ProductBuilder {
   public ProductForm createForm(String code) {
     ProductForm form = new ProductForm();
     form.setCode(code);
-    form.setDisplayOrder(Integer.parseInt(randomNumeric(3)));
+    form.setDisplayOrder(parseInt(randomNumeric(3)));
 
     return form;
   }
@@ -109,7 +111,7 @@ public class ProductBuilder {
   public DosageUnit createDosageUnit(String code) {
     DosageUnit dosageUnit = new DosageUnit();
     dosageUnit.setCode(code);
-    dosageUnit.setDisplayOrder(Integer.parseInt(randomNumeric(3)));
+    dosageUnit.setDisplayOrder(parseInt(randomNumeric(3)));
 
     return dosageUnit;
   }
@@ -118,7 +120,7 @@ public class ProductBuilder {
     ProductCategory category = new ProductCategory();
     category.setCode(code);
     category.setName(randomAlphanumeric(80));
-    category.setDisplayOrder(Integer.valueOf(randomNumeric(3)));
+    category.setDisplayOrder(valueOf(randomNumeric(3)));
 
     return category;
   }

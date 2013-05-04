@@ -24,7 +24,7 @@ public class SupplyLineBuilder {
     supplyLine.setSupplyingFacility(facility);
     supplyLine.setDescription(randomAlphanumeric(50));
     supplyLine.setDescription(randomAlphanumeric(50));
-    supplyLine.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    supplyLine.setModifiedBy(Long.valueOf(randomNumeric(5)));
     supplyLine.setModifiedDate(randomDate());
 
     return supplyLine;

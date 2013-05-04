@@ -20,7 +20,7 @@ public class SupervisoryNodeBuilder {
     node.setCode(randomAlphanumeric(10));
     node.setName(randomAlphanumeric(30));
     node.setDescription(randomAlphanumeric(50));
-    node.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    node.setModifiedBy(Long.valueOf(randomNumeric(5)));
     node.setModifiedDate(randomDate());
 
 

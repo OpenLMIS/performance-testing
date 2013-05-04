@@ -20,7 +20,7 @@ public class RequisitionGroupBuilder {
     requisitionGroup.setName(randomAlphanumeric(30));
     requisitionGroup.setDescription(randomAlphanumeric(40));
     requisitionGroup.setSupervisoryNode(supervisoryNode);
-    requisitionGroup.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    requisitionGroup.setModifiedBy(Long.valueOf(randomNumeric(5)));
     requisitionGroup.setModifiedDate(randomDate());
 
     return requisitionGroup;
@@ -30,7 +30,7 @@ public class RequisitionGroupBuilder {
     RequisitionGroupMember member = new RequisitionGroupMember();
     member.setFacility(facility);
     member.setRequisitionGroup(requisitionGroup);
-    member.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    member.setModifiedBy(Long.valueOf(randomNumeric(5)));
     member.setModifiedDate(randomDate());
 
     return member;
@@ -46,7 +46,7 @@ public class RequisitionGroupBuilder {
     mapping.setProcessingSchedule(schedule);
     mapping.setDropOffFacility(dropOffFacility);
     mapping.setDirectDelivery(true);
-    mapping.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    mapping.setModifiedBy(Long.valueOf(randomNumeric(5)));
     mapping.setModifiedDate(randomDate());
 
     return mapping;

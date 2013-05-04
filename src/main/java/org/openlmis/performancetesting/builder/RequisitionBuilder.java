@@ -25,7 +25,7 @@ public class RequisitionBuilder {
     rnr.setStatus(status);
     rnr.setFullSupplyItemsSubmittedCost(randomMoney(7));
     rnr.setNonFullSupplyItemsSubmittedCost(randomMoney(8));
-    rnr.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    rnr.setModifiedBy(Long.valueOf(randomNumeric(5)));
     rnr.setModifiedDate(randomDate());
     rnr.setSubmittedDate(randomDate());
 

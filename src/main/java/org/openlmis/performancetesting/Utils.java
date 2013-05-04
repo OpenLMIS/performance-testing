@@ -20,6 +20,9 @@ import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 
 public class Utils {
 
+  final static Random random = new Random();
+
+
   public static Date randomDate() {
     return new Date(abs(currentTimeMillis() - Long.valueOf(randomNumeric(11))));
   }
@@ -52,17 +55,18 @@ public class Utils {
   }
 
   public static double randomDouble(int min, int max) {
-    Random random = new Random();
     return min + (max - min) * random.nextDouble();
   }
 
   public static Money randomMoney(int length) {
     int min = (int) Math.pow(10, length - 1);
     int max = (int) Math.pow(10, length) - 1;
-    Random random = new Random();
     BigDecimal bigDecimal = new BigDecimal(min + (max - min) * random.nextDouble());
     return new Money(bigDecimal);
   }
 
+  public static int randomInteger(int min, int max) {
+    return min + random.nextInt(max - min);
+  }
 
 }

@@ -26,7 +26,7 @@ public class SupervisoryNodeDAO {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertSupervisoryNodeSql, new BeanPropertySqlParameterSource(supervisoryNode), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     supervisoryNode.setId(id);
     return id;
   }

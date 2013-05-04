@@ -42,8 +42,7 @@ public class ProgramData {
 
   public ArrayList<Program> setupPrograms(Map<Program, List<Integer>> programProductCountMap) {
     ArrayList<Program> programList = new ArrayList<>();
-    String[] programNames = {"ESS MEDICINES", "TB", "MALARIA", "ARV/ART", "VACCINES"};
-    for (String programName : programNames) {
+    for (String programName : PROGRAM_NAMES) {
       Program program = programBuilder.createProgram(programName);
       programDAO.insertProgram(program);
       programList.add(program);

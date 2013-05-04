@@ -29,29 +29,29 @@ public class RequisitionGroupDAO {
     this.template = template;
   }
 
-  public int insertRequisitionGroup(RequisitionGroup requisitionGroup) {
+  public long insertRequisitionGroup(RequisitionGroup requisitionGroup) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertRequisitionGroupQuery, new BeanPropertySqlParameterSource(requisitionGroup), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     requisitionGroup.setId(id);
     return id;
   }
 
-  public int insertRequisitionMember(RequisitionGroupMember rgMember) {
+  public long insertRequisitionMember(RequisitionGroupMember rgMember) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertRequisitionGroupMemberQuery, new BeanPropertySqlParameterSource(rgMember), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     rgMember.setId(id);
     return id;
   }
 
-  public int insertRequisitionGroupProgramSchedule(RequisitionGroupProgramSchedule requisitionGroupProgramSchedule) {
+  public long insertRequisitionGroupProgramSchedule(RequisitionGroupProgramSchedule requisitionGroupProgramSchedule) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertRequisitionGroupProgramScheduleQuery, new BeanPropertySqlParameterSource(requisitionGroupProgramSchedule), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     requisitionGroupProgramSchedule.setId(id);
     return id;
   }

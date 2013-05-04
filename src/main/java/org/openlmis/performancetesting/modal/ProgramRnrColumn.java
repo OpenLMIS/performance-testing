@@ -14,6 +14,6 @@ public class ProgramRnrColumn extends RnrColumn {
 
   @Getter
   @Setter
-  private Integer programId;
+  private long programId;
 
 }

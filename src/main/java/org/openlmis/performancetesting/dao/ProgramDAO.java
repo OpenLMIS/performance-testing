@@ -20,11 +20,11 @@ public class ProgramDAO {
     this.template = template;
   }
 
-  public int insertProgram(Program program) {
+  public long insertProgram(Program program) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertProgramQuery, new BeanPropertySqlParameterSource(program), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     program.setId(id);
     return id;
   }

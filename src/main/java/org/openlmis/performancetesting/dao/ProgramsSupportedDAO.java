@@ -30,7 +30,7 @@ public class ProgramsSupportedDAO {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertProgramsSupported, new BeanPropertySqlParameterSource(programSupported), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     programSupported.setId(id);
     return id;
   }

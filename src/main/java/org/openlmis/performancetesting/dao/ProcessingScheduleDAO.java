@@ -25,20 +25,20 @@ public class ProcessingScheduleDAO {
     this.template = template;
   }
 
-  public int insertSchedule(ProcessingSchedule processingSchedule) {
+  public long insertSchedule(ProcessingSchedule processingSchedule) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertScheduleQuery, new BeanPropertySqlParameterSource(processingSchedule), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     processingSchedule.setId(id);
     return id;
   }
 
-  public int insertPeriod(ProcessingPeriod period) {
+  public long insertPeriod(ProcessingPeriod period) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertPeriodQuery, new BeanPropertySqlParameterSource(period), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     period.setId(id);
     return id;
   }

@@ -45,7 +45,7 @@ public class FacilityBuilder {
     facility.setGoDownDate(randomDate());
     facility.setComment(randomAlphanumeric(50));
     facility.setDataReportable(nextBoolean());
-    facility.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    facility.setModifiedBy(Long.valueOf(randomNumeric(5)));
     facility.setModifiedDate(randomDate());
 //    facility.setCreatedBy();
 //    facility.setCreatedDate(randomDate());
@@ -77,7 +77,7 @@ public class FacilityBuilder {
     zone.setName(randomAlphanumeric(200));
     zone.setLevel(geoLevel);
     zone.setParent(parentZone);
-    zone.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    zone.setModifiedBy(Long.valueOf(randomNumeric(5)));
     zone.setModifiedDate(randomDate());
 //    zone.setCreatedBy();
 //    zone.setCreatedDate();

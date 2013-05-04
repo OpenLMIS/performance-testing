@@ -23,7 +23,7 @@ public class ProgramRnrTemplateBuilder {
     return new ProgramRnrTemplate(program.getId(), createRnrColumnsList(program.getId()));
   }
 
-  private List<RnrColumn> createRnrColumnsList(final Integer programId) {
+  private List<RnrColumn> createRnrColumnsList(final long programId) {
     return new ArrayList<RnrColumn>() {{
       add(createRnrColumn(programId, 1, "Product Code", true, 1, REFERENCE));
       add(createRnrColumn(programId, 2, "Product", true, 2, REFERENCE));
@@ -49,7 +49,7 @@ public class ProgramRnrTemplateBuilder {
     }};
   }
 
-  private RnrColumn createRnrColumn(Integer programId, Integer masterColumnId, String label, Boolean isVisible, Integer position,
+  private RnrColumn createRnrColumn(long programId, long masterColumnId, String label, Boolean isVisible, int position,
                                     RnRColumnSource source) {
     ProgramRnrColumn rnrColumn = new ProgramRnrColumn();
     rnrColumn.setProgramId(programId);

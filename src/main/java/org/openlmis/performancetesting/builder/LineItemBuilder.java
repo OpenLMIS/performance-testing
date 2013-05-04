@@ -57,7 +57,7 @@ public class LineItemBuilder {
     lineItem.setRoundToZero(nextBoolean());
     lineItem.setPackRoundingThreshold(valueOf(randomNumeric(2)));
     lineItem.setPreviousStockInHandAvailable(nextBoolean());
-    lineItem.setModifiedBy(valueOf(randomNumeric(5)));
+    lineItem.setModifiedBy(Long.valueOf(randomNumeric(5)));
     lineItem.setModifiedDate(randomDate());
 
     return lineItem;
@@ -69,7 +69,7 @@ public class LineItemBuilder {
     le.setId(lineItem.getId());
     le.setType(adjustmentType);
     le.setQuantity(valueOf(randomNumeric(3)));
-    le.setModifiedBy(valueOf(randomNumeric(3)));
+    le.setModifiedBy(Long.valueOf(randomNumeric(3)));
     le.setModifiedDate(randomDate());
 
     return le;

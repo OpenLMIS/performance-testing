@@ -16,33 +16,16 @@ public class Runner {
 
   public static final Logger logger = LoggerFactory.getLogger(Runner.class);
 
-  public static void main(String[] args) throws ParseException {
+  public static void main(String[] args) throws ParseException, InterruptedException {
 
     final ReferenceData referenceData = new ReferenceData();
     Date startTime = new Date();
     System.out.println("startTime " + startTime);
     referenceData.init();
 
-    Thread t1 = new Thread() {
-      public void run() {
-        referenceData.setupProducts();
-      }
-    };
-    t1.start();
+    referenceData.setupProducts();
 
-    Thread t2 = new Thread() {
-      public void run() {
-        referenceData.insertFacilityAndUsers();
-      }
-    };
-    t2.start();
-
-    try {
-      t1.join();
-      t2.join();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    referenceData.insertFacilityAndUsers();
 
     Date endTime = new Date();
     logger.info("endTime {}", endTime);

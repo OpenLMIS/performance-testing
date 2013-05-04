@@ -53,7 +53,7 @@ public class UserBuilder {
     user.setOfficePhone(randomAlphanumeric(15));
     user.setCellPhone(randomAlphanumeric(15));
     user.setEmail(randomAlphanumeric(25));
-    user.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    user.setModifiedBy(Long.valueOf(randomNumeric(5)));
     user.setActive(true);
     user.setSupervisor(new User());
     user.setModifiedDate(randomDate());

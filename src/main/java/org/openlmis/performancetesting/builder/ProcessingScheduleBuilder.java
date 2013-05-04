@@ -23,7 +23,7 @@ public class ProcessingScheduleBuilder {
     schedule.setCode(code);
     schedule.setName(name);
     schedule.setDescription(randomAlphanumeric(30));
-    schedule.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    schedule.setModifiedBy(Long.valueOf(randomNumeric(5)));
     schedule.setModifiedDate(randomDate());
 
     return schedule;
@@ -31,14 +31,14 @@ public class ProcessingScheduleBuilder {
 
   public ProcessingPeriod createPeriod(Integer name, Date startDate, Date endDate, ProcessingSchedule monthlySchedule) {
     ProcessingPeriod period = new ProcessingPeriod();
-    period.setId(name);
+    period.setId(name.longValue());
     period.setName(new SimpleDateFormat("MM-dd-yyyy").format(startDate));
     period.setDescription(randomAlphanumeric(10));
     period.setNumberOfMonths(1);
     period.setStartDate(startDate);
     period.setEndDate(endDate);
     period.setScheduleId(monthlySchedule.getId());
-    period.setModifiedBy(Integer.valueOf(randomNumeric(5)));
+    period.setModifiedBy(Long.valueOf(randomNumeric(5)));
     period.setModifiedDate(randomDate());
 
     return period;

@@ -12,15 +12,19 @@ import org.openlmis.performancetesting.builder.RequisitionBuilder;
 import org.openlmis.performancetesting.dao.LineItemDAO;
 import org.openlmis.performancetesting.dao.RequisitionDAO;
 import org.openlmis.rnr.domain.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Integer.valueOf;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
 import static org.openlmis.performancetesting.Constants.*;
+import static org.openlmis.performancetesting.Utils.randomInteger;
 
 public class RequisitionData {
 
@@ -29,6 +33,8 @@ public class RequisitionData {
   private final LineItemDAO lineItemDAO;
   private final LineItemBuilder lineItemBuilder;
   private ArrayList<LossesAndAdjustmentsType> adjustmentTypeList;
+
+  public static final Logger logger = LoggerFactory.getLogger(RequisitionData.class);
 
   public RequisitionData() {
     ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-performance.xml");
@@ -60,16 +66,16 @@ public class RequisitionData {
     }
 
     List<Product> nonFullSupplyProducts = lineItemDAO.getLineItems(requisition.getFacility(), requisition.getProgram(), false);
-    for (int counter = 0; counter < nonFullSupplyProducts.size(); counter++) {
-      if (counter % 10 == 0) {
-        RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, nonFullSupplyProducts.get(0));
-        lineItemDAO.insertLineItem(lineItem);
-      }
+    int startingIndex = randomInteger(0, nonFullSupplyProducts.size() - NUMBER_OF_NON_FULL_SUPPLY_ITEMS);
+    for (int counter = 0; counter < NUMBER_OF_NON_FULL_SUPPLY_ITEMS; counter++) {
+      RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, nonFullSupplyProducts.get(startingIndex++));
+      lineItemDAO.insertLineItem(lineItem);
     }
+    logger.debug("{},{} products(f,n) for requisition #{}", fullSupplyProducts.size(), nonFullSupplyProducts.size(), requisition.getId());
   }
 
   private void createLossesAndAdjustments(RnrLineItem lineItem) {
-    for (int i = Integer.valueOf(randomNumeric(1)) - 5; i > 0; i--) {
+    for (int i = valueOf(randomNumeric(1)) - 5; i > 0; i--) {
       LossesAndAdjustmentsType lossesAndAdjustmentsType = adjustmentTypeList.get(i);
       LossesAndAdjustments le = lineItemBuilder.createLossesAndAdjustment(lineItem, lossesAndAdjustmentsType);
       lineItemDAO.insertLossesAndAdjustments(le);

@@ -50,7 +50,7 @@ public class LineItemDAO {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertLineItemQuery, new BeanPropertySqlParameterSource(lineItem), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     lineItem.setId(id);
     return id;
   }
@@ -75,8 +75,7 @@ public class LineItemDAO {
         "INNER JOIN program_products pp ON pp.id = fap.programProductId " +
         "INNER JOIN products p ON p.id = pp.productId " +
         "INNER JOIN product_categories pc ON pc.id = p.categoryId " +
-        "WHERE " +
-        "pp.programId = :programId " +
+        "WHERE pp.programId = :programId " +
         "AND f.id = :facilityId " +
         "AND p.fullSupply = :fullSupply " +
         "AND p.active = TRUE AND pp.active = TRUE " +

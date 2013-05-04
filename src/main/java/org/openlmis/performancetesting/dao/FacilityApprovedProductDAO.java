@@ -20,11 +20,11 @@ public class FacilityApprovedProductDAO {
     this.template = template;
   }
 
-  public int insertFacilityApprovedProduct(FacilityApprovedProduct facilityApprovedProduct) {
+  public long insertFacilityApprovedProduct(FacilityApprovedProduct facilityApprovedProduct) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertFacilityApprovedProductQuery, new BeanPropertySqlParameterSource(facilityApprovedProduct), keyHolder, new String[]{"id"});
 
-    int id = keyHolder.getKey().intValue();
+    long id = keyHolder.getKey().longValue();
     facilityApprovedProduct.setId(id);
     return id;
   }

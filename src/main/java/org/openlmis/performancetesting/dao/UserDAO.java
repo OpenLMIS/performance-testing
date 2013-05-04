@@ -36,7 +36,7 @@ public class UserDAO {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertUserQuery, new BeanPropertySqlParameterSource(user), keyHolder, new String[]{"id"});
 
-    int userId = keyHolder.getKey().intValue();
+    long userId = keyHolder.getKey().longValue();
     user.setId(userId);
 
     return userId;
@@ -46,7 +46,7 @@ public class UserDAO {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertRoleQuery, new BeanPropertySqlParameterSource(role), keyHolder, new String[]{"id"});
 
-    int roleId = keyHolder.getKey().intValue();
+    long roleId = keyHolder.getKey().longValue();
     role.setId(roleId);
 
     for (Right right : role.getRights()) {
@@ -61,11 +61,11 @@ public class UserDAO {
     template.update(insertRoleAssignmentQuery, new BeanPropertySqlParameterSource(roleAssignment));
   }
 
-  public int insertVendor(Vendor vendor) {
+  public long insertVendor(Vendor vendor) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     template.update(insertVendorQuery, new BeanPropertySqlParameterSource(vendor), keyHolder, new String[]{"id"});
 
-    int vendorId = keyHolder.getKey().intValue();
+    long vendorId = keyHolder.getKey().longValue();
     vendor.setId(vendorId);
     return vendorId;
 
@@ -73,10 +73,10 @@ public class UserDAO {
 
   @Data
   class RoleRight {
-    Integer roleId;
+    long roleId;
     String rightName;
 
-    RoleRight(Integer roleId, String rightName) {
+    RoleRight(long roleId, String rightName) {
       this.roleId = roleId;
       this.rightName = rightName;
     }
