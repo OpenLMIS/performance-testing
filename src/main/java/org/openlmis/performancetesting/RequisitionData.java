@@ -23,7 +23,7 @@ import java.util.List;
 import static java.lang.Integer.valueOf;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
-import static org.openlmis.performancetesting.Constants.*;
+import static org.openlmis.performancetesting.Properties.*;
 import static org.openlmis.performancetesting.Utils.randomInteger;
 
 public class RequisitionData {

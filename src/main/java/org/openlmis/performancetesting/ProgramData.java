@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static org.openlmis.performancetesting.Constants.*;
+import static org.openlmis.performancetesting.Properties.*;
 
 public class ProgramData {
 
@@ -47,9 +47,9 @@ public class ProgramData {
       programDAO.insertProgram(program);
       programList.add(program);
       if (programName.equals("ESS MEDICINES")) {
-        programProductCountMap.put(program, asList(MAX_FULL_SUPPLY_COUNT, NON_FULL_SUPPLY_COUNT));
+        programProductCountMap.put(program, asList(MAX_FULL_SUPPLY_COUNT, NUMBER_OF_NON_FULL_SUPPLY_ITEMS));
       } else {
-        programProductCountMap.put(program, asList(AVERAGE_FULL_SUPPLY_COUNT, NON_FULL_SUPPLY_COUNT));
+        programProductCountMap.put(program, asList(AVERAGE_FULL_SUPPLY_COUNT, NUMBER_OF_NON_FULL_SUPPLY_ITEMS));
       }
 
     }

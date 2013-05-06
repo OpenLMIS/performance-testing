@@ -19,7 +19,7 @@ import java.util.*;
 import static java.lang.Integer.valueOf;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
-import static org.openlmis.performancetesting.Constants.*;
+import static org.openlmis.performancetesting.Properties.*;
 import static org.openlmis.performancetesting.Utils.periodEndDate;
 import static org.openlmis.performancetesting.Utils.periodStartDate;
 import static org.openlmis.rnr.domain.RnrStatus.APPROVED;
