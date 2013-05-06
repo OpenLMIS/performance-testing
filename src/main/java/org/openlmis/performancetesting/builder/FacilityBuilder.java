@@ -11,6 +11,7 @@ import static java.lang.Double.valueOf;
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
+import static org.openlmis.performancetesting.Utils.periodStartDate;
 import static org.openlmis.performancetesting.Utils.randomDate;
 
 public class FacilityBuilder {
@@ -40,9 +41,8 @@ public class FacilityBuilder {
     facility.setHasElectricity(nextBoolean());
     facility.setHasElectronicScc(nextBoolean());
     facility.setHasElectronicDar(nextBoolean());
-    facility.setActive(nextBoolean());
-    facility.setGoLiveDate(randomDate());
-    facility.setGoDownDate(randomDate());
+    facility.setActive(true);
+    facility.setGoLiveDate(periodStartDate(2009, 1));
     facility.setComment(randomAlphanumeric(50));
     facility.setDataReportable(nextBoolean());
     facility.setModifiedBy(Long.valueOf(randomNumeric(5)));
