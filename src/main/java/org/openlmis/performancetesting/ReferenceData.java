@@ -180,7 +180,7 @@ public class ReferenceData {
           final List<Facility> facilities = facilityList;
           new Thread() {
             public void run() {
-              insertProgramsSupported(program, facility);
+              insertProgramsSupported(program, facilities);
               insertSupplyLine(supervisoryNode, program, facility);
               insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
               createApproverAtSupervisoryNodes(supervisoryNode);
@@ -195,8 +195,10 @@ public class ReferenceData {
 
   }
 
-  private void insertProgramsSupported(Program program, Facility facility) {
-    programData.setupProgramSupported(program, facility);
+  private void insertProgramsSupported(Program program, List<Facility> facilities) {
+    for (Facility facility : facilities) {
+      programData.setupProgramSupported(program, facility);
+    }
   }
 
   private void createRequisitions(List<Facility> facilities, Program program, SupervisoryNode supervisoryNode, Facility supplyingFacility) {
