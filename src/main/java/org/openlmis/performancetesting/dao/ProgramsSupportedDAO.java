@@ -6,25 +6,28 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.ProgramSupported;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
+
+@Component
+@NoArgsConstructor
 public class ProgramsSupportedDAO {
 
+  @Autowired
   NamedParameterJdbcTemplate template;
+
   public static final Logger logger = LoggerFactory.getLogger(LineItemDAO.class);
 
   final String insertProgramsSupported = "INSERT INTO programs_supported VALUES(DEFAULT, :facilityId, :program.id," +
       ":startDate, :active, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
-
-  public ProgramsSupportedDAO(NamedParameterJdbcTemplate template) {
-    this.template = template;
-  }
-
 
   public long insertProgramSupported(ProgramSupported programSupported) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();

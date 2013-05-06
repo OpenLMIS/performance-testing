@@ -6,15 +6,22 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.RequisitionGroup;
 import org.openlmis.core.domain.RequisitionGroupMember;
 import org.openlmis.core.domain.RequisitionGroupProgramSchedule;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
+
+@Component
+@NoArgsConstructor
 public class RequisitionGroupDAO {
 
+  @Autowired
   NamedParameterJdbcTemplate template;
 
   final String insertRequisitionGroupQuery = "INSERT INTO requisition_groups VALUES(DEFAULT, :code, :name, :description, :supervisoryNode.id, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
@@ -24,10 +31,6 @@ public class RequisitionGroupDAO {
   final String insertRequisitionGroupProgramScheduleQuery = "INSERT INTO requisition_group_program_schedules " +
       "VALUES(DEFAULT, :requisitionGroup.id,  :program.id, :processingSchedule.id, :directDelivery, :dropOffFacility.id," +
       ":modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
-
-  public RequisitionGroupDAO(NamedParameterJdbcTemplate template) {
-    this.template = template;
-  }
 
   public long insertRequisitionGroup(RequisitionGroup requisitionGroup) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();

@@ -6,20 +6,25 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.ProgramProduct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
+
+@Component
+@NoArgsConstructor
 public class ProgramProductDAO {
 
+  @Autowired
   NamedParameterJdbcTemplate template;
+
   final String insertProgramQuery = "INSERT INTO program_products VALUES(DEFAULT, :program.id, :product.id, " +
       ":dosesPerMonth, :active, :currentPrice.value, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
 
-  public ProgramProductDAO(NamedParameterJdbcTemplate template) {
-    this.template = template;
-  }
 
   public long insertProgramProduct(ProgramProduct programProduct) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();

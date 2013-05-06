@@ -5,19 +5,25 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.DosageUnit;
 import org.openlmis.core.domain.Product;
 import org.openlmis.core.domain.ProductCategory;
 import org.openlmis.core.domain.ProductForm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 
+@Component
+@NoArgsConstructor
 public class ProductDAO {
 
+  @Autowired
   NamedParameterJdbcTemplate template;
 
   final String insertProductQuery = format("INSERT INTO products VALUES( " +

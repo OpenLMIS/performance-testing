@@ -6,22 +6,29 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.Facility;
 import org.openlmis.core.domain.FacilityType;
 import org.openlmis.core.domain.GeographicLevel;
 import org.openlmis.core.domain.GeographicZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
 
+@NoArgsConstructor
+@Component
 public class FacilityDAO {
+
+  @Autowired
   NamedParameterJdbcTemplate template;
 
   final String insertGeoZoneQuery = "INSERT INTO geographic_zones VALUES(DEFAULT, :code, :name, :level.id)";
@@ -37,11 +44,6 @@ public class FacilityDAO {
       " :comment, :dataReportable, :modifiedBy, :modifiedDate, %s, :modifiedDate)", randomNumeric(5));
 
   final static Logger logger = LoggerFactory.getLogger(FacilityDAO.class);
-
-  public FacilityDAO(NamedParameterJdbcTemplate template) {
-    this.template = template;
-  }
-
 
   public long insertFacility(Facility facility) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();

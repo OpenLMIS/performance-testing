@@ -6,24 +6,28 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.ProcessingPeriod;
 import org.openlmis.core.domain.ProcessingSchedule;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
+
+@Component
+@NoArgsConstructor
 public class ProcessingScheduleDAO {
 
+  @Autowired
   NamedParameterJdbcTemplate template;
+
   final String insertScheduleQuery = "INSERT INTO processing_schedules VALUES(DEFAULT, :code, :name, :description, " +
       ":modifiedBy, :modifiedDate, :modifiedBy)";
 
   final String insertPeriodQuery = "INSERT INTO processing_periods VALUES(:id, :scheduleId, :name, :description, " +
       ":startDate, :endDate, :numberOfMonths, :modifiedBy, :modifiedDate, :modifiedBy)";
-
-  public ProcessingScheduleDAO(NamedParameterJdbcTemplate template) {
-    this.template = template;
-  }
 
   public long insertSchedule(ProcessingSchedule processingSchedule) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();

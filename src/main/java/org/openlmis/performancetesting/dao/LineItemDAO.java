@@ -6,6 +6,7 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.Facility;
 import org.openlmis.core.domain.Product;
 import org.openlmis.core.domain.Program;
@@ -14,20 +15,27 @@ import org.openlmis.rnr.domain.LossesAndAdjustmentsType;
 import org.openlmis.rnr.domain.RnrLineItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+@Component
+@NoArgsConstructor
 public class LineItemDAO {
 
+  @Autowired
   NamedParameterJdbcTemplate template;
+
   public static final Logger logger = LoggerFactory.getLogger(LineItemDAO.class);
 
   final String insertLineItemQuery = "INSERT INTO requisition_line_items VALUES(DEFAULT, :rnrId, :productCode, :product," +
@@ -40,10 +48,6 @@ public class LineItemDAO {
 
   final String insertAdjustmentTypeQuery = "INSERT INTO losses_adjustments_types VALUES(:name, :description, :additive, :displayOrder)";
   final String insertAdjustmentsQuery = "INSERT INTO requisition_line_item_losses_adjustments VALUES(:id, :type.name, :quantity, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
-
-  public LineItemDAO(NamedParameterJdbcTemplate template) {
-    this.template = template;
-  }
 
 
   public long insertLineItem(RnrLineItem lineItem) {

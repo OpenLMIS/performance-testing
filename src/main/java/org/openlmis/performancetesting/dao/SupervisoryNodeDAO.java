@@ -6,12 +6,20 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.SupervisoryNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
+
+@Component
+@NoArgsConstructor
 public class SupervisoryNodeDAO {
+
+  @Autowired
   NamedParameterJdbcTemplate template;
 
   final String insertSupervisoryNodeSql = "INSERT INTO supervisory_nodes VALUES(DEFAULT, :parent.id, :facility.id" +

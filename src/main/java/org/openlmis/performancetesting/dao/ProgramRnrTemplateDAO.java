@@ -6,20 +6,23 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.rnr.domain.ProgramRnrTemplate;
 import org.openlmis.rnr.domain.RnrColumn;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Component;
 
+@Component
+@NoArgsConstructor
 public class ProgramRnrTemplateDAO {
+
+  @Autowired
   NamedParameterJdbcTemplate template;
 
   final String insertRnrTemplateQuery = "INSERT INTO program_rnr_columns VALUES( " +
       "DEFAULT,:id, :programId, :label, :visible, :position, :source.code, TRUE)";
-
-  public ProgramRnrTemplateDAO(NamedParameterJdbcTemplate template) {
-    this.template = template;
-  }
 
   public void insertRnrTemplate(ProgramRnrTemplate rnrTemplate) {
     for (RnrColumn rnrColumn : rnrTemplate.getRnrColumns()) {

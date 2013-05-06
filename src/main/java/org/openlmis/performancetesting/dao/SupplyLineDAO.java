@@ -6,19 +6,24 @@
 
 package org.openlmis.performancetesting.dao;
 
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.SupplyLine;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
+
+@Component
+@NoArgsConstructor
 public class SupplyLineDAO {
+
+  @Autowired
   NamedParameterJdbcTemplate template;
   final String insertSupplyLineQuery = "INSERT INTO supply_lines VALUES(DEFAULT, :description, :supervisoryNode.id," +
       " :program.id, :supplyingFacility.id, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
 
-  public SupplyLineDAO(NamedParameterJdbcTemplate template) {
-    this.template = template;
-  }
 
   public long insertSupplyLine(SupplyLine supplyLine) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();

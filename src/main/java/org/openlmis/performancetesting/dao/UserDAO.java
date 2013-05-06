@@ -7,12 +7,19 @@
 package org.openlmis.performancetesting.dao;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.openlmis.core.domain.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Component;
 
+@Component
+@NoArgsConstructor
 public class UserDAO {
+
+  @Autowired
   NamedParameterJdbcTemplate template;
 
   final String insertRoleQuery = "INSERT INTO roles VALUES(DEFAULT, :adminRole, :name, :description)";

@@ -7,7 +7,8 @@
 <beans
         xmlns="http://www.springframework.org/schema/beans"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <bean id="ds" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="org.postgresql.Driver"/>
@@ -18,65 +19,10 @@
         <property name="initialPoolSize" value="10"/>
     </bean>
 
-
     <bean id="template" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg ref="ds"/>
     </bean>
 
-    <bean id="productDAO" class="org.openlmis.performancetesting.dao.ProductDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="facilityDAO" class="org.openlmis.performancetesting.dao.FacilityDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="programDAO" class="org.openlmis.performancetesting.dao.ProgramDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="programRnrTemplateDAO" class="org.openlmis.performancetesting.dao.ProgramRnrTemplateDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="userDAO" class="org.openlmis.performancetesting.dao.UserDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="supervisoryNodeDAO" class="org.openlmis.performancetesting.dao.SupervisoryNodeDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="requisitionGroupDAO" class="org.openlmis.performancetesting.dao.RequisitionGroupDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="processingScheduleDAO" class="org.openlmis.performancetesting.dao.ProcessingScheduleDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="supplyLineDAO" class="org.openlmis.performancetesting.dao.SupplyLineDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="programProductDAO" class="org.openlmis.performancetesting.dao.ProgramProductDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="facilityApprovedProductDAO" class="org.openlmis.performancetesting.dao.FacilityApprovedProductDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="requisitionDAO" class="org.openlmis.performancetesting.dao.RequisitionDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="lineItemDAO" class="org.openlmis.performancetesting.dao.LineItemDAO">
-        <constructor-arg ref="template"/>
-    </bean>
-
-    <bean id="programsSupportedDAO" class="org.openlmis.performancetesting.dao.ProgramsSupportedDAO">
-        <constructor-arg ref="template"/>
-    </bean>
+    <context:component-scan base-package="org.openlmis.performancetesting.dao"/>
 
 </beans>
