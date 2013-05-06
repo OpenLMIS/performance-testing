@@ -42,8 +42,9 @@ public class UserBuilder {
 
   public User createUser(Facility homeFacility, Vendor vendor) {
     User user = new User();
-    user.setUserName(randomAlphanumeric(20));
-    user.setPassword(randomAlphanumeric(10));
+    String userName = randomAlphanumeric(20);
+    user.setUserName(userName);
+    user.setPassword(userName);
     user.setFirstName(randomAlphanumeric(35));
     user.setLastName(randomAlphanumeric(35));
     user.setEmployeeId(randomAlphanumeric(20));
