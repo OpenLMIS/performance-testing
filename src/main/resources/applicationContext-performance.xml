@@ -11,12 +11,12 @@
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <bean id="ds" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-        <property name="driverClass" value="org.postgresql.Driver"/>
-        <property name="jdbcUrl" value="jdbc:postgresql:open_lmis"/>
-        <property name="user" value="postgres"/>
-        <property name="password" value="p@ssw0rd"/>
-        <property name="maxPoolSize" value="100"/>
-        <property name="initialPoolSize" value="10"/>
+        <property name="driverClass" value="${driver.class}"/>
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="user" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="maxPoolSize" value="${db.connection.pool.size}"/>
+        <property name="initialPoolSize" value="${db.connection.init.pool.size}"/>
     </bean>
 
     <context:component-scan base-package="org.openlmis.performancetesting"/>
