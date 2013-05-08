@@ -34,3 +34,8 @@ task(run, dependsOn: 'classes', type: JavaExec) {
     main = 'org.openlmis.performancetesting.Runner'
     classpath = sourceSets.main.runtimeClasspath
 }
+
+task(cleanDB, dependsOn: 'classes', type: JavaExec) {
+    main = 'org.openlmis.performancetesting.DBCleaner'
+    classpath = sourceSets.main.runtimeClasspath
+}
