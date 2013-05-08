@@ -213,7 +213,7 @@ public class ReferenceData {
     userDAO.insertUser(user1);
     userDAO.insertUser(user2);
     Role lmu = rolesList.get(3);
-    Role medicalOfficer = rolesList.get(6);
+    Role medicalOfficer = rolesList.get(5);
 
 
     RoleAssignment roleAssignment1 = userBuilder.createRoleAssignment(program, user1, lmu, supervisoryNode);
