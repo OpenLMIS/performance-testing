@@ -20,9 +20,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Integer.valueOf;
-import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
-import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
 import static org.openlmis.performancetesting.Properties.ADJUSTMENT_NAMES;
 import static org.openlmis.performancetesting.Properties.NUMBER_OF_NON_FULL_SUPPLY_ITEMS;
 import static org.openlmis.performancetesting.Utils.randomInteger;
@@ -57,10 +54,10 @@ public class RequisitionData {
 
   public void createLineItem(final Rnr requisition) {
     List<Product> fullSupplyProducts = lineItemDAO.getLineItems(requisition.getFacility(), requisition.getProgram(), true);
-    for (final Product product : fullSupplyProducts) {
-      RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, product);
+    for (int counter = 0; counter < fullSupplyProducts.size(); counter++) {
+      RnrLineItem lineItem = lineItemBuilder.createLineItem(requisition, fullSupplyProducts.get(counter));
       lineItemDAO.insertLineItem(lineItem);
-      if (nextBoolean()) {
+      if (counter % 2 == 0) {
         createLossesAndAdjustments(lineItem);
       }
     }
@@ -75,8 +72,10 @@ public class RequisitionData {
   }
 
   private void createLossesAndAdjustments(RnrLineItem lineItem) {
-    for (int i = valueOf(randomNumeric(1)) - 5; i > 0; i--) {
-      LossesAndAdjustmentsType lossesAndAdjustmentsType = adjustmentTypeList.get(i);
+    int totalNoOfAdjustmentsPerProduct = 3;
+    int max = adjustmentTypeList.size() - totalNoOfAdjustmentsPerProduct;
+    for (int startIndex = randomInteger(0, max), numberOfAdjustments = 0; numberOfAdjustments < totalNoOfAdjustmentsPerProduct; numberOfAdjustments++) {
+      LossesAndAdjustmentsType lossesAndAdjustmentsType = adjustmentTypeList.get(startIndex + numberOfAdjustments);
       LossesAndAdjustments le = lineItemBuilder.createLossesAndAdjustment(lineItem, lossesAndAdjustmentsType);
       lineItemDAO.insertLossesAndAdjustments(le);
     }

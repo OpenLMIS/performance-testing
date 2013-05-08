@@ -32,15 +32,23 @@ public class LineItemBuilder {
     lineItem.setProductCategory(randomAlphabetic(50));
     lineItem.setProductCategoryDisplayOrder(valueOf(randomNumeric(3)));
     lineItem.setDispensingUnit(randomAlphabetic(15));
-    lineItem.setBeginningBalance(valueOf(randomNumeric(4)));
-    lineItem.setQuantityReceived(valueOf(randomNumeric(4)));
-    lineItem.setQuantityDispensed(valueOf(randomNumeric(4)));
-    lineItem.setStockInHand(valueOf(randomNumeric(4)));
+
+    Integer beginningBalance = valueOf(randomNumeric(4));
+    lineItem.setBeginningBalance(beginningBalance);
+
+    Integer quantityReceived = valueOf(randomNumeric(4));
+    lineItem.setQuantityReceived(quantityReceived);
+    Integer stockInHand = quantityReceived / 2;
+    lineItem.setStockInHand(stockInHand);
+
+    lineItem.setQuantityDispensed(quantityReceived + beginningBalance - stockInHand);
+
+
     lineItem.setQuantityRequested(valueOf(randomNumeric(4)));
     lineItem.setReasonForRequestedQuantity(randomAlphabetic(60));
     lineItem.setCalculatedOrderQuantity(valueOf(randomNumeric(4)));
     lineItem.setQuantityApproved(valueOf(randomNumeric(4)));
-    lineItem.setTotalLossesAndAdjustments(valueOf(randomNumeric(4)));
+    lineItem.setTotalLossesAndAdjustments(valueOf(randomNumeric(3)));
     lineItem.setNewPatientCount(valueOf(randomNumeric(3)));
     lineItem.setStockOutDays(valueOf(randomNumeric(2)));
     lineItem.setNormalizedConsumption(valueOf(randomNumeric(2)));
@@ -68,7 +76,7 @@ public class LineItemBuilder {
     LossesAndAdjustments le = new LossesAndAdjustments();
     le.setId(lineItem.getId());
     le.setType(adjustmentType);
-    le.setQuantity(valueOf(randomNumeric(3)));
+    le.setQuantity(valueOf(randomNumeric(2)));
     le.setModifiedBy(Long.valueOf(randomNumeric(3)));
     le.setModifiedDate(randomDate());
 
