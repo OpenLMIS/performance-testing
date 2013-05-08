@@ -11,7 +11,7 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="InitiateRnR" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="InitiateRnR" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -43,7 +43,7 @@
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="filename">output.csv</stringProp>
+          <stringProp name="filename">initiate.csv</stringProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">true</boolProp>
           <stringProp name="shareMode">All threads</stringProp>
@@ -666,7 +666,7 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/requisitions.json?facilityId=facilityId&amp;periodId=13&amp;programId=programId" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/requisitions.json?facilityId=facilityId&amp;periodId=14&amp;programId=programId" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
@@ -2194,7 +2194,7 @@
         </ResultCollector>
         <hashTree/>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
-          <stringProp name="filename">output.csv</stringProp>
+          <stringProp name="filename">submit.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">user,facilityId,programId,periodid</stringProp>
           <stringProp name="delimiter">,</stringProp>
@@ -2881,6 +2881,15 @@
               </collectionProp>
             </HeaderManager>
             <hashTree/>
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
+              <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+              <stringProp name="RegexExtractor.refname">RNRID</stringProp>
+              <stringProp name="RegexExtractor.regex">&quot;rnrId&quot;:([^,]+)</stringProp>
+              <stringProp name="RegexExtractor.template"></stringProp>
+              <stringProp name="RegexExtractor.default"></stringProp>
+              <stringProp name="RegexExtractor.match_number"></stringProp>
+            </RegexExtractor>
+            <hashTree/>
           </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/reference-data/currency.json" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -3264,7 +3273,7 @@
         </CookieManager>
         <hashTree/>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
-          <stringProp name="filename">output.csv</stringProp>
+          <stringProp name="filename">submit.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">user,facilityId,programId,periodId</stringProp>
           <stringProp name="delimiter">,</stringProp>
@@ -3339,7 +3348,7 @@
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ApproveRnR" enabled="false">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ApproveRnR" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -4006,7 +4015,7 @@
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">{&quot;id&quot;:1,&quot;fullSupplyLineItems&quot;:[{&quot;id&quot;:1,&quot;rnrId&quot;:1,&quot;product&quot;:&quot;ACETYL SALICYLIC ACID, TAB 300MG Capsule 300/200/600 mg&quot;,&quot;productDisplayOrder&quot;:4,&quot;productCode&quot;:&quot;EM1&quot;,&quot;productCategory&quot;:&quot;Anaesthetics&quot;,&quot;productCategoryDisplayOrder&quot;:4,&quot;roundToZero&quot;:false,&quot;packRoundingThreshold&quot;:1,&quot;packSize&quot;:10,&quot;dosesPerMonth&quot;:30,&quot;dosesPerDispensingUnit&quot;:10,&quot;dispensingUnit&quot;:&quot;Strip&quot;,&quot;maxMonthsOfStock&quot;:3,&quot;fullSupply&quot;:true,&quot;quantityReceived&quot;:1,&quot;quantityDispensed&quot;:1,&quot;beginningBalance&quot;:1,&quot;totalLossesAndAdjustments&quot;:0,&quot;stockInHand&quot;:1,&quot;stockOutDays&quot;:0,&quot;newPatientCount&quot;:1,&quot;amc&quot;:3,&quot;normalizedConsumption&quot;:10,&quot;calculatedOrderQuantity&quot;:8,&quot;maxStockQuantity&quot;:9,&quot;quantityApproved&quot;:10,&quot;packsToShip&quot;:1,&quot;previousStockInHandAvailable&quot;:false,&quot;price&quot;:&quot;50.00&quot;,&quot;numberOfMonths&quot;:3,&quot;rnrStatus&quot;:&quot;IN_APPROVAL&quot;,&quot;lossesAndAdjustments&quot;:[],&quot;previousNormalizedConsumptions&quot;:[],&quot;cost&quot;:&quot;50.00&quot;},{&quot;id&quot;:2,&quot;rnrId&quot;:1,&quot;product&quot;:&quot;AMOXYCILLIN (TRIHYDRATE), CAP 250MG Capsule 300/200/600 mg&quot;,&quot;productDisplayOrder&quot;:5,&quot;productCode&quot;:&quot;EM2&quot;,&quot;productCategory&quot;:&quot;Anaesthetics&quot;,&quot;productCategoryDisplayOrder&quot;:4,&quot;roundToZero&quot;:true,&quot;packRoundingThreshold&quot;:1,&quot;packSize&quot;:10,&quot;dosesPerMonth&quot;:30,&quot;dosesPerDispensingUnit&quot;:10,&quot;dispensingUnit&quot;:&quot;Strip&quot;,&quot;maxMonthsOfStock&quot;:3,&quot;fullSupply&quot;:true,&quot;quantityReceived&quot;:1,&quot;quantityDispensed&quot;:1,&quot;beginningBalance&quot;:1,&quot;totalLossesAndAdjustments&quot;:0,&quot;stockInHand&quot;:1,&quot;stockOutDays&quot;:0,&quot;newPatientCount&quot;:0,&quot;amc&quot;:0,&quot;normalizedConsumption&quot;:1,&quot;calculatedOrderQuantity&quot;:0,&quot;maxStockQuantity&quot;:0,&quot;quantityApproved&quot;:20,&quot;packsToShip&quot;:2,&quot;previousStockInHandAvailable&quot;:false,&quot;price&quot;:&quot;50.00&quot;,&quot;numberOfMonths&quot;:3,&quot;rnrStatus&quot;:&quot;IN_APPROVAL&quot;,&quot;lossesAndAdjustments&quot;:[],&quot;previousNormalizedConsumptions&quot;:[],&quot;cost&quot;:&quot;100.00&quot;},{&quot;id&quot;:3,&quot;rnrId&quot;:1,&quot;product&quot;:&quot;BENZATHINE BENZYL PENICILLIN , 2.4MU, PWD FOR INJ Capsule 300/200/600 mg&quot;,&quot;productDisplayOrder&quot;:5,&quot;productCode&quot;:&quot;EM3&quot;,&quot;productCategory&quot;:&quot;Anaesthetics&quot;,&quot;productCategoryDisplayOrder&quot;:4,&quot;roundToZero&quot;:false,&quot;packRoundingThreshold&quot;:1,&quot;packSize&quot;:10,&quot;dosesPerMonth&quot;:30,&quot;dosesPerDispensingUnit&quot;:10,&quot;dispensingUnit&quot;:&quot;Strip&quot;,&quot;maxMonthsOfStock&quot;:3,&quot;fullSupply&quot;:true,&quot;quantityReceived&quot;:1,&quot;quantityDispensed&quot;:1,&quot;beginningBalance&quot;:1,&quot;totalLossesAndAdjustments&quot;:0,&quot;stockInHand&quot;:1,&quot;stockOutDays&quot;:0,&quot;newPatientCount&quot;:0,&quot;amc&quot;:0,&quot;normalizedConsumption&quot;:1,&quot;calculatedOrderQuantity&quot;:0,&quot;maxStockQuantity&quot;:0,&quot;quantityApproved&quot;:30,&quot;packsToShip&quot;:3,&quot;previousStockInHandAvailable&quot;:false,&quot;price&quot;:&quot;50.00&quot;,&quot;numberOfMonths&quot;:3,&quot;rnrStatus&quot;:&quot;IN_APPROVAL&quot;,&quot;lossesAndAdjustments&quot;:[],&quot;previousNormalizedConsumptions&quot;:[],&quot;cost&quot;:&quot;150.00&quot;}],&quot;nonFullSupplyLineItems&quot;:[]}</stringProp>
+                  <stringProp name="Argument.value">{}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
               </collectionProp>
@@ -4228,7 +4237,7 @@
         </ResultCollector>
         <hashTree/>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
-          <stringProp name="filename">output.csv</stringProp>
+          <stringProp name="filename">submit.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">user,facilityId,programId,periodid</stringProp>
           <stringProp name="delimiter">,</stringProp>
