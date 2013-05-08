@@ -183,7 +183,7 @@ public class ReferenceData {
               insertProgramsSupported(program, facilities);
               insertSupplyLine(supervisoryNode, program, facility);
               insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
-              createApproverAtSupervisoryNodes(supervisoryNode);
+              createApproverAtSupervisoryNodes(supervisoryNode, program);
               createRequisitions(facilities, program, supervisoryNode, facility);
             }
           }.start();
@@ -207,7 +207,7 @@ public class ReferenceData {
     }
   }
 
-  private void createApproverAtSupervisoryNodes(SupervisoryNode supervisoryNode) {
+  private void createApproverAtSupervisoryNodes(SupervisoryNode supervisoryNode, Program program) {
     User user1 = userBuilder.createUser(null, vendor);
     User user2 = userBuilder.createUser(null, vendor);
     userDAO.insertUser(user1);
@@ -215,14 +215,12 @@ public class ReferenceData {
     Role lmu = rolesList.get(3);
     Role facilityHead = rolesList.get(4);
 
-    for (Program program : programList) {
-      RoleAssignment roleAssignment1 = userBuilder.createRoleAssignment(program, user1, lmu, supervisoryNode);
-      userDAO.insertRoleAssignment(roleAssignment1);
 
-      RoleAssignment roleAssignment2 = userBuilder.createRoleAssignment(program, user2, facilityHead, supervisoryNode.getParent());
-      userDAO.insertRoleAssignment(roleAssignment2);
-    }
+    RoleAssignment roleAssignment1 = userBuilder.createRoleAssignment(program, user1, lmu, supervisoryNode);
+    userDAO.insertRoleAssignment(roleAssignment1);
 
+    RoleAssignment roleAssignment2 = userBuilder.createRoleAssignment(program, user2, facilityHead, supervisoryNode.getParent());
+    userDAO.insertRoleAssignment(roleAssignment2);
   }
 
   private RequisitionGroupProgramSchedule insertRequisitionGroupProgramSchedule(RequisitionGroup requisitionGroup,
