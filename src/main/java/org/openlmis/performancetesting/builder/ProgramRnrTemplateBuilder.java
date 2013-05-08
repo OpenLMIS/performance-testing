@@ -30,9 +30,9 @@ public class ProgramRnrTemplateBuilder {
       add(createRnrColumn(programId, 3, "Unit/Unit of Issue", true, 3, REFERENCE));
       add(createRnrColumn(programId, 4, "Beginning Balance", true, 4, USER_INPUT));
       add(createRnrColumn(programId, 5, "Total Received Quantity", true, 5, USER_INPUT));
-      add(createRnrColumn(programId, 6, "Total Consumed Quantity", true, 6, USER_INPUT));
+      add(createRnrColumn(programId, 6, "Total Consumed Quantity", true, 6, CALCULATED));
       add(createRnrColumn(programId, 7, "Total Losses / Adjustments", true, 7, USER_INPUT));
-      add(createRnrColumn(programId, 8, "Stock on Hand", true, 8, CALCULATED));
+      add(createRnrColumn(programId, 8, "Stock on Hand", true, 8, USER_INPUT));
       add(createRnrColumn(programId, 9, "New Patients", true, 9, USER_INPUT));
       add(createRnrColumn(programId, 10, "Total Stockout Days", true, 10, USER_INPUT));
       add(createRnrColumn(programId, 11, "Adjusted Total Consumption", true, 11, CALCULATED));
