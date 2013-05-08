@@ -29,7 +29,7 @@ public class Properties {
   public static final int FACILITIES_PER_DISTRICT = getInteger("facilities.per.district");
   public static final int FACILITIES_PER_REQUISITION_GROUP = getInteger("facilities.per.rg");
   public static final int NO_OF_FACILITY_TYPES = getInteger("no.of.facility.types");
-  public static final int NUMBER_OF_PERIODS = getInteger("no.of.periods");
+  public static final int ENDING_PERIOD_MONTH = getInteger("ending.period.month");
   public static final int STARTING_PERIOD_MONTH = getInteger("starting.period.month");
 
 

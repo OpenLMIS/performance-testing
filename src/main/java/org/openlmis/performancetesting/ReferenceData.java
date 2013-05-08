@@ -22,7 +22,8 @@ import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
 import static org.openlmis.performancetesting.Properties.*;
 import static org.openlmis.performancetesting.Utils.periodEndDate;
 import static org.openlmis.performancetesting.Utils.periodStartDate;
-import static org.openlmis.rnr.domain.RnrStatus.APPROVED;
+import static org.openlmis.rnr.domain.RnrStatus.INITIATED;
+import static org.openlmis.rnr.domain.RnrStatus.RELEASED;
 
 public class ReferenceData {
 
@@ -203,7 +204,8 @@ public class ReferenceData {
 
   private void createRequisitions(List<Facility> facilities, Program program, SupervisoryNode supervisoryNode, Facility supplyingFacility) {
     for (Facility facility : facilities) {
-      requisitionData.createRequisition(periodList, facility, program, supervisoryNode, supplyingFacility, APPROVED);
+      requisitionData.createRequisition(periodList.subList(STARTING_PERIOD_MONTH, ENDING_PERIOD_MONTH), facility, program, supervisoryNode, supplyingFacility, RELEASED);
+      requisitionData.createRequisition(periodList.subList(ENDING_PERIOD_MONTH, ENDING_PERIOD_MONTH + 1), facility, program, supervisoryNode, supplyingFacility, INITIATED);
     }
   }
 

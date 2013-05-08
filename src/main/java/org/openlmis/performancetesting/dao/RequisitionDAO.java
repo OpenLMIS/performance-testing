@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+import static java.sql.Types.VARCHAR;
+
 
 @Component
 @NoArgsConstructor
@@ -29,13 +31,15 @@ public class RequisitionDAO {
   NamedParameterJdbcTemplate template;
 
   final String insertRequisitionQuery = "INSERT INTO requisitions VALUES(DEFAULT, :facility.id, :program.id, :period.id, " +
-      "'RELEASED', :fullSupplyItemsSubmittedCost.value, :NonFullSupplyItemsSubmittedCost.value, :supervisoryNodeId, " +
+      ":status, :fullSupplyItemsSubmittedCost.value, :NonFullSupplyItemsSubmittedCost.value, :supervisoryNodeId, " +
       ":supplyingFacility.id, NULL, :submittedDate, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
 
 
   public long insertRequisition(Rnr rnr) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-    template.update(insertRequisitionQuery, new BeanPropertySqlParameterSource(rnr), keyHolder, new String[]{"id"});
+    BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(rnr);
+    paramSource.registerSqlType("status", VARCHAR);
+    template.update(insertRequisitionQuery, paramSource, keyHolder, new String[]{"id"});
 
     long id = keyHolder.getKey().longValue();
     rnr.setId(id);
