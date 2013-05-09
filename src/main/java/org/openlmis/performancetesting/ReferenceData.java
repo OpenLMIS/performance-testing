@@ -185,7 +185,7 @@ public class ReferenceData {
               insertSupplyLine(supervisoryNode, program, facility);
               insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
               createApproverAtSupervisoryNodes(supervisoryNode, program);
-              createRequisitions(facilities, program, supervisoryNode, facility);
+              createRequisitions(facilities, program, facility);
             }
           }.start();
 
@@ -202,10 +202,10 @@ public class ReferenceData {
     }
   }
 
-  private void createRequisitions(List<Facility> facilities, Program program, SupervisoryNode supervisoryNode, Facility supplyingFacility) {
+  private void createRequisitions(List<Facility> facilities, Program program, Facility supplyingFacility) {
     for (Facility facility : facilities) {
-      requisitionData.createRequisition(periodList.subList(STARTING_PERIOD_MONTH, ENDING_PERIOD_MONTH), facility, program, supervisoryNode, supplyingFacility, RELEASED);
-      requisitionData.createRequisition(periodList.subList(ENDING_PERIOD_MONTH, ENDING_PERIOD_MONTH + 1), facility, program, supervisoryNode, supplyingFacility, INITIATED);
+      requisitionData.createRequisition(periodList.subList(STARTING_PERIOD_MONTH, ENDING_PERIOD_MONTH), facility, program, null, supplyingFacility, RELEASED);
+      requisitionData.createRequisition(periodList.subList(ENDING_PERIOD_MONTH, ENDING_PERIOD_MONTH + 1), facility, program, null, supplyingFacility, INITIATED);
     }
   }
 
