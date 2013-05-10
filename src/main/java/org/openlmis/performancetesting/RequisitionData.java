@@ -52,6 +52,36 @@ public class RequisitionData {
     }
   }
 
+  public void createRequisition(int facilityCounter, List<ProcessingPeriod> periods, Facility facility,
+                                Program program, SupervisoryNode supervisoryNode, Facility supplyingFacility) {
+    for (ProcessingPeriod period : periods) {
+      RnrStatus status = decideStatus(facilityCounter);
+      supervisoryNode = getSupervisoryNode(supervisoryNode, status);
+
+      if (status != null) {
+        Rnr requisition = requisitionBuilder.createRequisition(facility, program, period, supervisoryNode, supplyingFacility, status);
+        requisitionDAO.insertRequisition(requisition);
+        createLineItem(requisition);
+      }
+    }
+
+  }
+
+  private SupervisoryNode getSupervisoryNode(SupervisoryNode supervisoryNode, RnrStatus status) {
+    if (status == RnrStatus.IN_APPROVAL) {
+      assert supervisoryNode != null;
+      supervisoryNode = supervisoryNode.getParent();
+    } else if (status != RnrStatus.AUTHORIZED) {
+      supervisoryNode = null;
+    }
+    return supervisoryNode;
+  }
+
+  private RnrStatus decideStatus(int facilityCounter) {
+    int statusEnumIndex = (facilityCounter % 5);
+    return RnrStatus.values()[statusEnumIndex];
+  }
+
   public void createLineItem(final Rnr requisition) {
     List<Product> fullSupplyProducts = lineItemDAO.getLineItems(requisition.getFacility(), requisition.getProgram(), true);
     for (int counter = 0; counter < fullSupplyProducts.size(); counter++) {

@@ -22,7 +22,6 @@ import static org.apache.commons.lang.math.RandomUtils.nextBoolean;
 import static org.openlmis.performancetesting.Properties.*;
 import static org.openlmis.performancetesting.Utils.periodEndDate;
 import static org.openlmis.performancetesting.Utils.periodStartDate;
-import static org.openlmis.rnr.domain.RnrStatus.INITIATED;
 import static org.openlmis.rnr.domain.RnrStatus.RELEASED;
 
 public class ReferenceData {
@@ -185,7 +184,7 @@ public class ReferenceData {
               insertSupplyLine(supervisoryNode, program, facility);
               insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
               createApproverAtSupervisoryNodes(supervisoryNode, program);
-              createRequisitions(facilities, program, facility);
+              createRequisitions(facilities, program, facility, supervisoryNode);
             }
           }.start();
 
@@ -202,10 +201,14 @@ public class ReferenceData {
     }
   }
 
-  private void createRequisitions(List<Facility> facilities, Program program, Facility supplyingFacility) {
-    for (Facility facility : facilities) {
-      requisitionData.createRequisition(periodList.subList(STARTING_PERIOD_MONTH, ENDING_PERIOD_MONTH), facility, program, null, supplyingFacility, RELEASED);
-      requisitionData.createRequisition(periodList.subList(ENDING_PERIOD_MONTH, ENDING_PERIOD_MONTH + 1), facility, program, null, supplyingFacility, INITIATED);
+  private void createRequisitions(List<Facility> facilities, Program program, Facility supplyingFacility, SupervisoryNode supervisoryNode) {
+    for (int facilityIndex = 0; facilityIndex < facilities.size(); facilityIndex++) {
+
+      requisitionData.createRequisition(periodList.subList(STARTING_PERIOD_MONTH, ENDING_PERIOD_MONTH),
+          facilities.get(facilityIndex), program, null, supplyingFacility, RELEASED);
+
+      requisitionData.createRequisition(facilityIndex, periodList.subList(ENDING_PERIOD_MONTH, ENDING_PERIOD_MONTH + 1),
+          facilities.get(facilityIndex), program, supervisoryNode, supplyingFacility);
     }
   }
 
