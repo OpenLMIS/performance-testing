@@ -78,7 +78,8 @@ public class RequisitionData {
   }
 
   private RnrStatus decideStatus(int facilityCounter) {
-    int statusEnumIndex = (facilityCounter % 5);
+    int statusEnumIndex = (facilityCounter % 6);
+    if (statusEnumIndex == 5) return null;
     return RnrStatus.values()[statusEnumIndex];
   }
 

@@ -175,7 +175,7 @@ public class ReferenceData {
         final SupervisoryNode supervisoryNode = insertSupervisoryNodePair(facility);
         final RequisitionGroup requisitionGroup = insertRequisitionGroup(supervisoryNode);
         insertRequisitionGroupMember(requisitionGroup, facilityList);
-
+        createApproverAtSupervisoryNodes(supervisoryNode);
         for (final Program program : programList) {
           final List<Facility> facilities = facilityList;
           new Thread() {
@@ -183,7 +183,6 @@ public class ReferenceData {
               insertProgramsSupported(program, facilities);
               insertSupplyLine(supervisoryNode, program, facility);
               insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
-              createApproverAtSupervisoryNodes(supervisoryNode, program);
               createRequisitions(facilities, program, facility, supervisoryNode);
             }
           }.start();
@@ -212,7 +211,7 @@ public class ReferenceData {
     }
   }
 
-  private void createApproverAtSupervisoryNodes(SupervisoryNode supervisoryNode, Program program) {
+  private void createApproverAtSupervisoryNodes(SupervisoryNode supervisoryNode) {
     User user1 = userBuilder.createUser(null, vendor);
     User user2 = userBuilder.createUser(null, vendor);
     userDAO.insertUser(user1);
@@ -220,12 +219,13 @@ public class ReferenceData {
     Role lmu = rolesList.get(3);
     Role medicalOfficer = rolesList.get(5);
 
+    for (Program program : programList) {
+      RoleAssignment roleAssignment1 = userBuilder.createRoleAssignment(program, user1, lmu, supervisoryNode);
+      userDAO.insertRoleAssignment(roleAssignment1);
 
-    RoleAssignment roleAssignment1 = userBuilder.createRoleAssignment(program, user1, lmu, supervisoryNode);
-    userDAO.insertRoleAssignment(roleAssignment1);
-
-    RoleAssignment roleAssignment2 = userBuilder.createRoleAssignment(program, user2, medicalOfficer, supervisoryNode.getParent());
-    userDAO.insertRoleAssignment(roleAssignment2);
+      RoleAssignment roleAssignment2 = userBuilder.createRoleAssignment(program, user2, medicalOfficer, supervisoryNode.getParent());
+      userDAO.insertRoleAssignment(roleAssignment2);
+    }
   }
 
   private RequisitionGroupProgramSchedule insertRequisitionGroupProgramSchedule(RequisitionGroup requisitionGroup,
@@ -297,14 +297,15 @@ public class ReferenceData {
     Role storeInCharge = rolesList.get(2);
     Role facilityHead = rolesList.get(4);
 
-    for (int i = 0; i < 2; i++) {
-      User user = userBuilder.createUser(facility, vendor);
-      userDAO.insertUser(user);
+    User user1 = userBuilder.createUser(facility, vendor);
+    userDAO.insertUser(user1);
 
-      for (Program program : programList) {
-        userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user, storeInCharge, null));
-        userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user, facilityHead, null));
-      }
+    User user2 = userBuilder.createUser(facility, vendor);
+    userDAO.insertUser(user2);
+
+    for (Program program : programList) {
+      userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user1, storeInCharge, null));
+      userDAO.insertRoleAssignment(userBuilder.createRoleAssignment(program, user2, facilityHead, null));
     }
   }
 
