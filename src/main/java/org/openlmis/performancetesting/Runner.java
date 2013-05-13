@@ -27,6 +27,8 @@ public class Runner {
 
     referenceData.insertFacilityAndUsers();
 
+    referenceData.setupAdmins();
+
     Date endTime = new Date();
     logger.info("endTime {}", endTime);
     logger.info("time take {}", (endTime.getTime() - startTime.getTime()));

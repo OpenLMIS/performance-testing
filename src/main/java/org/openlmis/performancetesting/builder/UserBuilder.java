@@ -30,6 +30,10 @@ public class UserBuilder {
 
     roleAssignment.setUserId(user.getId());
     roleAssignment.setRoleId(role.getId());
+
+    if (program == null) {
+      program = new Program();
+    }
     roleAssignment.setProgramId(program.getId());
 
     if (supervisoryNode == null) {

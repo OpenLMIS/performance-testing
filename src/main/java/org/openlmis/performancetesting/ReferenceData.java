@@ -359,4 +359,15 @@ public class ReferenceData {
     }
   }
 
+  public void setupAdmins() {
+    User admin = userBuilder.createUser(null, vendor);
+    userDAO.insertUser(admin);
+    RoleAssignment roleAssignment1 = userBuilder.createRoleAssignment(null, admin, rolesList.get(0), null);
+    userDAO.insertRoleAssignment(roleAssignment1);
+
+    User lmuInCharge = userBuilder.createUser(null, vendor);
+    userDAO.insertUser(lmuInCharge);
+    RoleAssignment roleAssignment2 = userBuilder.createRoleAssignment(null, lmuInCharge, rolesList.get(1), null);
+    userDAO.insertRoleAssignment(roleAssignment2);
+  }
 }
