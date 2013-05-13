@@ -606,7 +606,7 @@
               <elementProp name="periodId" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.name">periodId</stringProp>
-                <stringProp name="Argument.value">${periodid}</stringProp>
+                <stringProp name="Argument.value">${periodId}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
@@ -1072,7 +1072,7 @@
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -2207,7 +2207,7 @@
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -3278,7 +3278,7 @@
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -3445,14 +3445,14 @@
               <elementProp name="j_username" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.name">j_username</stringProp>
-                <stringProp name="Argument.value">F49ba3mH8aBNjQxkHW4v</stringProp>
+                <stringProp name="Argument.value">${user}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
               <elementProp name="j_password" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">true</boolProp>
                 <stringProp name="Argument.name">j_password</stringProp>
-                <stringProp name="Argument.value">F49ba3mH8aBNjQxkHW4v</stringProp>
+                <stringProp name="Argument.value">${user}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
@@ -4102,7 +4102,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -4172,7 +4172,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.num_threads">10</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <longProp name="ThreadGroup.start_time">1366954819000</longProp>
         <longProp name="ThreadGroup.end_time">1366954819000</longProp>
@@ -4762,7 +4762,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -4832,7 +4832,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.num_threads">10</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <longProp name="ThreadGroup.start_time">1367304311000</longProp>
         <longProp name="ThreadGroup.end_time">1367304311000</longProp>
@@ -5600,7 +5600,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
           <hashTree/>
         </hashTree>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -5726,7 +5726,6 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
           </value>
         </objProp>
         <stringProp name="filename"></stringProp>
-        <boolProp name="ResultCollector.success_only_logging">true</boolProp>
       </ResultCollector>
       <hashTree/>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Authorizemyfacility" enabled="true">
@@ -5868,12 +5867,14 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
                 <stringProp name="Argument.name">j_username</stringProp>
                 <stringProp name="Argument.value">${user}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
               <elementProp name="j_password" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.name">j_password</stringProp>
                 <stringProp name="Argument.value">${user}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
             </collectionProp>
           </elementProp>
@@ -6156,6 +6157,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
                 <stringProp name="Argument.name">rights</stringProp>
                 <stringProp name="Argument.value">CREATE_REQUISITION,AUTHORIZE_REQUISITION</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
             </collectionProp>
           </elementProp>
@@ -6791,7 +6793,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -6958,14 +6960,14 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
               <elementProp name="j_username" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.name">j_username</stringProp>
-                <stringProp name="Argument.value">F49ba3mH8aBNjQxkHW4v</stringProp>
+                <stringProp name="Argument.value">${user}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
               <elementProp name="j_password" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">true</boolProp>
                 <stringProp name="Argument.name">j_password</stringProp>
-                <stringProp name="Argument.value">F49ba3mH8aBNjQxkHW4v</stringProp>
+                <stringProp name="Argument.value">${user}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
@@ -7615,7 +7617,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
