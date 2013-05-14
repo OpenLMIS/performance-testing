@@ -1,6 +1,6 @@
 
 --READY to initiate ----------
-SELECT U.id,U.username,U.facilityId, RA.programId, 13
+SELECT U.username,U.facilityId, RA.programId, 13
 FROM users U JOIN role_assignments RA ON U.id = RA.userid
 JOIN roles R ON RA.roleId = R.id
 WHERE RA.supervisoryNodeId IS NULL
