@@ -57,3 +57,10 @@ JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
 JOIN roles RO on RO.id = RA.roleId
 JOIN users U on U.id = RA.userid
 AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId=R.programId ORDER BY R.facilityId, R.programId LIMIT 150 OFFSET 150;" > viewrnr.csv
+
+
+-- Convert to order ------------------
+psql -d open_lmis -U postgres -t -A -F"," -c "select u.username
+from roles ro, role_assignments ra, users u where ro.name='LMU In-Charge' and ro.id=ra.roleid and u.id=ra.userid LIMIT 1;" > converttoorder.csv
+
+
