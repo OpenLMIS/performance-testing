@@ -18,7 +18,7 @@ psql -d open_lmis -U postgres -t -A -F"," -c "SELECT username, facilityid, progr
 	select U.username as username, R.facilityid, R.programid
 	from requisitions R, users U
 	where R.periodid=13 and R.status='INITIATED' and U.facilityid=R.facilityid
-	order by U.facilityid, R.programid,U.id) AS Q )m AS foo where rownumber%2=1 LIMIT 1500;" > submission.csv;
+	order by U.facilityid, R.programid,U.id) AS Q ) AS foo where rownumber%2=1 LIMIT 1500;" > submission.csv;
 
 -- READY for authorization ---------
 psql -d open_lmis -U postgres -t -A -F"," -c "SELECT username, facilityid, programid, 13 FROM (
