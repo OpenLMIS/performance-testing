@@ -3656,15 +3656,48 @@
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <BSFPostProcessor guiclass="TestBeanGUI" testclass="BSFPostProcessor" testname="BSF PostProcessor" enabled="true">
-            <stringProp name="filename"></stringProp>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="parameters"></stringProp>
-            <stringProp name="script">eval(&apos;var json = &apos; +prev.getResponseDataAsString());
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.json.JSONArray;
+import org.json.JSONObject;
 
-vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
-</stringProp>
-            <stringProp name="scriptLanguage">javascript</stringProp>
-          </BSFPostProcessor>
+String jsonString = prev.getResponseDataAsString();
+
+JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
+
+        JSONArray fullSupplyLineItems = rnr.getJSONArray(&quot;fullSupplyLineItems&quot;);
+        JSONArray nonFullSupplyLineItems = rnr.getJSONArray(&quot;nonFullSupplyLineItems&quot;);
+
+        JSONArray fullSupplyArray = new JSONArray();
+        JSONArray nonFullSupplyArray = new JSONArray();
+
+        for (int index = 0; index &lt; fullSupplyLineItems.length(); index++) {
+            JSONObject lineItem = new JSONObject();
+            lineItem.put(&quot;productCode&quot;, fullSupplyLineItems.getJSONObject(index).getString(&quot;productCode&quot;));
+            lineItem.put(&quot;quantityApproved&quot;, fullSupplyLineItems.getJSONObject(index).getLong(&quot;quantityApproved&quot;));
+            lineItem.put(&quot;remarks&quot;, fullSupplyLineItems.getJSONObject(index).getString(&quot;remarks&quot;));
+
+            fullSupplyArray.put(lineItem);
+        }
+
+        for (int index = 0; index &lt; nonFullSupplyLineItems.length(); index++) {
+            JSONObject lineItem = new JSONObject();
+            lineItem.put(&quot;productCode&quot;, nonFullSupplyLineItems.getJSONObject(index).getString(&quot;productCode&quot;));
+            lineItem.put(&quot;quantityApproved&quot;, nonFullSupplyLineItems.getJSONObject(index).getLong(&quot;quantityApproved&quot;));
+            lineItem.put(&quot;remarks&quot;, nonFullSupplyLineItems.getJSONObject(index).getString(&quot;remarks&quot;));
+
+            nonFullSupplyArray.put(lineItem);
+        }
+
+
+        JSONObject rnrJsonObject= new JSONObject();
+        rnrJsonObject.put(&quot;fullSupplyLineItems&quot;, fullSupplyArray);
+        rnrJsonObject.put(&quot;nonFullSupplyLineItems&quot;, nonFullSupplyArray);
+
+        vars.put(&quot;requisition&quot;, rnrJsonObject.toString());</stringProp>
+          </BeanShellPostProcessor>
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/requisitions/RNRID/comments.json" enabled="true">
@@ -7037,6 +7070,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
           </value>
         </objProp>
         <stringProp name="filename"></stringProp>
+        <boolProp name="useGroupName">true</boolProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>
