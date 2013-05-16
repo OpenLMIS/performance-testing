@@ -5129,7 +5129,7 @@ vars.put(&quot;requisition&quot;, JSON.stringify(json.rnr) );
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/requisitions/${RNRID}/comments.json</stringProp>
+          <stringProp name="HTTPSampler.path">/requisitions/${RNRID_g1}/comments.json</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
