@@ -61,7 +61,7 @@ public class LineItemBuilder {
     lineItem.setRemarks(randomAlphabetic(100));
     lineItem.setDosesPerMonth(valueOf(randomNumeric(2)));
     lineItem.setDosesPerDispensingUnit(valueOf(randomNumeric(3)));
-    lineItem.setPackSize(valueOf(randomNumeric(3)));
+    lineItem.setPackSize(valueOf(randomNumeric(3) + 1));
     lineItem.setRoundToZero(nextBoolean());
     lineItem.setPackRoundingThreshold(valueOf(randomNumeric(2)));
     lineItem.setPreviousStockInHandAvailable(nextBoolean());
