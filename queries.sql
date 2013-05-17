@@ -97,7 +97,7 @@ SELECT username, facilityid, programid, 13 FROM (
 
 -- READY for first approval -------
 psql -d open_lmis -U postgres -t -A -F"," -c "
-SELECT U.username, R.facilityId, R.programId, 13
+SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
 from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
 JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
 JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
@@ -108,7 +108,7 @@ AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId
 " > firstapproval1.csv;
 
 psql -d open_lmis -U postgres -t -A -F"," -c "
-SELECT U.username, R.facilityId, R.programId, 13
+SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
 from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
 JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
 JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
@@ -119,7 +119,7 @@ AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId
 " > firstapproval2.csv;
 
 psql -d open_lmis -U postgres -t -A -F"," -c "
-SELECT U.username, R.facilityId, R.programId, 13
+SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
 from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
 JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
 JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
@@ -131,7 +131,7 @@ AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId
 
 -- READY for second approval ------
 psql -d open_lmis -U postgres -t -A -F"," -c "
-SELECT U.username, R.facilityId, R.programId, 13
+SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
 from requisitions R JOIN supervisory_nodes SN ON R.supervisoryNodeId = SN.id
 JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
 JOIN roles RO on RO.id = RA.roleId
@@ -140,7 +140,7 @@ AND RO.name='Medical-Officer' and R.periodId=13 and R.status = 'IN_APPROVAL' AND
 " > secondapproval1.csv;
 
 psql -d open_lmis -U postgres -t -A -F"," -c "
-SELECT U.username, R.facilityId, R.programId, 13
+SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
 from requisitions R JOIN supervisory_nodes SN ON R.supervisoryNodeId = SN.id
 JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
 JOIN roles RO on RO.id = RA.roleId
@@ -149,7 +149,7 @@ AND RO.name='Medical-Officer' and R.periodId=13 and R.status = 'IN_APPROVAL' AND
 " > secondapproval2.csv;
 
 psql -d open_lmis -U postgres -t -A -F"," -c "
-SELECT U.username, R.facilityId, R.programId, 13
+SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
 from requisitions R JOIN supervisory_nodes SN ON R.supervisoryNodeId = SN.id
 JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
 JOIN roles RO on RO.id = RA.roleId
