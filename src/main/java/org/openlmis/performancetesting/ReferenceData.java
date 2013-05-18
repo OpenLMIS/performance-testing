@@ -15,6 +15,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static java.lang.Integer.valueOf;
 import static org.apache.commons.lang.RandomStringUtils.randomNumeric;
@@ -26,7 +28,6 @@ import static org.openlmis.rnr.domain.RnrStatus.RELEASED;
 
 public class ReferenceData {
 
-
   private FacilityBuilder facilityBuilder = new FacilityBuilder();
   private ProgramRnrTemplateBuilder programRnrTemplateBuilder = new ProgramRnrTemplateBuilder();
   private UserBuilder userBuilder = new UserBuilder();
@@ -34,12 +35,12 @@ public class ReferenceData {
   private RequisitionGroupBuilder requisitionGroupBuilder = new RequisitionGroupBuilder();
   private ProcessingScheduleBuilder scheduleBuilder = new ProcessingScheduleBuilder();
   private SupplyLineBuilder supplyLineBuilder = new SupplyLineBuilder();
-
   private ProductData productData = new ProductData();
+
   private ProgramData programData = new ProgramData();
   private RequisitionData requisitionData = new RequisitionData();
-
   private RoleRightData roleRightData = new RoleRightData();
+
   private FacilityDAO facilityDAO;
   private ProgramRnrTemplateDAO programRnrTemplateDAO;
   private UserDAO userDAO;
@@ -47,6 +48,7 @@ public class ReferenceData {
   private RequisitionGroupDAO requisitionGroupDAO;
   private ProcessingScheduleDAO processingScheduleDAO;
   private SupplyLineDAO supplyLineDAO;
+  ExecutorService service = Executors.newFixedThreadPool(Properties.NO_OF_PARALLEL_THREADS);
 
   @Getter
   private final ArrayList<ProcessingPeriod> periodList = new ArrayList<>();
@@ -178,20 +180,21 @@ public class ReferenceData {
         createApproverAtSupervisoryNodes(supervisoryNode);
         for (final Program program : programList) {
           final List<Facility> facilities = facilityList;
-          new Thread() {
+          Thread thread = new Thread() {
             public void run() {
               insertProgramsSupported(program, facilities);
               insertSupplyLine(supervisoryNode, program, facility);
               insertRequisitionGroupProgramSchedule(requisitionGroup, program, monthlySchedule, facility);
               createRequisitions(facilities, program, facility, supervisoryNode);
             }
-          }.start();
+          };
+          service.execute(thread);
 
         }
         facilityList = new ArrayList<>();
       }
     }
-
+    service.shutdown();
   }
 
   private void insertProgramsSupported(Program program, List<Facility> facilities) {

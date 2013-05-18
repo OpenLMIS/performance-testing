@@ -37,6 +37,7 @@ public class Properties {
   public static final int AVERAGE_FULL_SUPPLY_COUNT = getInteger("average.full.supply.products.count");
   public static final int NUMBER_OF_NON_FULL_SUPPLY_ITEMS = getInteger("no.of.non.full.supply.products");
   public static final int TOTAL_NO_OF_PRODUCTS = getInteger("total.no.of.products");
+  public static final int NO_OF_PARALLEL_THREADS= getInteger("no.of.parallel.threads");
 
   public static int getInteger(String key) {
     String strValue = getString(key);
