@@ -1082,9 +1082,9 @@
         </ConfigTestElement>
         <hashTree/>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
-          <stringProp name="filename">submission1.csv.csv</stringProp>
+          <stringProp name="filename">submission1.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="variableNames">user,facilityId,programId,periodId,reqId</stringProp>
+          <stringProp name="variableNames">user,facilityId,programId,periodId</stringProp>
           <stringProp name="delimiter">,</stringProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">true</boolProp>
@@ -1713,6 +1713,15 @@ vars.put(&quot;requisition&quot;, rnr.toString());
 </stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">RNRID</stringProp>
+            <stringProp name="RegexExtractor.regex">&quot;rnrId&quot;:([^,]+)</stringProp>
+            <stringProp name="RegexExtractor.template"></stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/reference-data/currency.json" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -1986,7 +1995,7 @@ vars.put(&quot;requisition&quot;, rnr.toString());
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/requisitions/${reqId}/comments.json</stringProp>
+          <stringProp name="HTTPSampler.path">/requisitions/${RNRID_g1}/comments.json</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -2044,7 +2053,7 @@ vars.put(&quot;requisition&quot;, rnr.toString());
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
-          <stringProp name="HTTPSampler.path">/requisitions/${reqId}/save.json</stringProp>
+          <stringProp name="HTTPSampler.path">/requisitions/${RNRID_g1}/save.json</stringProp>
           <stringProp name="HTTPSampler.method">PUT</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -2105,7 +2114,7 @@ vars.put(&quot;requisition&quot;, rnr.toString());
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
-          <stringProp name="HTTPSampler.path">/requisitions/${reqId}/submit.json</stringProp>
+          <stringProp name="HTTPSampler.path">/requisitions/${RNRID_g1}/submit.json</stringProp>
           <stringProp name="HTTPSampler.method">PUT</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -5482,7 +5491,7 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
           <stringProp name="filename">authorization1.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="variableNames">user,facilityId,programId,periodId,reqId</stringProp>
+          <stringProp name="variableNames">user,facilityId,programId,periodId</stringProp>
           <stringProp name="delimiter">,</stringProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">true</boolProp>
@@ -6106,6 +6115,15 @@ vars.put(&quot;requisition&quot;, rnr.toString());
 </stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">RNRID</stringProp>
+            <stringProp name="RegexExtractor.regex">&quot;rnrId&quot;:([^,]+)</stringProp>
+            <stringProp name="RegexExtractor.template"></stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number"></stringProp>
+          </RegexExtractor>
+          <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/reference-data/currency.json" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -6372,7 +6390,7 @@ vars.put(&quot;requisition&quot;, rnr.toString());
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/requisitions/${reqId}/comments.json</stringProp>
+          <stringProp name="HTTPSampler.path">/requisitions/${RNRID_g1}/comments.json</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -6430,7 +6448,7 @@ vars.put(&quot;requisition&quot;, rnr.toString());
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
-          <stringProp name="HTTPSampler.path">/requisitions/${reqId}/save.json</stringProp>
+          <stringProp name="HTTPSampler.path">/requisitions/${RNRID_g1}/save.json</stringProp>
           <stringProp name="HTTPSampler.method">PUT</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -6491,7 +6509,7 @@ vars.put(&quot;requisition&quot;, rnr.toString());
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
-          <stringProp name="HTTPSampler.path">/requisitions/${reqId}/authorize.json</stringProp>
+          <stringProp name="HTTPSampler.path">/requisitions/${RNRID_g1}/authorize.json</stringProp>
           <stringProp name="HTTPSampler.method">PUT</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
