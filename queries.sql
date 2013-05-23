@@ -138,10 +138,22 @@ AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId
 
 -- Convert to order ------------------
 psql -d open_lmis -U postgres -t -A -F"," -c "
-select u.username
-from roles ro, role_assignments ra, users u where ro.name='LMU In-Charge' and ro.id=ra.roleid and u.id=ra.userid LIMIT 1;
-" > converttoorder.csv
+SELECT U.username, R.id
+from roles RO, role_assignments RA, users U, requisitions R WHERE
+RO.name='LMU In-Charge' AND
+RO.id = RA.roleId AND
+R.status = 'APPROVED' AND
+U.id = RA.userId LIMIT 10;
+" > converttoorder1.csv
 
+psql -d open_lmis -U postgres -t -A -F"," -c "
+SELECT U.username, R.id
+from roles RO, role_assignments RA, users U, requisitions R WHERE
+RO.name='LMU In-Charge' AND
+RO.id = RA.roleId AND
+R.status = 'APPROVED' AND
+U.id = RA.userId LIMIT 10 OFFSET 10;
+" > converttoorder2.csv
 
 
 
