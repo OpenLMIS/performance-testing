@@ -151,6 +151,6 @@ SELECT COUNT(*) FROM pg_stat_activity;
 SELECT pg_size_pretty(pg_database_size('open_lmis'));
 
 pg_dump -Ft open_lmis > backup.tar;
-pg_restore -Ft  -d open_lmis backup.tar;
+pg_restore -Ft --clean -d open_lmis backup.tar
 
-
+drop table users,requisitions, requisition_groups,comments CASCADE;
