@@ -32,7 +32,7 @@ public class RequisitionDAO {
 
   final String insertRequisitionQuery = "INSERT INTO requisitions VALUES(DEFAULT, :facility.id, :program.id, :period.id, " +
       ":status, :fullSupplyItemsSubmittedCost.value, :NonFullSupplyItemsSubmittedCost.value, :supervisoryNodeId, " +
-      ":supplyingFacility.id, NULL, :submittedDate, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
+      ":supplyingFacility.id, :submittedDate, :modifiedBy, :modifiedDate, :modifiedBy, :modifiedDate)";
 
 
   public long insertRequisition(Rnr rnr) {
