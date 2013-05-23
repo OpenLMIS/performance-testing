@@ -23,6 +23,7 @@ import java.util.List;
 import static org.openlmis.performancetesting.Properties.ADJUSTMENT_NAMES;
 import static org.openlmis.performancetesting.Properties.NUMBER_OF_NON_FULL_SUPPLY_ITEMS;
 import static org.openlmis.performancetesting.Utils.randomInteger;
+import static org.openlmis.rnr.domain.RnrStatus.*;
 
 public class RequisitionData {
 
@@ -68,19 +69,29 @@ public class RequisitionData {
   }
 
   private SupervisoryNode getSupervisoryNode(SupervisoryNode supervisoryNode, RnrStatus status) {
-    if (status == RnrStatus.IN_APPROVAL) {
+    if (status == IN_APPROVAL) {
       assert supervisoryNode != null;
       supervisoryNode = supervisoryNode.getParent();
-    } else if (status != RnrStatus.AUTHORIZED) {
+    } else if (status != AUTHORIZED) {
       supervisoryNode = null;
     }
     return supervisoryNode;
   }
 
   private RnrStatus decideStatus(int facilityCounter) {
-    int statusEnumIndex = (facilityCounter % 6);
-    if (statusEnumIndex == 5) return null;
-    return RnrStatus.values()[statusEnumIndex];
+
+    int statusEnumIndex = (facilityCounter % 20);
+    if (statusEnumIndex < 3) {
+      return null;
+    } else if (statusEnumIndex < 14) {
+      return INITIATED;
+    } else if (statusEnumIndex < 16) {
+      return SUBMITTED;
+    } else if (statusEnumIndex < 18) {
+      return IN_APPROVAL;
+    } else {
+      return APPROVED;
+    }
   }
 
   public void createLineItem(final Rnr requisition) {
