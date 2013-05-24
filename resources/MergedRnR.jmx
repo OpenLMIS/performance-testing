@@ -4531,15 +4531,6 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
             </collectionProp>
           </HeaderManager>
           <hashTree/>
-          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="false">
-            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
-            <stringProp name="RegexExtractor.refname">RNRID</stringProp>
-            <stringProp name="RegexExtractor.regex">&quot;id&quot;:([^,]+)</stringProp>
-            <stringProp name="RegexExtractor.template"></stringProp>
-            <stringProp name="RegexExtractor.default"></stringProp>
-            <stringProp name="RegexExtractor.match_number"></stringProp>
-          </RegexExtractor>
-          <hashTree/>
           <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="parameters"></stringProp>
@@ -4555,14 +4546,11 @@ String jsonString = prev.getResponseDataAsString();
 
     for (int index = 0; index &lt; rnrIds.length() &amp;&amp; index &lt; 20; index++) {
       JSONObject lineItem = new JSONObject();
-      lineItem.put(&quot;id&quot;, rnrIds.getJSONObject(index).getString(&quot;id&quot;));
+      lineItem.put(&quot;id&quot;, rnrIds.getJSONObject(index).getInt(&quot;id&quot;));
       reqIds.put(lineItem);
     }
 
-    JSONObject finalIds = new JSONObject();
-    finalIds.put(&quot;rnr_list&quot;, reqIds);
-
-    vars.put(&quot;rnrids&quot;, finalIds.toString());
+    vars.put(&quot;rnrids&quot;, reqIds.toString());
 </stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
@@ -7446,7 +7434,7 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
         </hashTree>
       </hashTree>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-        <boolProp name="ResultCollector.error_logging">true</boolProp>
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
           <value class="SampleSaveConfiguration">
@@ -7472,7 +7460,9 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
             <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
             <assertionsResultsToSave>0</assertionsResultsToSave>
             <bytes>true</bytes>
+            <hostname>true</hostname>
             <threadCounts>true</threadCounts>
+            <sampleCount>true</sampleCount>
           </value>
         </objProp>
         <stringProp name="filename"></stringProp>
@@ -7505,7 +7495,9 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
             <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
             <assertionsResultsToSave>0</assertionsResultsToSave>
             <bytes>true</bytes>
+            <hostname>true</hostname>
             <threadCounts>true</threadCounts>
+            <sampleCount>true</sampleCount>
           </value>
         </objProp>
         <stringProp name="filename"></stringProp>
