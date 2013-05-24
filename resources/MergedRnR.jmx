@@ -2163,7 +2163,7 @@ vars.put(&quot;requisition&quot;, rnr.toString());
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
+            <intProp name="Assertion.test_type">8</intProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -4092,7 +4092,7 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
+            <intProp name="Assertion.test_type">8</intProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -4118,8 +4118,8 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
           </elementProp>
           <stringProp name="HTTPSampler.domain">${host}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout">25000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">25000</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
@@ -4540,6 +4540,32 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
             <stringProp name="RegexExtractor.match_number"></stringProp>
           </RegexExtractor>
           <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.json.JSONArray;
+import org.json.JSONObject;
+
+String jsonString = prev.getResponseDataAsString();
+    JSONObject rnr = new JSONObject(jsonString);
+    JSONArray rnrIds = rnr.getJSONArray(&quot;rnr_list&quot;);
+
+    JSONArray reqIds = new JSONArray();
+
+    for (int index = 0; index &lt; rnrIds.length() &amp;&amp; index &lt; 20; index++) {
+      JSONObject lineItem = new JSONObject();
+      lineItem.put(&quot;id&quot;, rnrIds.getJSONObject(index).getString(&quot;id&quot;));
+      reqIds.put(lineItem);
+    }
+
+    JSONObject finalIds = new JSONObject();
+    finalIds.put(&quot;rnr_list&quot;, reqIds);
+
+    vars.put(&quot;rnrids&quot;, finalIds.toString());
+</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/orders.json" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -4547,7 +4573,8 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${reqId}</stringProp>
+                <stringProp name="Argument.value">${rnrids}&#xd;
+</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -6559,7 +6586,7 @@ vars.put(&quot;requisition&quot;, rnr.toString());
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
+            <intProp name="Assertion.test_type">8</intProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
@@ -7413,11 +7440,78 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
+            <intProp name="Assertion.test_type">8</intProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
       </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">true</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>false</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>false</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+        <boolProp name="useGroupName">true</boolProp>
+      </ResultCollector>
+      <hashTree/>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>
