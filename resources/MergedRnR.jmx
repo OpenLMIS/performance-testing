@@ -4544,7 +4544,7 @@ String jsonString = prev.getResponseDataAsString();
 
     JSONArray reqIds = new JSONArray();
 
-    for (int index = 0; index &lt; rnrIds.length() &amp;&amp; index &lt; 20; index++) {
+    for (int index = 0; index &lt; rnrIds.length() &amp;&amp; index &lt; 100; index++) {
       JSONObject lineItem = new JSONObject();
       lineItem.put(&quot;id&quot;, rnrIds.getJSONObject(index).getInt(&quot;id&quot;));
       reqIds.put(lineItem);
