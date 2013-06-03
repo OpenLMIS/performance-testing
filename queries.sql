@@ -69,6 +69,7 @@ SELECT username, facilityid, programid, 13 FROM (
 
 -- READY for first approval -------
 psql -d open_lmis -U postgres -t -A -F"," -c "
+SELECT Q1.username,Q1.facilityId,Q1.programId, Q1.requisitionId,Q2.facilityId, Q2.programId, Q2.requisitionId FROM (
 SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
 from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
 JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
@@ -76,19 +77,18 @@ JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
 JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
 JOIN roles RO on RO.id = RA.roleId
 JOIN users U on U.id = RA.userid
-AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId=R.programId ORDER BY R.facilityId, R.programId LIMIT 125;
+AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId=R.programId AND R.id %2 =0
+ORDER BY R.facilityId, R.programId
+) AS Q1 JOIN (SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
+from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
+JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
+JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
+JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
+JOIN roles RO on RO.id = RA.roleId
+JOIN users U on U.id = RA.userid
+AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId=R.programId AND R.id %2 =1
+ORDER BY R.facilityId, R.programId) AS Q2 ON Q1.facilityId = Q2.facilityId AND Q1.programId = Q2.programId+1 ORDER BY Q1.facilityId, Q1.programId;
 " > firstapproval1.csv;
-
-psql -d open_lmis -U postgres -t -A -F"," -c "
-SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
-from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
-JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
-JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
-JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
-JOIN roles RO on RO.id = RA.roleId
-JOIN users U on U.id = RA.userid
-AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId=R.programId ORDER BY R.facilityId, R.programId LIMIT 125 OFFSET 125;
-" > firstapproval2.csv;
 
 
 -- READY for second approval ------

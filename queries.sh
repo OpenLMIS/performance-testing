@@ -3,7 +3,7 @@
 ############ Initiate    ###############
 for counter in {0..8}
 do
- limit=142
+ limit=240
  offset=`expr $limit \* $counter`
 
  psql -d open_lmis -U postgres -t -A -F"," -c "
@@ -55,7 +55,7 @@ done
 ############ Authorize ############### 2814 #####
 for counter in {0..8}
 do
- limit=312
+ limit=160
  offset=`expr $limit \* $counter`
 
 psql -d open_lmis -U postgres -t -A -F"," -c "
@@ -69,63 +69,61 @@ SELECT username, facilityid, programid, programId+2, 13 FROM (
  LIMIT $limit OFFSET $offset"  > authorization`expr $counter + 1`.csv;
 done
 
-############ FirstApproval-1 ############### 1839 ######
+############ FirstApproval ####################
 for counter in {0..8}
 do
- limit=200
+ limit=81
  offset=`expr $limit \* $counter`
 
-psql -d open_lmis -U postgres -t -A -F"," -c "
-select w.user1,w.facility1,w.program1, w.requisitionId1,w.program2, w.requisitionId2, 13 from (
-(SELECT U.username as user1, R.facilityId as facility1, R.programId as program1, 13 AS periodId, R.id as requisitionId1
-from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
-JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
-JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
-JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
-JOIN roles RO on RO.id = RA.roleId
-JOIN users U on U.id = RA.userid
-AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId=R.programId and mod(R.id,2)=0
-ORDER BY R.facilityId, R.programId )as a join
-(SELECT U.username as user2, R.facilityId as facility2, R.programId as program2, 13 AS periodId, R.id as requisitionId2
-from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
-JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
-JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
-JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
-JOIN roles RO on RO.id = RA.roleId
-JOIN users U on U.id = RA.userid
-AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId=R.programId and mod(R.id,2)=1
-ORDER BY R.facilityId, R.programId )as b on (a.facility1=b.facility2 and a.user1=b.user2)
-)as w;
-LIMIT $limit OFFSET $offset"  > firstapproval`expr $counter + 1`.csv;
+  psql -d open_lmis -U postgres -t -A -F"," -c "
+  SELECT Q1.username, Q1.programId, Q1.requisitionId, Q2.programId, Q2.requisitionId FROM (
+  SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
+  from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
+  JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
+  JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
+  JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
+  JOIN roles RO on RO.id = RA.roleId
+  JOIN users U on U.id = RA.userid
+  AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId=R.programId AND R.id %2 =0
+  ORDER BY R.facilityId, R.programId
+  ) AS Q1 JOIN (SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
+  from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
+  JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
+  JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
+  JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
+  JOIN roles RO on RO.id = RA.roleId
+  JOIN users U on U.id = RA.userid
+  AND RO.name='LMU' and R.periodId=13 and R.status = 'AUTHORIZED' AND RA.programId=R.programId AND R.id %2 =1
+  ORDER BY R.facilityId, R.programId) AS Q2 ON Q1.facilityId = Q2.facilityId AND Q1.programId = Q2.programId+1 ORDER BY Q1.facilityId, Q1.programId
+  LIMIT $limit OFFSET $offset"  > firstapproval`expr $counter + 1`.csv;
 done
 
 
-############ SecondApproval-1 ############### 1803 #######
+############ SecondApproval ####################
 for counter in {0..8}
 do
- limit=200
- offset=`expr $limit \* $counter`
+  limit=75
+  offset=`expr $limit \* $counter`
 
-psql -d open_lmis -U postgres -t -A -F"," -c "
-select w.user1,w.facility1,w.program1, w.requisitionId1,w.program2, w.requisitionId2, 13 from (
-(SELECT U.username as user1, R.facilityId as facility1, R.programId as program1, 13 AS periodId, R.id as requisitionId1
-from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
-JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
-JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
-JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
-JOIN roles RO on RO.id = RA.roleId
-JOIN users U on U.id = RA.userid
-AND RO.name='Medical-Officer' and R.periodId=13 and R.status = 'IN_APPROVAL' AND RA.programId=R.programId and mod(R.id,2)=0
-ORDER BY R.facilityId, R.programId )as a join
-(SELECT U.username as user2, R.facilityId as facility2, R.programId as program2, 13 AS periodId, R.id as requisitionId2
-from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
-JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
-JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
-JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
-JOIN roles RO on RO.id = RA.roleId
-JOIN users U on U.id = RA.userid
-AND RO.name='Medical-Officer' and R.periodId=13 and R.status = 'IN_APPROVAL' AND RA.programId=R.programId and mod(R.id,2)=1
-ORDER BY R.facilityId, R.programId )as b on (a.facility1=b.facility2 and a.user1=b.user2)
-)as w;
-LIMIT $limit OFFSET $offset"  > secondapproval`expr $counter + 1`.csv;
+  psql -d open_lmis -U postgres -t -A -F"," -c "
+  SELECT Q1.username, Q1.programId, Q1.requisitionId, Q2.programId, Q2.requisitionId FROM (
+  SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
+  from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
+  JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
+  JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
+  JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
+  JOIN roles RO on RO.id = RA.roleId
+  JOIN users U on U.id = RA.userid
+  AND RO.name='LMU' and R.periodId=13 and R.status = 'IN_APPROVAL' AND RA.programId=R.programId AND R.id %2 =0
+  ORDER BY R.facilityId, R.programId
+  ) AS Q1 JOIN (SELECT U.username, R.facilityId, R.programId, 13 AS periodId, R.id as requisitionId
+  from requisitions R JOIN requisition_group_members RGM ON R.facilityId = RGM.facilityId
+  JOIN requisition_groups RG ON RGM.requisitionGroupId = RG.id
+  JOIN supervisory_nodes SN ON RG.supervisoryNodeId = SN.id
+  JOIN role_assignments RA ON SN.id = RA.supervisoryNodeId
+  JOIN roles RO on RO.id = RA.roleId
+  JOIN users U on U.id = RA.userid
+  AND RO.name='LMU' and R.periodId=13 and R.status = 'IN_APPROVAL' AND RA.programId=R.programId AND R.id %2 =1
+  ORDER BY R.facilityId, R.programId) AS Q2 ON Q1.facilityId = Q2.facilityId AND Q1.programId = Q2.programId+1 ORDER BY Q1.facilityId, Q1.programId
+  LIMIT $limit OFFSET $offset"  > secondapproval`expr $counter + 1`.csv;
 done

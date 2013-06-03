@@ -4846,7 +4846,7 @@ vars.put(&quot;requisition2&quot;, rnr.toString());
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
           <stringProp name="filename">firstapproval3.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="variableNames">user,facilityId,programId1,reqId1,programId2,reqId2,periodId</stringProp>
+          <stringProp name="variableNames">user,programId1,reqId1,programId2,reqId2</stringProp>
           <stringProp name="delimiter">,</stringProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">true</boolProp>
@@ -6025,7 +6025,7 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
           <stringProp name="filename">secondapproval3.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="variableNames">user,facilityId,programId1,reqId1,programId2,reqId2,periodId</stringProp>
+          <stringProp name="variableNames">user,programId1,reqId1,programId2,reqId2</stringProp>
           <stringProp name="delimiter">,</stringProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">true</boolProp>
@@ -7172,7 +7172,7 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">150</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">450</stringProp>
         <longProp name="ThreadGroup.start_time">1366954819000</longProp>
         <longProp name="ThreadGroup.end_time">1366954819000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
