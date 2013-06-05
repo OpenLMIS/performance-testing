@@ -29,7 +29,7 @@
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">125</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">600</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1800</stringProp>
         <longProp name="ThreadGroup.start_time">1366785511000</longProp>
         <longProp name="ThreadGroup.end_time">1366785511000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -1514,7 +1514,7 @@
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">417</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">600</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1800</stringProp>
         <longProp name="ThreadGroup.start_time">1366785511000</longProp>
         <longProp name="ThreadGroup.end_time">1366785511000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -3171,7 +3171,7 @@ vars.put(&quot;requisition2&quot;, rnr.toString());
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">17</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">600</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1800</stringProp>
         <longProp name="ThreadGroup.start_time">1368424853000</longProp>
         <longProp name="ThreadGroup.end_time">1368424853000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -4816,7 +4816,7 @@ vars.put(&quot;requisition2&quot;, rnr.toString());
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">5</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">600</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1800</stringProp>
         <longProp name="ThreadGroup.start_time">1366887102000</longProp>
         <longProp name="ThreadGroup.end_time">1366887102000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -5995,7 +5995,7 @@ JSONObject rnr = new JSONObject(jsonString).getJSONObject(&quot;rnr&quot;);
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">5</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">600</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1800</stringProp>
         <longProp name="ThreadGroup.start_time">1366887102000</longProp>
         <longProp name="ThreadGroup.end_time">1366887102000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -7751,7 +7751,7 @@ String jsonString = prev.getResponseDataAsString();
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">84</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">600</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1800</stringProp>
         <longProp name="ThreadGroup.start_time">1367304311000</longProp>
         <longProp name="ThreadGroup.end_time">1367304311000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
